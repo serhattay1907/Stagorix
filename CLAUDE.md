@@ -28,9 +28,10 @@ Stagorix is an open-source, brand-agnostic, multi-agent pipeline that turns news
 | `docs/ARCHITECTURE.md` | System design |
 | `docs/DECISIONS.md` | Decision log (append-only) |
 | `docs/ROADMAP.md` | Phases and tasks — the source of truth for progress |
-| `brands/<slug>/` | Brand profiles *(Phase 4)* |
-| `stagorix/` | Python core: analysis, agents, CLI *(Phase 2.4+)* |
-| `render/` | Remotion project and effect library *(Phase 2.4+)* |
+| `brands/<slug>/` | Brand profiles (schema in phase 4) |
+| `stagorix/` | Python core: `cli.py`, `doctor.py` and one subpackage per area (analysis, agents, llm, brands, assets, render, platforms, panel, runs) |
+| `render/` | Remotion project: `compositions/`, `effects/`, `layouts/` |
+| `tests/` | Python tests (`uv run pytest`) |
 
 ## Working rules
 
@@ -43,10 +44,25 @@ Stagorix is an open-source, brand-agnostic, multi-agent pipeline that turns news
 - Everything that matters is committed; ephemeral environments lose uncommitted work.
 - When a decision is made, add it to `docs/DECISIONS.md`. When a task finishes, tick it in `docs/ROADMAP.md`.
 
+## Commands
+
+| Task | Command |
+| --- | --- |
+| Install Python deps | `uv sync` |
+| CLI | `uv run stagorix --help` |
+| Environment check | `uv run stagorix doctor` |
+| Tests | `uv run pytest` |
+| Lint / format | `uv run ruff check .` · `uv run ruff format .` |
+| Render deps | `cd render && npm ci` |
+| Typecheck render | `cd render && npm run typecheck` |
+| Remotion Studio | `cd render && npm run studio` |
+
 ## Code conventions
 
 - Python 3.12, typed, Pydantic models for every agent input/output.
 - TypeScript for Remotion; every effect/component has a Zod schema for its props.
-- Pin every dependency version (Python lock file, `package-lock.json`, Docker image digests).
+- Pin every dependency version (`uv.lock`, `package-lock.json`, Docker image digests).
+- A command that is not built yet says so and exits with code 2; never a silent no-op.
+- `zod` is pinned to the exact version Remotion depends on; upgrade both together.
 - Media (raw videos, renders, cutouts, models) is never committed.
 - Personal, local-only notes for a contributor go in `CLAUDE.local.md` (gitignored).
