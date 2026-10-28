@@ -12,6 +12,7 @@ FROM ${BASE_IMAGE} AS runtime
 
 ENV DEBIAN_FRONTEND=noninteractive \
     LANG=C.UTF-8 \
+    STAGORIX_IN_CONTAINER=1 \
     UV_PYTHON_INSTALL_DIR=/opt/python \
     UV_PROJECT_ENVIRONMENT=/opt/venv \
     UV_COMPILE_BYTECODE=1 \
