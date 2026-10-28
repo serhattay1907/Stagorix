@@ -1,4 +1,4 @@
-# Videus
+# Stagorix
 Provider-agnostic, local-first multi-agent pipeline that turns news and your own videos into branded Shorts and Reels (LangGraph + Whisper + Remotion).
 
 - Brand-agnostic core: every brand, person or organization lives in its own `brands/<slug>/` profile.
