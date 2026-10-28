@@ -35,6 +35,12 @@ uv run pytest
 cd render && npm ci && npm run typecheck
 ```
 
+**Optional, for AI coding agents:** Remotion's official agent skills improve generated Remotion code. They are installed locally and never committed:
+
+```bash
+cd render && npx skills add remotion-dev/skills
+```
+
 ## Docs
 
 - [Architecture](docs/ARCHITECTURE.md)
@@ -44,4 +50,6 @@ cd render && npm ci && npm run typecheck
 
 ## License
 
-[MIT](LICENSE)
+Stagorix is [MIT](LICENSE) licensed.
+
+It renders video with [Remotion](https://www.remotion.dev), which has its own license: free for individuals, non-profits and for-profit organizations with up to 3 employees; larger organizations need a [Remotion Company License](https://www.remotion.pro/license). Check it before using Stagorix in a larger company.
