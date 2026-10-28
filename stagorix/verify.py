@@ -1,0 +1,167 @@
+"""Golden test: render a fixed composition and compare it with committed references.
+
+The references in tests/golden/ are produced inside the Docker image, which is
+the canonical environment on every OS (principle 2). Natively rendered frames
+may differ slightly because system fonts differ; the result says so.
+"""
+
+from __future__ import annotations
+
+import json
+import re
+import shutil
+import subprocess
+import time
+from pathlib import Path
+
+from pydantic import BaseModel
+
+from stagorix.doctor import in_container
+
+ROOT = Path(__file__).resolve().parents[1]
+RENDER_DIR = ROOT / "render"
+GOLDEN_DIR = ROOT / "tests" / "golden"
+OUT_DIR = ROOT / "workspace" / "verify"
+
+COMPOSITION = "Placeholder"
+STILL_FRAMES = (10, 45, 89)
+EXPECTED = {"width": 1080, "height": 1920, "fps": 30.0, "frames": 90}
+MIN_SSIM = 0.99
+
+
+class Step(BaseModel):
+    name: str
+    ok: bool
+    detail: str
+    seconds: float
+
+
+class VerifyError(RuntimeError):
+    """A tool needed by the golden test is missing or failed."""
+
+
+def _tool(name: str) -> str:
+    path = shutil.which(name)
+    if path is None:
+        raise VerifyError(f"'{name}' not found on PATH")
+    return path
+
+
+def _run(cmd: list[str], cwd: Path | None = None) -> subprocess.CompletedProcess[str]:
+    result = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, check=False)
+    if result.returncode != 0:
+        tail = (result.stderr or result.stdout).strip().splitlines()[-5:]
+        raise VerifyError(f"{Path(cmd[0]).name} failed:\n" + "\n".join(tail))
+    return result
+
+
+def _remotion(args: list[str], browser: str | None) -> None:
+    cmd = [_tool("npx"), "remotion", *args, "--log=error"]
+    if browser:
+        cmd.append(f"--browser-executable={browser}")
+    _run(cmd, cwd=RENDER_DIR)
+
+
+def _ssim(a: Path, b: Path) -> float:
+    result = _run(
+        [_tool("ffmpeg"), "-hide_banner", "-i", str(a), "-i", str(b), "-lavfi", "ssim", "-f", "null", "-"]
+    )
+    match = re.search(r"All:([0-9.]+)", result.stderr)
+    if match is None:
+        raise VerifyError("could not read SSIM from ffmpeg output")
+    return float(match.group(1))
+
+
+def _probe(video: Path) -> dict[str, float]:
+    result = _run(
+        [
+            _tool("ffprobe"),
+            "-v",
+            "error",
+            "-select_streams",
+            "v:0",
+            "-count_frames",
+            "-show_entries",
+            "stream=width,height,r_frame_rate,nb_read_frames",
+            "-of",
+            "json",
+            str(video),
+        ]
+    )
+    stream = json.loads(result.stdout)["streams"][0]
+    num, den = stream["r_frame_rate"].split("/")
+    return {
+        "width": float(stream["width"]),
+        "height": float(stream["height"]),
+        "fps": float(num) / float(den),
+        "frames": float(stream["nb_read_frames"]),
+    }
+
+
+def _timed(name: str, fn) -> Step:  # type: ignore[no-untyped-def]
+    start = time.perf_counter()
+    try:
+        ok, detail = fn()
+    except VerifyError as exc:
+        ok, detail = False, str(exc)
+    return Step(name=name, ok=ok, detail=detail, seconds=round(time.perf_counter() - start, 1))
+
+
+def run_verify(update: bool = False, browser: str | None = None) -> list[Step]:
+    """Render, then compare with tests/golden. With update=True, rewrite the references."""
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    steps: list[Step] = []
+
+    def render_stills() -> tuple[bool, str]:
+        for f in STILL_FRAMES:
+            _remotion(
+                ["still", "src/index.ts", COMPOSITION, str(OUT_DIR / f"frame-{f:03d}.png"), f"--frame={f}"],
+                browser,
+            )
+        return True, f"{len(STILL_FRAMES)} frames"
+
+    def render_video() -> tuple[bool, str]:
+        _remotion(
+            ["render", "src/index.ts", COMPOSITION, str(OUT_DIR / "verify.mp4"), "--codec=h264"], browser
+        )
+        return True, "verify.mp4"
+
+    steps.append(_timed("Render stills", render_stills))
+    steps.append(_timed("Render video", render_video))
+    if not all(s.ok for s in steps):
+        return steps
+
+    def check_video() -> tuple[bool, str]:
+        got = _probe(OUT_DIR / "verify.mp4")
+        bad = [f"{k} {got[k]:g}≠{v:g}" for k, v in EXPECTED.items() if abs(got[k] - v) > 0.01]
+        return (not bad), ", ".join(bad) or "1080×1920, 30 fps, 90 frames"
+
+    steps.append(_timed("Video format", check_video))
+
+    if update:
+
+        def write_golden() -> tuple[bool, str]:
+            GOLDEN_DIR.mkdir(parents=True, exist_ok=True)
+            for f in STILL_FRAMES:
+                shutil.copyfile(
+                    OUT_DIR / f"frame-{f:03d}.png", GOLDEN_DIR / f"{COMPOSITION.lower()}-{f:03d}.png"
+                )
+            where = "Docker" if in_container() else "native (not canonical)"
+            return True, f"references rewritten from {where} render"
+
+        steps.append(_timed("Update references", write_golden))
+        return steps
+
+    def compare() -> tuple[bool, str]:
+        scores = []
+        for f in STILL_FRAMES:
+            ref = GOLDEN_DIR / f"{COMPOSITION.lower()}-{f:03d}.png"
+            if not ref.exists():
+                return False, f"missing {ref.name}; run 'stagorix verify --update' in Docker"
+            scores.append(_ssim(OUT_DIR / f"frame-{f:03d}.png", ref))
+        worst = min(scores)
+        note = "" if in_container() else " (native run; references come from Docker)"
+        return worst >= MIN_SSIM, f"min SSIM {worst:.4f} (need ≥ {MIN_SSIM}){note}"
+
+    steps.append(_timed("Compare with golden", compare))
+    return steps

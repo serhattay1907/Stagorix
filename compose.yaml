@@ -2,6 +2,8 @@
 #   docker compose up --build
 # GPU profile (NVIDIA on Linux or Windows WSL2):
 #   docker compose -f compose.yaml -f compose.gpu.yaml up --build
+# Golden test:
+#   docker compose run --rm worker stagorix verify
 name: stagorix
 
 services:
@@ -17,3 +19,4 @@ services:
     volumes:
       - ./brands:/app/brands
       - ./workspace:/app/workspace
+      - ./tests/golden:/app/tests/golden
