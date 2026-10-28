@@ -37,6 +37,7 @@ Stagorix is an open-source, brand-agnostic, multi-agent pipeline that turns news
 - Work in small, reviewable steps. After each step, report what changed and wait for the owner's go-ahead before starting the next.
 - The owner makes decisions. Present options with trade-offs and a recommendation; state assumptions explicitly.
 - Git workflow: Claude may create branches, commit, push and open pull requests without asking. Merging into `main` is always done by the owner. Never push to `main` directly.
+- No AI tool attribution anywhere: no `Co-Authored-By` trailers, session links or "Generated with" lines in commits, PRs, docs or code. If a credit seems genuinely needed, ask the owner first.
 - Deletion and any other irreversible action only with explicit approval.
 - Give honest critique; flag conflicts with the principles instead of working around them.
 - Everything that matters is committed; ephemeral environments lose uncommitted work.
