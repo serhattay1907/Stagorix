@@ -1,31 +1,51 @@
-# Stagorix — geliştirme talimatları
+# Stagorix — instructions for Claude Code
 
-Stagorix: markadan bağımsız, çok ajanlı dikey video pipeline'ı (YouTube Shorts, Instagram Reels). Haberleri ve kullanıcının kendi videolarını markaya özel kısa videolara dönüştüren açık kaynak bir üretim hattıdır.
+Stagorix is an open-source, brand-agnostic, multi-agent pipeline that turns news and a user's own videos into branded, captioned vertical videos (YouTube Shorts, Instagram Reels). Read this file before any change; every proposal and code decision is checked against the principles below.
 
-## Değişmez ilkeler
+## Core principles (non-negotiable)
 
-1. **Markadan bağımsız:** Çekirdek ortaktır; her marka/kişi/kurum, kurulum sihirbazı ve kullanıcı yönlendirmesiyle uyarlanır. Markaya özgü her şey (renk, yazı tipi, ses tonu, dil, kaynaklar, hareket dili, logo) `brands/<slug>/` profilinde durur. Hiçbir marka çekirdeğe gömülmez; çekirdek kodda marka adı, rengi veya metni sabit yazılmaz; bir markanın ayarı diğerini etkilemez. Random Talks Academy yalnızca ilk test markasıdır.
-2. **Her cihazda:** macOS (Apple Silicon ve Intel), Windows (Docker Desktop + WSL2) ve Linux'ta aynı adımlarla kurulur ve aynı sonucu verir (altın testle doğrulanır). Varsayılan profil CPU'dur, GPU isteğe bağlıdır. Tek bir sisteme özgü özellik opsiyonel kalır ve üç sistem için de belgelenir.
-3. **Kullanıcı kontrolünde:** Her adım, süre, maliyet ve onay noktası görünür (kontrol paneli hazır olana kadar sohbet ve plan dokümanında). Onay olmadan hiçbir şey yayınlanmaz. Hatalar sessizce yutulmaz; kaydı tutulur ve kullanıcıya gösterilir.
+1. **Brand-agnostic.** The core is shared. Everything brand-specific (name, colors, fonts, tone, language, sources, motion system, logo) lives in `brands/<slug>/`. Never hard-code a brand name, color, text or language in core code. One brand's settings never affect another's. Random Talks Academy is only the first test brand.
+2. **Runs everywhere.** macOS (Apple Silicon and Intel), Windows (Docker Desktop + WSL2) and Linux install with the same steps and produce the same output, verified by the golden test. CPU profile is the default, GPU is optional. A feature that works on only one OS stays optional and is documented for all three.
+3. **User in control.** Every step, duration, cost and approval point is visible. Nothing is published without explicit approval. Errors are never swallowed; they are logged and shown to the user.
 
-## Destek ilkeleri
+## Supporting principles
 
-4. **Güvenlik:** Token ve anahtarlar asla repoya ya da sohbete girmez; kullanıcı verisi yerelde kalır.
-5. **Maliyet:** Varsayılan ücretsiz; ücretli servisler opsiyonel ve bütçe tavanlıdır.
-6. **Lisans:** Sadece lisanslı varlık kullanılır; her varlığın kaynağı ve atfı kaydedilir.
-7. **Bağımsızlık:** Tek bir LLM'e ya da servise kilitlenmez; sağlayıcılar değiştirilebilir.
+4. **Security.** Tokens and keys never enter the repo, logs or chat. Use `.env` (gitignored) and `.env.example` with placeholders. User data stays local.
+5. **Cost.** Free by default. Paid services are opt-in plugins with a budget cap.
+6. **Licensing.** Only licensed assets. Every asset's source, license and attribution is recorded.
+7. **Independence.** No lock-in to one LLM or service. Providers sit behind adapters and are swappable.
 
-## Dil
+## Language
 
-- Üretilen içeriğin dili her markanın profilinde belirlenir (TR, EN veya çok dilli); çekirdek hiçbir dile bağlı değildir.
-- Kod, kimlikler, commit mesajları, repo dokümanları ve README İngilizce yazılır. Bu dosya proje sahibiyle çalışma talimatı olduğu için Türkçedir.
+- Generated content language is set per brand profile (any language, or several). The core is language-neutral: no language-specific strings or assumptions in core code.
+- Code, identifiers, commit messages, docs and README are in English.
 
-## Çalışma kuralları
+## Repository map
 
-- Serhat'la iletişim Türkçe, kısa ve net; gerektiğinde görsel/tablo.
-- Aşama aşama ilerlenir; her adımda ne yapıldığı bildirilir, sonraki adım için Serhat'ın komutu beklenir. Komut olmadan yeni bir aşamaya geçilmez, kapsam kararı verilmez.
-- Kararları Serhat verir; seçenekler gerekçesiyle sunulur. Commit/push ve geri alınamaz işler yalnızca onayla.
-- Dürüst eleştiri verilir; varsayımlar açıkça belirtilir.
-- Her şey repoya kaydedilir; geçici ortamda kalan kod kaybolabilir.
+| Path | Purpose |
+| --- | --- |
+| `pilot/` | Phase 1 throwaway prototypes. Read-only reference; do not extend or import from it. |
+| `docs/ARCHITECTURE.md` | System design |
+| `docs/DECISIONS.md` | Decision log (append-only) |
+| `docs/ROADMAP.md` | Phases and tasks — the source of truth for progress |
+| `brands/<slug>/` | Brand profiles *(Phase 4)* |
+| `stagorix/` | Python core: analysis, agents, CLI *(Phase 2.4+)* |
+| `render/` | Remotion project and effect library *(Phase 2.4+)* |
 
-Her öneri ve kod kararı bu ilkelere göre kontrol edilir. Güncel plan: "Stagorix — Ana Plan v3" dokümanı.
+## Working rules
+
+- Work in small, reviewable steps. After each step, report what changed and wait for the owner's go-ahead before starting the next.
+- The owner makes decisions. Present options with trade-offs and a recommendation; state assumptions explicitly.
+- Git workflow: Claude may create branches, commit, push and open pull requests without asking. Merging into `main` is always done by the owner. Never push to `main` directly.
+- Deletion and any other irreversible action only with explicit approval.
+- Give honest critique; flag conflicts with the principles instead of working around them.
+- Everything that matters is committed; ephemeral environments lose uncommitted work.
+- When a decision is made, add it to `docs/DECISIONS.md`. When a task finishes, tick it in `docs/ROADMAP.md`.
+
+## Code conventions
+
+- Python 3.12, typed, Pydantic models for every agent input/output.
+- TypeScript for Remotion; every effect/component has a Zod schema for its props.
+- Pin every dependency version (Python lock file, `package-lock.json`, Docker image digests).
+- Media (raw videos, renders, cutouts, models) is never committed.
+- Personal, local-only notes for a contributor go in `CLAUDE.local.md` (gitignored).
