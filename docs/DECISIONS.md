@@ -4,6 +4,9 @@ Append-only. Newest first. Each entry names the principle(s) it serves (P1–P7,
 
 | Date | Decision | Rationale | Principle |
 | --- | --- | --- | --- |
+| 2026-10-29 | Remotion's official agent skills are installed locally with one documented command, not copied into the repo (supersedes 2026-10-28 "ship with the repo") | The skills have no stated license; Remotion itself is not MIT; no agent-specific folders in the repo | P6, P7 |
+| 2026-10-29 | Our own project skills live in `.agents/skills/<name>/` | Agent-neutral location | P7 |
+| 2026-10-29 | README states Remotion's license (free up to 3 employees, company license above) | Users of an MIT project must not be surprised by a dependency's terms | P6 |
 | 2026-10-29 | `stagorix verify` replaces `make verify` | `make` is not available on Windows by default | P2 |
 | 2026-10-29 | Golden test compares rendered stills with references by SSIM ≥ 0.99, plus video format checks; references come only from the Docker image | Byte-identical video across encoders is unrealistic; SSIM catches real visual drift; Docker is the one canonical environment | P2 |
 | 2026-10-29 | CI: lint, tests and typecheck natively on Ubuntu, macOS and Windows; golden test in Docker on Ubuntu | Hosted macOS/Windows runners cannot run Linux containers; Docker on those OSes is checked by hand in 2.8 | P2 |

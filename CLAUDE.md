@@ -56,6 +56,7 @@ Stagorix is an open-source, brand-agnostic, multi-agent pipeline that turns news
 | Render deps | `cd render && npm ci` |
 | Typecheck render | `cd render && npm run typecheck` |
 | Remotion Studio | `cd render && npm run studio` |
+| Remotion agent skills (local, never committed) | `cd render && npx skills add remotion-dev/skills` |
 | Docker, CPU (default) | `docker compose up --build` |
 | Golden test (canonical, in Docker) | `docker compose run --rm worker stagorix verify` |
 | Rewrite golden references | `docker compose run --rm worker stagorix verify --update` |
@@ -70,3 +71,4 @@ Stagorix is an open-source, brand-agnostic, multi-agent pipeline that turns news
 - `zod` is pinned to the exact version Remotion depends on; upgrade both together.
 - Media (raw videos, renders, cutouts, models) is never committed. Exception: the small golden-test frames in `tests/golden/`, always produced inside Docker.
 - Personal, local-only notes for a contributor go in `CLAUDE.local.md` (gitignored).
+- Third-party files are never vendored without a clear, compatible license. Project skills (our own) live in `.agents/skills/<name>/`.

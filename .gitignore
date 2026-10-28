@@ -235,3 +235,7 @@ CLAUDE.local.md
 # Local working files (inputs, renders)
 workspace/*
 !workspace/.gitkeep
+
+# Third-party agent skills, installed locally with `npx skills add remotion-dev/skills`
+.agents/skills/remotion*/
+.claude/skills/remotion*/
