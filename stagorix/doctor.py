@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import platform
 import shutil
 import subprocess
@@ -95,9 +96,18 @@ def check_docker() -> Check:
     return Check(name="Docker", status=Status.OK, detail=out)
 
 
+def in_container() -> bool:
+    """True inside the Stagorix image (env var set in the Dockerfile)."""
+    return os.environ.get("STAGORIX_IN_CONTAINER") == "1"
+
+
 def run_checks() -> list[Check]:
-    return [check_python(), check_node(), check_ffmpeg(), check_docker()]
+    checks = [check_python(), check_node(), check_ffmpeg()]
+    if not in_container():
+        checks.append(check_docker())
+    return checks
 
 
 def system_summary() -> str:
-    return f"{platform.system()} {platform.release()} ({platform.machine()})"
+    where = " · Docker" if in_container() else ""
+    return f"{platform.system()} {platform.release()} ({platform.machine()}){where}"
