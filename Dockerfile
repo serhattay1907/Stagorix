@@ -1,9 +1,10 @@
 # One image, two bases: CPU (default) and NVIDIA GPU (compose.gpu.yaml).
-# Base tags are pinned here; digests get pinned once CI can resolve them (roadmap 2.6).
+# Base images are pinned by digest; Dependabot proposes updates. The GPU base
+# (compose.gpu.yaml) is pinned by tag until it can be resolved and tested on a GPU machine.
 
-ARG BASE_IMAGE=debian:bookworm-slim
-ARG NODE_IMAGE=node:22-bookworm-slim
-ARG UV_IMAGE=ghcr.io/astral-sh/uv:0.11.32
+ARG BASE_IMAGE=debian:bookworm-slim@sha256:99c0b25c46d0214d5a2091092e7908907dcaecd6a962cde0ac700acee222b6f3
+ARG NODE_IMAGE=node:22-bookworm-slim@sha256:4b150b48b4116e2a22f2c39cc27025fbf4f153e2078fd3b14d159fdb5c7279da
+ARG UV_IMAGE=ghcr.io/astral-sh/uv:0.11.32@sha256:df4cae8f3a96d175e2e5f992e597550000edbe78fdc2594d5cd8de1a217f504c
 
 FROM ${NODE_IMAGE} AS node
 FROM ${UV_IMAGE} AS uv

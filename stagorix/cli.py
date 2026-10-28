@@ -75,6 +75,33 @@ def doctor() -> None:
 
 
 @app.command()
+def verify(
+    update: Annotated[
+        bool, typer.Option("--update", help="Rewrite the golden references (run inside Docker).")
+    ] = False,
+    browser: Annotated[
+        str | None,
+        typer.Option("--browser-executable", help="Use this Chrome/Chromium instead of Remotion's."),
+    ] = None,
+) -> None:
+    """Golden test: render a fixed video and compare it with the references."""
+    from stagorix.verify import OUT_DIR, run_verify
+
+    steps = run_verify(update=update, browser=browser)
+    table = Table(title=f"Stagorix verify · {system_summary()}")
+    table.add_column("Step")
+    table.add_column("Result")
+    table.add_column("Time")
+    table.add_column("Detail")
+    for s in steps:
+        table.add_row(s.name, "[green]ok[/]" if s.ok else "[red]fail[/]", f"{s.seconds:.1f}s", s.detail)
+    console.print(table)
+    console.print(f"Output: {OUT_DIR}")
+    if not all(s.ok for s in steps):
+        raise typer.Exit(code=1)
+
+
+@app.command()
 def run(
     mode: Annotated[Mode, typer.Argument(help="Input mode.")],
     brand: Annotated[str, typer.Option("--brand", "-b", help="Brand profile slug.")],
