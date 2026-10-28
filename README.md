@@ -17,6 +17,17 @@ Provider-agnostic, local-first multi-agent pipeline that turns news and your own
 | `polish` | An edited video | Same video, branded and captioned |
 | `clip` | A long video | 3–5 short candidates |
 
+## Development
+
+Requires Python 3.12, [uv](https://docs.astral.sh/uv/), Node.js 22 and ffmpeg. The one-command Docker setup arrives in roadmap 2.5.
+
+```bash
+uv sync
+uv run stagorix doctor
+uv run pytest
+cd render && npm ci && npm run typecheck
+```
+
 ## Docs
 
 - [Architecture](docs/ARCHITECTURE.md)

@@ -39,7 +39,7 @@ Source of truth for progress. 12 phases after Phase 0. Owner tags: **(S)** = Ser
 - [x] 2.1 Rename repo to `stagorix` (C)
 - [x] 2.2 Separate "Stagorix" Claude project with principles in its instructions (S)
 - [x] 2.3 `CLAUDE.md`, `README`, `docs/ARCHITECTURE`, `DECISIONS`, `ROADMAP` (C, push approval S)
-- [ ] 2.4 Folder structure, `pyproject.toml`, `package.json`, CLI skeleton (C)
+- [x] 2.4 Folder structure, `pyproject.toml`, `package.json`, CLI skeleton (C)
 - [ ] 2.5 Docker `cpu` / `gpu` profiles, pinned versions, fonts and models in the image (C)
 - [ ] 2.6 Golden test (`make verify`) + CI (C)
 - [ ] 2.7 Official Remotion skills in the repo (C)
