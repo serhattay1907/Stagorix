@@ -4,6 +4,7 @@ Append-only. Newest first. Each entry names the principle(s) it serves (P1–P7,
 
 | Date | Decision | Rationale | Principle |
 | --- | --- | --- | --- |
+| 2026-10-28 | No AI tool attribution in commits, PRs, docs or code; any credit only with owner approval | Owner preference; authorship stays with the owner | — |
 | 2026-10-28 | Claude may branch, commit, push and open PRs freely; only the owner merges into `main`; no direct pushes to `main` | Keeps the real control point with the owner while removing per-commit friction | P3 |
 | 2026-10-28 | `CLAUDE.md` in English; personal Turkish working notes in gitignored `CLAUDE.local.md` | Contributors' Claude Code reads `CLAUDE.md`; it must not be tied to one person | P1, language rule |
 | 2026-10-28 | `docs/ROADMAP.md` is the source of truth for progress; the plan doc links to it | Two copies drift apart | P3 |
