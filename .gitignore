@@ -228,3 +228,6 @@ pilot/**/public/
 *.wav
 .env
 data/
+
+# Personal Claude Code notes
+CLAUDE.local.md
