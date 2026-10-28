@@ -218,3 +218,13 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Stagorix
+node_modules/
+out/
+pilot/**/public/
+*.mp4
+*.mov
+*.wav
+.env
+data/
