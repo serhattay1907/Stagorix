@@ -19,7 +19,14 @@ Provider-agnostic, local-first multi-agent pipeline that turns news and your own
 
 ## Development
 
-Requires Python 3.12, [uv](https://docs.astral.sh/uv/), Node.js 22 and ffmpeg. The one-command Docker setup arrives in roadmap 2.5.
+**With Docker (recommended, same on macOS, Windows and Linux):**
+
+```bash
+docker compose up --build                                        # CPU (default)
+docker compose -f compose.yaml -f compose.gpu.yaml up --build    # NVIDIA GPU, Linux or Windows WSL2
+```
+
+**Without Docker:** Python 3.12, [uv](https://docs.astral.sh/uv/), Node.js 22 and ffmpeg.
 
 ```bash
 uv sync
