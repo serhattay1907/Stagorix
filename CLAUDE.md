@@ -56,6 +56,8 @@ Stagorix is an open-source, brand-agnostic, multi-agent pipeline that turns news
 | Render deps | `cd render && npm ci` |
 | Typecheck render | `cd render && npm run typecheck` |
 | Remotion Studio | `cd render && npm run studio` |
+| Docker, CPU (default) | `docker compose up --build` |
+| Docker, NVIDIA GPU | `docker compose -f compose.yaml -f compose.gpu.yaml up --build` |
 
 ## Code conventions
 

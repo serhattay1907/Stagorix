@@ -4,6 +4,9 @@ Append-only. Newest first. Each entry names the principle(s) it serves (P1–P7,
 
 | Date | Decision | Rationale | Principle |
 | --- | --- | --- | --- |
+| 2026-10-29 | One Dockerfile with a swappable base: Debian slim for CPU, NVIDIA CUDA (cuDNN) for GPU; GPU is a compose override file | CPU works everywhere with one command; GPU stays opt-in; macOS Docker has no GPU passthrough | P2, P5 |
+| 2026-10-29 | Fonts in the image: Noto core + Noto Color Emoji; CJK fonts deferred | Covers Latin, Greek, Cyrillic and emoji without ~100 MB of CJK fonts; brand fonts come from brand profiles | P1, P2 |
+| 2026-10-29 | ML models baked into the image in 3.1, together with the code that uses them | Baking models before their dependencies exist adds GBs with nothing to test | P2 |
 | 2026-10-29 | Python tooling: uv + `uv.lock`, Typer CLI, Ruff, pytest; flat `stagorix/` package | One fast cross-OS tool for envs and locking; layout matches docs | P2 |
 | 2026-10-29 | Render: Remotion 4.0.539 in `render/`, `zod` pinned to Remotion's own version (4.5.4) | Mismatched zod versions break prop schemas | P2 |
 | 2026-10-29 | Unbuilt commands exit with code 2 and name their roadmap phase | Nothing fails silently | P3 |

@@ -1,0 +1,16 @@
+# GPU override. Requires an NVIDIA GPU with the NVIDIA Container Toolkit
+# (Linux) or Docker Desktop with WSL2 GPU support (Windows).
+# macOS has no GPU passthrough in Docker; use the default CPU profile there.
+services:
+  worker:
+    build:
+      args:
+        BASE_IMAGE: nvidia/cuda:12.6.3-cudnn-runtime-ubuntu22.04
+    image: stagorix-worker:gpu
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]

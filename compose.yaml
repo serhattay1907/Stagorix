@@ -1,0 +1,19 @@
+# CPU profile (default) — the same on macOS, Windows and Linux:
+#   docker compose up --build
+# GPU profile (NVIDIA on Linux or Windows WSL2):
+#   docker compose -f compose.yaml -f compose.gpu.yaml up --build
+name: stagorix
+
+services:
+  worker:
+    build:
+      context: .
+      args:
+        BASE_IMAGE: debian:bookworm-slim
+    image: stagorix-worker:cpu
+    env_file:
+      - path: .env
+        required: false
+    volumes:
+      - ./brands:/app/brands
+      - ./workspace:/app/workspace
