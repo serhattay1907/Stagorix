@@ -4,6 +4,7 @@ Append-only. Newest first. Each entry names the principle(s) it serves (P1–P7,
 
 | Date | Decision | Rationale | Principle |
 | --- | --- | --- | --- |
+| 2026-10-29 | Fillers Whisper does not transcribe will be caught by giving Whisper the language's filler words as a hint, set per brand profile (4.1); no audio-based filler detector for now | Whisper folds an untranscribed "um" into the next word's timing, so it is invisible to the timestamp detector; filler words are language-specific and must not live in the core | P1, P3 |
 | 2026-10-29 | Flub approval in the terminal (`flubs --review`, Enter keeps the suggestion) until the control panel exists (6.3) | Approval must be possible now; the panel will reuse the same `flubs.json` | P3 |
 | 2026-10-29 | `stagorix cut` writes a separate preview; the source video is never changed; 10 ms audio fades at every join | Edits stay reversible; joins must not click | P3 |
 | 2026-10-29 | Flub detector works on word timestamps only and measures speaking rate in seconds per letter (supersedes the prototype's Turkish vowel count) | Fast, no extra model, and language-neutral; Unicode punctuation marks sentence ends | P1, P2 |
