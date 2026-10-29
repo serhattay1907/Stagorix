@@ -28,6 +28,10 @@ STILL_FRAMES = (10, 45, 89)
 EXPECTED = {"width": 1080, "height": 1920, "fps": 30.0, "frames": 90}
 MIN_SSIM = 0.99
 
+SPEECH_FIXTURE = "speech-en.opus"
+SPEECH_TEXT = "The quick brown fox jumps over the lazy dog. Every video starts with a single frame."
+MIN_WORD_MATCH = 0.9
+
 
 class Step(BaseModel):
     name: str
@@ -164,4 +168,24 @@ def run_verify(update: bool = False, browser: str | None = None) -> list[Step]:
         return worst >= MIN_SSIM, f"min SSIM {worst:.4f} (need ≥ {MIN_SSIM}){note}"
 
     steps.append(_timed("Compare with golden", compare))
+    steps.append(_timed("Transcribe sample", check_transcript))
     return steps
+
+
+def _norm(text: str) -> list[str]:
+    return re.findall(r"[a-z']+", text.lower())
+
+
+def check_transcript() -> tuple[bool, str]:
+    """Transcribe a fixed English sample and compare the words with the known text."""
+    from stagorix.analysis.media import MediaError
+    from stagorix.analysis.transcribe import transcribe
+
+    try:
+        got = transcribe(GOLDEN_DIR / SPEECH_FIXTURE, language="en")
+    except MediaError as exc:
+        raise VerifyError(str(exc)) from exc
+    expected = _norm(SPEECH_TEXT)
+    heard = set(_norm(got.text))
+    match = sum(w in heard for w in expected) / len(expected)
+    return match >= MIN_WORD_MATCH, f"{match:.0%} of words (need ≥ {MIN_WORD_MATCH:.0%}) · {got.model}"
