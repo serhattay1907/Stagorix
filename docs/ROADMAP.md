@@ -6,7 +6,7 @@ Source of truth for progress. 12 phases after Phase 0. Owner tags: **(S)** = Ser
 | --- | --- | --- |
 | 0 | Setup | ✅ |
 | 1 | Pilot | ✅ |
-| 2 | Cleanup and repo skeleton | 🟡 in progress |
+| 2 | Cleanup and repo skeleton | ✅ (macOS test deferred, see 2.8) |
 | 3 | Core engine | ⬜ |
 | 4 | Brand system | ⬜ |
 | 5 | Agents (LangGraph) | ⬜ |
@@ -43,7 +43,7 @@ Source of truth for progress. 12 phases after Phase 0. Owner tags: **(S)** = Ser
 - [x] 2.5 Docker `cpu` / `gpu` profiles, pinned versions, fonts and models in the image (C)
 - [x] 2.6 Golden test (`make verify`) + CI (C)
 - [x] 2.7 Official Remotion skills: documented local install, not vendored (C)
-- [ ] 2.8 Install test on macOS, Windows and Linux (S)
+- [ ] 2.8 Install test on macOS, Windows and Linux (S) — Windows ✅ (Docker, golden test SSIM 1.0), Linux ✅ (CI); **macOS open: required before 12.1**
 
 ## Phase 3 — Core engine
 
@@ -116,6 +116,7 @@ Source of truth for progress. 12 phases after Phase 0. Owner tags: **(S)** = Ser
 
 ## Phase 12 — Open source and CV
 
+- [ ] 12.0 Gate: macOS install test from 2.8 passes (S)
 - [ ] 12.1 README, screenshots, demo GIF (C, GIF S)
 - [ ] 12.2 Scoring evaluation report (C)
 - [ ] 12.3 DaVinci export, optional (C)
