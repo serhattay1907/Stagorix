@@ -9,7 +9,7 @@
     "noUnusedParameters": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "lib": ["DOM", "ES2022"]
+    "lib": ["DOM", "DOM.Iterable", "ES2022"]
   },
   "include": ["src", "remotion.config.ts"]
 }

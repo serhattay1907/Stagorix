@@ -54,6 +54,7 @@ Stagorix is an open-source, brand-agnostic, multi-agent pipeline that turns news
 | Analyze a video | `uv run stagorix analyze <file> [--language xx] [--cutout-seconds 3] [--skip-transcript\|--skip-framing\|--skip-voice]` |
 | Find flubs in a transcript | `uv run stagorix flubs <transcript.json> [--review]` |
 | Preview with approved flub edits | `uv run stagorix cut <video> [--flubs flubs.json]` |
+| Effect showcase video | `uv run stagorix showcase [--theme theme.json]` (in Docker: `docker compose run --rm worker stagorix showcase`) |
 | Models | `uv run stagorix models list` · `uv run stagorix models download <name>` |
 | Tests | `uv run pytest` |
 | Lint / format | `uv run ruff check .` · `uv run ruff format .` |
@@ -70,6 +71,7 @@ Stagorix is an open-source, brand-agnostic, multi-agent pipeline that turns news
 
 - Python 3.12, typed, Pydantic models for every agent input/output.
 - TypeScript for Remotion; every effect/component has a Zod schema for its props.
+- Effects take colors, fonts, radius and motion from the theme (`useTheme()`, `render/src/theme/`), never as literals; text and timings (in seconds) come from props. New effects appear in the `Showcase` composition.
 - Pin every dependency version (`uv.lock`, `package-lock.json`, Docker image digests).
 - A command that is not built yet says so and exits with code 2; never a silent no-op.
 - `zod` is pinned to the exact version Remotion depends on; upgrade both together.

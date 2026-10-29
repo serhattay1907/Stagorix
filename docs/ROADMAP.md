@@ -50,6 +50,11 @@ Source of truth for progress. 12 phases after Phase 0. Owner tags: **(S)** = Ser
 - [x] 3.1 Analysis: Whisper, face tracking, person cutout (ported from pilot) (C)
 - [x] 3.2 Flub detector (C) — 3.2a detection + confidence list, 3.2b terminal approval + cut preview
 - [ ] 3.3 Effect library v1: pilot effects as Zod-typed components (C)
+  - [x] 3.3a Talking-head effects on a theme scale: captions (5 styles), title behind speaker + cutout layer, camera zooms and whips, label, outro, grade; bundled fonts; named positions in a safe area; `Showcase` composition and `stagorix showcase`
+  - [ ] 3.3b Motion language: effect roles, intensity and spacing rules, set per brand
+  - [ ] 3.3c Pack A: more caption styles, emoji and number emphasis, shake, transitions (glitch, mask wipe, zoom blur); four preset looks; free sound library with license log (moved forward from 7.3)
+  - [ ] 3.3d Pack B: speaker effects (background swap/blur, outline glow, colour pop) and data cards (counter, charts, A vs B)
+  - [ ] 3.3e Cards from the pilot: quote bubbles, checklist, headline wall, timeline, badge, spotlight
 - [ ] 3.4 Layouts: full face, split screen, card over face, inside a phone (C)
 - [ ] 3.5 New effects: list cards, progress bar, phone mock-up, orbit, pull-back, zoom-through, vertigo, UI/diagram scenes (C)
 - [ ] 3.6 Preview + final render, −14 LUFS (C)
