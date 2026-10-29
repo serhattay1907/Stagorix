@@ -4,6 +4,9 @@ Append-only. Newest first. Each entry names the principle(s) it serves (P1–P7,
 
 | Date | Decision | Rationale | Principle |
 | --- | --- | --- | --- |
+| 2026-10-29 | Effects read a theme made of fixed scales (palette, font pair, radius 0–4, energy 1–5, caption style); a neutral theme is the default until brand profiles exist (4.1) | Brands and the setup wizard pick values on a scale instead of writing CSS; style packs (4.3) become preset themes; no brand look in the core | P1 |
+| 2026-10-29 | A `Showcase` composition plays every effect with sample content; it is the review tool now, part of the golden test, and the basis of the template picker later (4.3, 6.4) | One place to see and compare effects; visual regressions are caught in CI | P2, P3 |
+| 2026-10-29 | Effect timing props are in seconds; content (text, keywords, locale) always comes from props | Language- and frame-rate-neutral effects | P1 |
 | 2026-10-29 | Fillers Whisper does not transcribe will be caught by giving Whisper the language's filler words as a hint, set per brand profile (4.1); no audio-based filler detector for now | Whisper folds an untranscribed "um" into the next word's timing, so it is invisible to the timestamp detector; filler words are language-specific and must not live in the core | P1, P3 |
 | 2026-10-29 | Flub approval in the terminal (`flubs --review`, Enter keeps the suggestion) until the control panel exists (6.3) | Approval must be possible now; the panel will reuse the same `flubs.json` | P3 |
 | 2026-10-29 | `stagorix cut` writes a separate preview; the source video is never changed; 10 ms audio fades at every join | Edits stay reversible; joins must not click | P3 |

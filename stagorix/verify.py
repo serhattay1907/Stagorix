@@ -23,8 +23,9 @@ RENDER_DIR = ROOT / "render"
 GOLDEN_DIR = ROOT / "tests" / "golden"
 OUT_DIR = ROOT / "workspace" / "verify"
 
-COMPOSITION = "Placeholder"
-STILL_FRAMES = (10, 45, 89)
+COMPOSITION = "Placeholder"  # also rendered as a video for the format check
+# Stills compared with tests/golden/<composition>-<frame>.png.
+STILLS = {"Placeholder": (10, 45, 89), "Showcase": (40, 170, 270, 420)}
 EXPECTED = {"width": 1080, "height": 1920, "fps": 30.0, "frames": 90}
 MIN_SSIM = 0.99
 
@@ -64,6 +65,10 @@ def _remotion(args: list[str], browser: str | None) -> None:
     if browser:
         cmd.append(f"--browser-executable={browser}")
     _run(cmd, cwd=RENDER_DIR)
+
+
+def _still(composition: str, frame: int) -> str:
+    return f"{composition.lower()}-{frame:03d}.png"
 
 
 def _ssim(a: Path, b: Path) -> float:
@@ -117,12 +122,12 @@ def run_verify(update: bool = False, browser: str | None = None) -> list[Step]:
     steps: list[Step] = []
 
     def render_stills() -> tuple[bool, str]:
-        for f in STILL_FRAMES:
-            _remotion(
-                ["still", "src/index.ts", COMPOSITION, str(OUT_DIR / f"frame-{f:03d}.png"), f"--frame={f}"],
-                browser,
-            )
-        return True, f"{len(STILL_FRAMES)} frames"
+        for comp, frames in STILLS.items():
+            for f in frames:
+                _remotion(
+                    ["still", "src/index.ts", comp, str(OUT_DIR / _still(comp, f)), f"--frame={f}"], browser
+                )
+        return True, f"{sum(len(v) for v in STILLS.values())} frames from {len(STILLS)} compositions"
 
     def render_video() -> tuple[bool, str]:
         _remotion(
@@ -146,10 +151,9 @@ def run_verify(update: bool = False, browser: str | None = None) -> list[Step]:
 
         def write_golden() -> tuple[bool, str]:
             GOLDEN_DIR.mkdir(parents=True, exist_ok=True)
-            for f in STILL_FRAMES:
-                shutil.copyfile(
-                    OUT_DIR / f"frame-{f:03d}.png", GOLDEN_DIR / f"{COMPOSITION.lower()}-{f:03d}.png"
-                )
+            for comp, frames in STILLS.items():
+                for f in frames:
+                    shutil.copyfile(OUT_DIR / _still(comp, f), GOLDEN_DIR / _still(comp, f))
             where = "Docker" if in_container() else "native (not canonical)"
             return True, f"references rewritten from {where} render"
 
@@ -158,11 +162,12 @@ def run_verify(update: bool = False, browser: str | None = None) -> list[Step]:
 
     def compare() -> tuple[bool, str]:
         scores = []
-        for f in STILL_FRAMES:
-            ref = GOLDEN_DIR / f"{COMPOSITION.lower()}-{f:03d}.png"
-            if not ref.exists():
-                return False, f"missing {ref.name}; run 'stagorix verify --update' in Docker"
-            scores.append(_ssim(OUT_DIR / f"frame-{f:03d}.png", ref))
+        for comp, frames in STILLS.items():
+            for f in frames:
+                ref = GOLDEN_DIR / _still(comp, f)
+                if not ref.exists():
+                    return False, f"missing {ref.name}; run 'stagorix verify --update' in Docker"
+                scores.append(_ssim(OUT_DIR / ref.name, ref))
         worst = min(scores)
         note = "" if in_container() else " (native run; references come from Docker)"
         return worst >= MIN_SSIM, f"min SSIM {worst:.4f} (need ≥ {MIN_SSIM}){note}"
