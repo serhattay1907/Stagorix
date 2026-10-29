@@ -1,5 +1,6 @@
 import { AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { z } from "zod";
+import { safeX } from "../theme/layout";
 import { clamp, ease, pop, sec } from "../theme/motion";
 import { alpha, radiusPx, useTheme } from "../theme/theme";
 
@@ -48,8 +49,7 @@ export const Outro: React.FC<OutroProps> = (props) => {
         style={{
           position: "absolute",
           top: height * 0.17,
-          left: 72,
-          right: 150,
+          ...safeX(width),
           textAlign: "center",
           fontFamily: theme.font.display,
           opacity: card,

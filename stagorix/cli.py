@@ -105,6 +105,31 @@ def verify(
 
 
 @app.command()
+def showcase(
+    out: Annotated[Path, typer.Option("--out", help="Output video.")] = Path("workspace/showcase.mp4"),
+    theme: Annotated[
+        Path | None,
+        typer.Option("--theme", help='JSON file like {"theme": {...}}; default is the neutral theme.'),
+    ] = None,
+    browser: Annotated[
+        str | None,
+        typer.Option("--browser-executable", help="Use this Chrome/Chromium instead of Remotion's."),
+    ] = None,
+) -> None:
+    """Render every effect with sample content, to review the look of a theme."""
+    from stagorix.render.showcase import render_showcase
+    from stagorix.verify import VerifyError
+
+    try:
+        with console.status("Rendering showcase …"):
+            path = render_showcase(out, theme, browser)
+    except VerifyError as exc:
+        console.print(f"[red]Showcase failed:[/] {exc}")
+        raise typer.Exit(code=1) from exc
+    console.print(f"[green]Done:[/] {path}")
+
+
+@app.command()
 def run(
     mode: Annotated[Mode, typer.Argument(help="Input mode.")],
     brand: Annotated[str, typer.Option("--brand", "-b", help="Brand profile slug.")],

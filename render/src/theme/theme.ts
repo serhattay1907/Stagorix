@@ -1,6 +1,11 @@
 import { zColor } from "@remotion/zod-types";
 import { createContext, useContext } from "react";
 import { z } from "zod";
+import { FONTS } from "./fonts";
+import { positionSchema } from "./layout";
+
+export const captionStyleSchema = z.enum(["highlight", "karaoke", "boxed", "pop", "plain"]);
+export type CaptionStyle = z.infer<typeof captionStyleSchema>;
 
 // A theme is a set of choices on fixed scales, so a brand (or the setup wizard)
 // picks values instead of writing CSS. Brand profiles (phase 4) provide one;
@@ -22,26 +27,26 @@ export const themeSchema = z.object({
   radius: z.number().int().min(0).max(4).describe("Corner roundness: 0 square … 4 pill"),
   energy: z.number().int().min(1).max(5).describe("Motion: 1 calm … 5 punchy"),
   captions: z.object({
-    style: z.enum(["highlight", "karaoke", "plain"]),
+    style: captionStyleSchema,
     case: z.enum(["as-is", "upper"]),
-    position: z.enum(["middle", "lower"]),
+    position: positionSchema,
   }),
 });
 
 export type Theme = z.infer<typeof themeSchema>;
 
-// Deliberately plain: no brand look, readable on any footage.
+// Brand-free default: high-contrast and readable on any footage, not a brand look.
 export const neutralTheme: Theme = {
   palette: {
-    background: "#0E0F12",
-    surface: "#1B1D22",
+    background: "#0A0B0F",
+    surface: "#16181F",
     text: "#FFFFFF",
-    muted: "#B9BDC6",
-    accent: "#5B8CFF",
-    positive: "#3DD68C",
-    negative: "#FF5A4E",
+    muted: "#C3C7D1",
+    accent: "#FFD23F",
+    positive: "#2EE6A6",
+    negative: "#FF5470",
   },
-  font: { display: "'Noto Sans', 'Noto Color Emoji', sans-serif", body: "'Noto Sans', 'Noto Color Emoji', sans-serif" },
+  font: { display: FONTS.montserrat, body: FONTS.inter },
   radius: 2,
   energy: 3,
   captions: { style: "highlight", case: "as-is", position: "middle" },
