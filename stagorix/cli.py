@@ -170,6 +170,50 @@ def models_download(name: Annotated[str, typer.Argument(help="Whisper model name
     console.print(f"[green]Done:[/] {path}")
 
 
+def _print_flubs(report) -> None:  # type: ignore[no-untyped-def]
+    table = Table(title=f"Flubs · {report.source} · approve from {report.approve_from:.0%}")
+    for col in ("#", "Time", "Kind", "Words", "Confidence", "Action", "Approved", "Detail"):
+        table.add_column(col)
+    for i, f in enumerate(report.flubs, 1):
+        action = f"{f.action} → {f.keep}s" if f.keep else str(f.action)
+        approved = "[green]yes[/]" if f.approved else "[dim]no[/]"
+        table.add_row(
+            str(i),
+            f"{f.start:.1f}–{f.end:.1f}s",
+            str(f.kind),
+            f.text,
+            f"{f.confidence:.0%}",
+            action,
+            approved,
+            f.detail,
+        )
+    console.print(table)
+
+
+@app.command()
+def flubs(
+    transcript_file: Annotated[
+        Path, typer.Argument(help="transcript.json from `stagorix analyze`.", exists=True, dir_okay=False)
+    ],
+    out: Annotated[
+        Path | None,
+        typer.Option("--out", help="Where to write flubs.json (default: next to the transcript)."),
+    ] = None,
+) -> None:
+    """Find hesitations, stretched words, restarts and long pauses in a transcript. Nothing is cut."""
+    from stagorix.analysis.flubs import detect_flubs
+    from stagorix.analysis.models import Transcript
+
+    transcript = Transcript.model_validate_json(transcript_file.read_text(encoding="utf-8"))
+    report = detect_flubs(transcript)
+    target = out or transcript_file.with_name("flubs.json")
+    target.write_text(report.model_dump_json(indent=2), encoding="utf-8")
+    _print_flubs(report)
+    console.print(
+        f"{len(report.flubs)} found · {sum(f.approved for f in report.flubs)} pre-approved → {target}"
+    )
+
+
 @app.command()
 def analyze(
     source: Annotated[Path, typer.Argument(help="Input video or audio file.", exists=True, dir_okay=False)],
@@ -238,6 +282,16 @@ def analyze(
                 " → transcript.json"
             )
             table.add_row("Transcript", "[green]ok[/]", f"{seconds:.1f}s", detail)
+
+            from stagorix.analysis.flubs import detect_flubs
+
+            done = run_step("Flubs", lambda p: detect_flubs(transcript))
+            if done:
+                report, seconds = done
+                (out_dir / "flubs.json").write_text(report.model_dump_json(indent=2), encoding="utf-8")
+                approved = sum(f.approved for f in report.flubs)
+                detail = f"{len(report.flubs)} found · {approved} pre-approved → flubs.json"
+                table.add_row("Flubs", "[green]ok[/]", f"{seconds:.1f}s", detail)
 
     if not skip_framing:
         from stagorix.analysis.framing import render_vertical, track_faces

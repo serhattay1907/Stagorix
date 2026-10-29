@@ -4,6 +4,11 @@ Append-only. Newest first. Each entry names the principle(s) it serves (P1–P7,
 
 | Date | Decision | Rationale | Principle |
 | --- | --- | --- | --- |
+| 2026-10-29 | Flub detector works on word timestamps only and measures speaking rate in seconds per letter (supersedes the prototype's Turkish vowel count) | Fast, no extra model, and language-neutral; Unicode punctuation marks sentence ends | P1, P2 |
+| 2026-10-29 | Every flub is a proposal with a confidence score; only those ≥ 60% are pre-approved, and nothing is cut without the user's approval | Emphasis can look like a flub (a stretched short word); the user decides | P3 |
+| 2026-10-29 | Pauses after a sentence are shortened to 0.6 s, gaps inside a sentence to 0.2 s; never removed entirely | Removing every pause makes speech sound rushed and robotic | P3 |
+| 2026-10-29 | A repeated phrase is cut only when the first take is an unfinished sentence; the last take is kept | Deliberate repetition (anaphora) across finished sentences must stay | P3 |
+| 2026-10-29 | Stretched words are flagged for review, not edited automatically | Speeding up a single word belongs to rendering (3.6); a wrong guess is audible | P3 |
 | 2026-10-29 | Virtual camera gets a dead zone (30% of the crop width) and sub-pixel crops; follow time 1 s (supersedes the 0.5 s always-follow camera) | A real talking-head test showed the camera chasing natural head sway (203 one-pixel moves in 51 s); with the dead zone the same clip needs zero moves | P2 |
 | 2026-10-29 | Person cutout runs U²-Net (`u2net_human_seg`, Apache-2.0) directly with onnxruntime instead of the `rembg` package; model URL and SHA-256 pinned | Same model, far fewer dependencies (no numba, scikit-image, pymatting); download integrity checked | P2, P4, P6 |
 | 2026-10-29 | Cutout covers only the opening seconds (default 3 s, `--cutout-seconds`) | Slowest step on CPU (~0.5 s/frame); titles-behind-speaker is a hook effect | P2, P5 |

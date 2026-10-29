@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from enum import StrEnum
+
 from pydantic import BaseModel, Field
 
 
@@ -60,3 +62,36 @@ class VoiceTrack(BaseModel):
     lufs_before: float
     lufs_after: float
     target_lufs: float
+
+
+class FlubKind(StrEnum):
+    PAUSE = "pause"  # long silence at a sentence boundary
+    HESITATION = "hesitation"  # long gap inside a sentence (often an untranscribed "um")
+    STRETCH = "stretch"  # a word spoken much slower than the speaker's norm
+    REPEAT = "repeat"  # a phrase restarted after an unfinished attempt
+
+
+class FlubAction(StrEnum):
+    SHORTEN = "shorten"  # keep `keep` seconds of the span
+    CUT = "cut"  # remove the span (the first take of a repeat)
+    REVIEW = "review"  # needs a human ear; no automatic edit
+
+
+class Flub(BaseModel):
+    kind: FlubKind
+    start: float = Field(ge=0)
+    end: float = Field(ge=0)
+    text: str = Field(description="Words involved, for the approval list.")
+    confidence: float = Field(ge=0, le=1)
+    action: FlubAction
+    keep: float = Field(default=0, ge=0, description="Seconds kept when shortening.")
+    detail: str
+    approved: bool = Field(description="Pre-selected for the edit; the user can change it.")
+
+
+class FlubReport(BaseModel):
+    source: str
+    language: str
+    letter_seconds: float = Field(description="Speaker's median seconds per letter.")
+    approve_from: float = Field(description="Flubs at or above this confidence are pre-approved.")
+    flubs: list[Flub]
