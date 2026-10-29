@@ -4,6 +4,7 @@ Append-only. Newest first. Each entry names the principle(s) it serves (P1–P7,
 
 | Date | Decision | Rationale | Principle |
 | --- | --- | --- | --- |
+| 2026-10-30 | Every step names the expertise it needs; decisions cite current sources, data or measurements, and the basis is logged here | Professional quality and traceable reasons for every choice | — |
 | 2026-10-29 | Effect roadmap follows a motion language first: every effect carries a role (hook, emphasis, transition, info, outro), an intensity and spacing rules that brands tune and the Editor agent obeys; then pack A (caption styles, emoji/number emphasis, shake, transitions) with four preset looks and a sound library moved forward from 7.3; then pack B (speaker effects, data cards) | Effects with a reason and brand-consistent rules, not random effects; sound matters as much as picture | P1, P3 |
 | 2026-10-29 | Bundled fonts: Montserrat, Inter, Bebas Neue from Fontsource (OFL-1.1, pinned), Latin + Latin Extended; rendering waits until they load | Same letters on every OS; OFL allows bundling; no frame renders with a fallback font | P2, P6 |
 | 2026-10-29 | Effects place text by named positions (top, upper, middle, lower) inside a platform safe area, not by pixel values | Brands and the editor pick a position; text never sits under platform buttons | P1, P3 |

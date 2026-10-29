@@ -41,6 +41,7 @@ Stagorix is an open-source, brand-agnostic, multi-agent pipeline that turns news
 - No AI tool attribution anywhere: no `Co-Authored-By` trailers, session links or "Generated with" lines in commits, PRs, docs or code. If a credit seems genuinely needed, ask the owner first.
 - Deletion and any other irreversible action only with explicit approval.
 - Give honest critique; flag conflicts with the principles instead of working around them.
+- Every step names the expertise it needs (editor, brand, social media, sound, UI/UX, security, licensing, architecture …) and is decided the way that expert would decide. Decisions cite their basis: current sources, data or our own measurements, recorded in `docs/DECISIONS.md`.
 - Everything that matters is committed; ephemeral environments lose uncommitted work.
 - When a decision is made, add it to `docs/DECISIONS.md`. When a task finishes, tick it in `docs/ROADMAP.md`.
 
