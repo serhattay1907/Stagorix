@@ -6,7 +6,7 @@ Append-only. Newest first. Each entry names the principle(s) it serves (P1–P7,
 | --- | --- | --- | --- |
 | 2026-10-29 | Flub detector works on word timestamps only and measures speaking rate in seconds per letter (supersedes the prototype's Turkish vowel count) | Fast, no extra model, and language-neutral; Unicode punctuation marks sentence ends | P1, P2 |
 | 2026-10-29 | Every flub is a proposal with a confidence score; only those ≥ 60% are pre-approved, and nothing is cut without the user's approval | Emphasis can look like a flub (a stretched short word); the user decides | P3 |
-| 2026-10-29 | Pauses after a sentence are shortened to 0.6 s, gaps inside a sentence to 0.2 s; never removed entirely | Removing every pause makes speech sound rushed and robotic | P3 |
+| 2026-10-29 | Pauses after a sentence are shortened to 0.6 s, gaps over 0.5 s after a comma to 0.3 s, gaps over 0.5 s inside a sentence to 0.2 s; never removed entirely. Stretch threshold 2.5×; tuned on one clean and one flawed recording | Removing every pause makes speech sound rushed and robotic | P3 |
 | 2026-10-29 | A repeated phrase is cut only when the first take is an unfinished sentence; the last take is kept | Deliberate repetition (anaphora) across finished sentences must stay | P3 |
 | 2026-10-29 | Stretched words are flagged for review, not edited automatically | Speeding up a single word belongs to rendering (3.6); a wrong guess is audible | P3 |
 | 2026-10-29 | Virtual camera gets a dead zone (30% of the crop width) and sub-pixel crops; follow time 1 s (supersedes the 0.5 s always-follow camera) | A real talking-head test showed the camera chasing natural head sway (203 one-pixel moves in 51 s); with the dead zone the same clip needs zero moves | P2 |
