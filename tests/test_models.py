@@ -15,8 +15,16 @@ def test_dockerfile_bakes_the_default_whisper_model() -> None:
     assert f"snapshot_download('{info.repo}', local_dir='/opt/models/whisper/{info.name}')" in dockerfile
 
 
+def test_dockerfile_bakes_yunet() -> None:
+    dockerfile = (ROOT / "Dockerfile").read_text(encoding="utf-8")
+    assert (
+        f"hf_hub_download('{models.YUNET.repo}', '{models.YUNET_FILE}', local_dir='/opt/models/yunet')"
+        in dockerfile
+    )
+
+
 def test_every_model_records_source_and_license() -> None:
-    for m in models.WHISPER_MODELS.values():
+    for m in [*models.WHISPER_MODELS.values(), models.YUNET]:
         assert m.repo and m.license and m.size_mb > 0
 
 

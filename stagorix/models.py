@@ -56,3 +56,21 @@ def download_whisper(name: str) -> Path:
     target = whisper_path(name)
     snapshot_download(repo_id=info.repo, local_dir=target)
     return target
+
+
+YUNET = ModelInfo(name="yunet-2023mar", repo="opencv/face_detection_yunet", license="MIT", size_mb=1)
+YUNET_FILE = "face_detection_yunet_2023mar.onnx"
+
+
+def yunet_path() -> Path:
+    return models_dir() / "yunet" / YUNET_FILE
+
+
+def ensure_yunet() -> Path:
+    """Return the YuNet face detector, downloading it (~0.2 MB) on first use."""
+    path = yunet_path()
+    if not path.exists():
+        from huggingface_hub import hf_hub_download
+
+        hf_hub_download(repo_id=YUNET.repo, filename=YUNET_FILE, local_dir=path.parent)
+    return path

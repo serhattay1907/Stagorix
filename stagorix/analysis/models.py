@@ -23,3 +23,25 @@ class Transcript(BaseModel):
     @property
     def text(self) -> str:
         return " ".join(w.text for w in self.words)
+
+
+class FaceDetection(BaseModel):
+    frame: int = Field(ge=0)
+    x: float
+    y: float
+    w: float = Field(gt=0)
+    h: float = Field(gt=0)
+    score: float = Field(ge=0, le=1)
+
+
+class FaceTrack(BaseModel):
+    source: str
+    width: int
+    height: int
+    fps: float
+    frames: int
+    sample_every: int = Field(ge=1, description="Detection ran on every Nth frame.")
+    detections: list[FaceDetection]
+    face_ratio: float = Field(ge=0, le=1, description="Share of sampled frames with a face.")
+    crop_width: int = Field(description="Width of the full-height 9:16 window in source pixels.")
+    crop_x: list[int] = Field(description="Left edge of the window for every frame.")

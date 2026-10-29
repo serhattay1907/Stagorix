@@ -169,7 +169,26 @@ def run_verify(update: bool = False, browser: str | None = None) -> list[Step]:
 
     steps.append(_timed("Compare with golden", compare))
     steps.append(_timed("Transcribe sample", check_transcript))
+    steps.append(_timed("Vertical framing", check_framing))
     return steps
+
+
+def check_framing() -> tuple[bool, str]:
+    """Face tracking + 9:16 cut on a generated 16:9 clip with no face: crop must stay centred."""
+    from stagorix.analysis.framing import render_vertical, track_faces
+    from stagorix.analysis.video import probe
+
+    src = OUT_DIR / "landscape.mp4"
+    _run(
+        [_tool("ffmpeg"), "-v", "error", "-y", "-f", "lavfi", "-i", "testsrc2=s=1920x1080:r=30:d=2"]
+        + ["-c:v", "libx264", "-preset", "veryfast", "-pix_fmt", "yuv420p", str(src)]
+    )
+    track = track_faces(src)
+    centred = set(track.crop_x) == {(1920 - track.crop_width) // 2}
+    out = render_vertical(src, track, OUT_DIR / "vertical.mp4")
+    got = probe(out)
+    ok = centred and (got.width, got.height, got.frames) == (1080, 1920, 60)
+    return ok, f"{got.width}×{got.height}, {got.frames} frames, crop {'centred' if centred else 'moved'}"
 
 
 def _norm(text: str) -> list[str]:
