@@ -87,4 +87,4 @@ Nothing passes an approval point without explicit user action.
 
 - One command: `docker compose up` on macOS, Windows (WSL2) and Linux.
 - Pinned versions; fonts and models baked into the image.
-- Golden test (`make verify`): renders a fixed input and compares against a reference, on all three OSes in CI.
+- Golden test (`stagorix verify`): renders a fixed input and compares against a reference, on all three OSes in CI.

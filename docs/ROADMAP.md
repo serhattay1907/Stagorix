@@ -41,14 +41,14 @@ Source of truth for progress. 12 phases after Phase 0. Owner tags: **(S)** = Ser
 - [x] 2.3 `CLAUDE.md`, `README`, `docs/ARCHITECTURE`, `DECISIONS`, `ROADMAP` (C, push approval S)
 - [x] 2.4 Folder structure, `pyproject.toml`, `package.json`, CLI skeleton (C)
 - [x] 2.5 Docker `cpu` / `gpu` profiles, pinned versions, fonts and models in the image (C)
-- [x] 2.6 Golden test (`make verify`) + CI (C)
+- [x] 2.6 Golden test (`stagorix verify`) + CI (C)
 - [x] 2.7 Official Remotion skills: documented local install, not vendored (C)
 - [ ] 2.8 Install test on macOS, Windows and Linux (S) — Windows ✅ (Docker, golden test SSIM 1.0), Linux ✅ (CI); **macOS open: required before 12.1**
 
 ## Phase 3 — Core engine
 
 - [x] 3.1 Analysis: Whisper, face tracking, person cutout (ported from pilot) (C)
-- [ ] 3.2 Flub detector (C)
+- [ ] 3.2 Flub detector (C) — 3.2a detection + confidence list ✅; 3.2b approval and cut preview open
 - [ ] 3.3 Effect library v1: pilot effects as Zod-typed components (C)
 - [ ] 3.4 Layouts: full face, split screen, card over face, inside a phone (C)
 - [ ] 3.5 New effects: list cards, progress bar, phone mock-up, orbit, pull-back, zoom-through, vertigo, UI/diagram scenes (C)
