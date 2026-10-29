@@ -4,6 +4,7 @@ Append-only. Newest first. Each entry names the principle(s) it serves (P1–P7,
 
 | Date | Decision | Rationale | Principle |
 | --- | --- | --- | --- |
+| 2026-10-29 | Virtual camera gets a dead zone (30% of the crop width) and sub-pixel crops; follow time 1 s (supersedes the 0.5 s always-follow camera) | A real talking-head test showed the camera chasing natural head sway (203 one-pixel moves in 51 s); with the dead zone the same clip needs zero moves | P2 |
 | 2026-10-29 | Person cutout runs U²-Net (`u2net_human_seg`, Apache-2.0) directly with onnxruntime instead of the `rembg` package; model URL and SHA-256 pinned | Same model, far fewer dependencies (no numba, scikit-image, pymatting); download integrity checked | P2, P4, P6 |
 | 2026-10-29 | Cutout covers only the opening seconds (default 3 s, `--cutout-seconds`) | Slowest step on CPU (~0.5 s/frame); titles-behind-speaker is a hook effect | P2, P5 |
 | 2026-10-29 | Voice clean-up: high-pass 80 Hz, light compression, normalised to −16 LUFS; final mix goes to −14 LUFS in 3.6 | Clean, consistent voice before editing; platform loudness is set once at the end | P2 |

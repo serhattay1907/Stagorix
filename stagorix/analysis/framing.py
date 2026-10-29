@@ -1,9 +1,11 @@
 """Face tracking and a smooth 9:16 virtual camera.
 
-Faces are detected with OpenCV YuNet on downscaled, sampled frames. The crop
-centre follows the face through a two-way exponential filter, so the camera
-moves slowly and without jitter. If no face is found, the crop stays centred
-and the result says so (principle 3).
+Faces are detected with OpenCV YuNet on downscaled, sampled frames. The virtual
+camera behaves like a camera operator: while the face stays inside a central
+dead zone it does not move at all; when the face leaves it, the camera eases
+over just enough to bring it back. Crops are sub-pixel, so a moving camera has
+no 1 px steps. If no face is found, the crop stays centred and the result says
+so (principle 3).
 """
 
 from __future__ import annotations
@@ -21,7 +23,9 @@ from stagorix.analysis.video import VideoInfo, VideoWriter, iter_frames, probe
 DETECT_WIDTH = 640
 SAMPLE_EVERY_S = 0.1
 MIN_SCORE = 0.7
-FOLLOW_SECONDS = 0.5
+DETECTION_SMOOTH_S = 0.3
+FOLLOW_SECONDS = 1.0
+DEAD_ZONE = 0.30  # share of the crop width around its centre where the face may move freely
 TARGET_W, TARGET_H = 1080, 1920
 
 
@@ -41,18 +45,30 @@ def smooth(values: np.ndarray, fps: float, seconds: float = FOLLOW_SECONDS) -> n
     return out
 
 
-def crop_positions(centres: np.ndarray, info: VideoInfo) -> list[int]:
+def crop_positions(centres: np.ndarray, info: VideoInfo) -> list[float]:
     """Left edge of the crop for every frame, from per-frame face centres (NaN = unknown)."""
     cw = crop_width_for(info)
     n = len(centres)
     known = ~np.isnan(centres)
     if not known.any():
-        filled = np.full(n, info.width / 2)
-    else:
-        idx = np.arange(n)
-        filled = np.interp(idx, idx[known], centres[known])
-    x = smooth(filled, info.fps) - cw / 2
-    return [int(v) for v in np.clip(np.round(x), 0, info.width - cw)]
+        return [round((info.width - cw) / 2, 2)] * n
+    idx = np.arange(n)
+    target = smooth(np.interp(idx, idx[known], centres[known]), info.fps, DETECTION_SMOOTH_S)
+
+    half_zone = DEAD_ZONE * cw / 2
+    cam = np.empty(n)
+    cam[0] = np.median(target[: max(1, round(info.fps * 2))])
+    for i in range(n):
+        prev = cam[i - 1] if i else cam[0]
+        offset = target[i] - prev
+        if abs(offset) > half_zone:
+            prev += offset - np.sign(offset) * half_zone  # just enough to bring the face back
+        cam[i] = prev
+    moved = np.any(np.abs(np.diff(cam)) > 1e-6)
+    if moved:
+        cam = smooth(cam, info.fps, FOLLOW_SECONDS)
+    left = np.clip(cam - cw / 2, 0, info.width - cw)
+    return [round(float(v), 2) for v in left]
 
 
 def detect_faces(
@@ -137,7 +153,9 @@ def render_vertical(
     try:
         for i, frame in enumerate(iter_frames(path, info)):
             x = track.crop_x[min(i, len(track.crop_x) - 1)]
-            writer.write(fit_to_target(frame[:, x : x + cw], cv2))
+            centre = (x + cw / 2 - 0.5, (info.height - 1) / 2)
+            crop = cv2.getRectSubPix(frame, (cw, info.height), centre)  # sub-pixel, no 1 px steps
+            writer.write(fit_to_target(crop, cv2))
             if on_progress and info.frames and i % 30 == 0:
                 on_progress(min(i / info.frames, 1.0))
     finally:
