@@ -7,6 +7,7 @@ fails silently (principle 3).
 from __future__ import annotations
 
 from enum import StrEnum
+from pathlib import Path
 from typing import Annotated, NoReturn
 
 import typer
@@ -23,6 +24,8 @@ app = typer.Typer(
 )
 brand_app = typer.Typer(help="Manage brand profiles.", no_args_is_help=True)
 app.add_typer(brand_app, name="brand")
+models_app = typer.Typer(help="List and download ML models.", no_args_is_help=True)
+app.add_typer(models_app, name="models")
 
 console = Console()
 
@@ -130,3 +133,88 @@ def brand_list() -> None:
 def brand_new() -> None:
     """Create a brand profile with the setup wizard."""
     _planned("The brand setup wizard", "4.2")
+
+
+@models_app.command("list")
+def models_list() -> None:
+    """Show known models, their license and whether they are downloaded."""
+    from stagorix import models
+
+    table = Table(title=f"Models · {models.models_dir()}")
+    for col in ("Kind", "Name", "Size", "License", "Source", "Downloaded"):
+        table.add_column(col)
+    for m in models.WHISPER_MODELS.values():
+        default = " (default)" if m.name == models.DEFAULT_WHISPER else ""
+        here = "[green]yes[/]" if models.is_downloaded(m.name) else "no"
+        table.add_row("whisper", m.name + default, f"{m.size_mb} MB", m.license, m.repo, here)
+    console.print(table)
+
+
+@models_app.command("download")
+def models_download(name: Annotated[str, typer.Argument(help="Whisper model name, e.g. small.")]) -> None:
+    """Download a model now instead of on first use."""
+    from stagorix import models
+
+    if name not in models.WHISPER_MODELS:
+        console.print(f"[red]Unknown model '{name}'.[/] Known: {', '.join(models.WHISPER_MODELS)}")
+        raise typer.Exit(code=1)
+    info = models.WHISPER_MODELS[name]
+    console.print(f"Downloading whisper/{name} (~{info.size_mb} MB, {info.license}) from {info.repo} …")
+    path = models.download_whisper(name)
+    console.print(f"[green]Done:[/] {path}")
+
+
+@app.command()
+def analyze(
+    source: Annotated[Path, typer.Argument(help="Input video or audio file.", exists=True, dir_okay=False)],
+    language: Annotated[
+        str | None,
+        typer.Option("--language", "-l", help="Spoken language code, e.g. en. Detected if omitted."),
+    ] = None,
+    whisper_model: Annotated[str, typer.Option("--whisper-model", help="Whisper model size.")] = "small",
+    out: Annotated[Path | None, typer.Option("--out", help="Output folder.")] = None,
+) -> None:
+    """Analyze a video: word-level transcript (more analysis steps follow in phase 3.1)."""
+    import time
+
+    from rich.progress import BarColumn, Progress, TextColumn, TimeElapsedColumn
+
+    from stagorix import models
+    from stagorix.analysis.media import MediaError
+    from stagorix.analysis.transcribe import transcribe
+
+    out_dir = out or Path("workspace") / "analysis" / source.stem
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    if whisper_model in models.WHISPER_MODELS and not models.is_downloaded(whisper_model):
+        info = models.WHISPER_MODELS[whisper_model]
+        console.print(
+            f"[yellow]First use:[/] downloading whisper/{whisper_model} (~{info.size_mb} MB, {info.license})."
+        )
+
+    start = time.perf_counter()
+    try:
+        with Progress(TextColumn("Transcribing"), BarColumn(), TimeElapsedColumn(), console=console) as bar:
+            task = bar.add_task("transcribe", total=1.0)
+            transcript = transcribe(
+                source,
+                model=whisper_model,
+                language=language,
+                on_progress=lambda f: bar.update(task, completed=f),
+            )
+    except (MediaError, ValueError) as exc:
+        console.print(f"[red]Analysis failed:[/] {exc}")
+        raise typer.Exit(code=1) from exc
+    seconds = time.perf_counter() - start
+
+    path = out_dir / "transcript.json"
+    path.write_text(transcript.model_dump_json(indent=2), encoding="utf-8")
+
+    table = Table(title=f"Analysis · {source.name}")
+    for col in ("Step", "Result", "Time", "Detail"):
+        table.add_column(col)
+    lang = f"{transcript.language} ({'detected' if transcript.language_detected else 'given'})"
+    detail = f"{len(transcript.words)} words · {transcript.duration:.1f}s audio · {lang} · {transcript.model}"
+    table.add_row("Transcript", "[green]ok[/]", f"{seconds:.1f}s", detail)
+    console.print(table)
+    console.print(f"Output: {path}")

@@ -18,6 +18,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
     UV_PROJECT_ENVIRONMENT=/opt/venv \
     UV_COMPILE_BYTECODE=1 \
     UV_LINK_MODE=copy \
+    STAGORIX_MODELS_DIR=/opt/models \
     PATH=/opt/venv/bin:$PATH
 
 # ffmpeg, fonts (Noto covers Latin, Greek, Cyrillic and emoji) and the
@@ -42,6 +43,11 @@ WORKDIR /app
 # Python: the version comes from .python-version, packages from uv.lock.
 COPY pyproject.toml uv.lock .python-version README.md ./
 RUN uv sync --frozen --no-dev --no-install-project
+
+# Default Whisper model, baked in so the first run works offline. Must match
+# DEFAULT_WHISPER in stagorix/models.py (checked by tests/test_models.py).
+RUN python -c "from huggingface_hub import snapshot_download; \
+snapshot_download('Systran/faster-whisper-small', local_dir='/opt/models/whisper/small')"
 
 # Render: exact packages from package-lock.json plus Remotion's pinned browser.
 COPY render/package.json render/package-lock.json render/

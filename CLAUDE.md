@@ -51,6 +51,8 @@ Stagorix is an open-source, brand-agnostic, multi-agent pipeline that turns news
 | Install Python deps | `uv sync` |
 | CLI | `uv run stagorix --help` |
 | Environment check | `uv run stagorix doctor` |
+| Analyze a video | `uv run stagorix analyze <file> [--language xx]` |
+| Models | `uv run stagorix models list` · `uv run stagorix models download <name>` |
 | Tests | `uv run pytest` |
 | Lint / format | `uv run ruff check .` · `uv run ruff format .` |
 | Render deps | `cd render && npm ci` |
@@ -69,6 +71,6 @@ Stagorix is an open-source, brand-agnostic, multi-agent pipeline that turns news
 - Pin every dependency version (`uv.lock`, `package-lock.json`, Docker image digests).
 - A command that is not built yet says so and exits with code 2; never a silent no-op.
 - `zod` is pinned to the exact version Remotion depends on; upgrade both together.
-- Media (raw videos, renders, cutouts, models) is never committed. Exception: the small golden-test frames in `tests/golden/`, always produced inside Docker.
+- Media (raw videos, renders, cutouts, models) is never committed. Exceptions: the small golden-test files in `tests/golden/` (frames produced inside Docker, a synthetic speech sample).
 - Personal, local-only notes for a contributor go in `CLAUDE.local.md` (gitignored).
 - Third-party files are never vendored without a clear, compatible license. Project skills (our own) live in `.agents/skills/<name>/`.
