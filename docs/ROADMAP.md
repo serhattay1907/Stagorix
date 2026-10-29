@@ -48,7 +48,7 @@ Source of truth for progress. 12 phases after Phase 0. Owner tags: **(S)** = Ser
 ## Phase 3 — Core engine
 
 - [x] 3.1 Analysis: Whisper, face tracking, person cutout (ported from pilot) (C)
-- [ ] 3.2 Flub detector (C) — 3.2a detection + confidence list ✅; 3.2b approval and cut preview open
+- [x] 3.2 Flub detector (C) — 3.2a detection + confidence list, 3.2b terminal approval + cut preview
 - [ ] 3.3 Effect library v1: pilot effects as Zod-typed components (C)
 - [ ] 3.4 Layouts: full face, split screen, card over face, inside a phone (C)
 - [ ] 3.5 New effects: list cards, progress bar, phone mock-up, orbit, pull-back, zoom-through, vertigo, UI/diagram scenes (C)
@@ -57,6 +57,7 @@ Source of truth for progress. 12 phases after Phase 0. Owner tags: **(S)** = Ser
 ## Phase 4 — Brand system
 
 - [ ] 4.1 Brand profile schema (`brand.yaml`, `sources.yaml`, `tokens.json`, `motion-system.md`) (C)
+  - Include per-language filler words (e.g. "um", "ııı") passed to Whisper as a hint, so fillers are transcribed and cut instead of hiding inside a neighbouring word
 - [ ] 4.2 Brand setup wizard (C)
 - [ ] 4.3 Style packs: News, Educational, Minimal, Energetic (C), approval (S)
 - [ ] 4.4 Style card from reference videos (`extract-style`) (C), first references (S)
