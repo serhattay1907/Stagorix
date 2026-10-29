@@ -4,6 +4,7 @@ Append-only. Newest first. Each entry names the principle(s) it serves (P1–P7,
 
 | Date | Decision | Rationale | Principle |
 | --- | --- | --- | --- |
+| 2026-10-29 | The owner opens every pull request from a branch Claude pushed; Claude supplies the title and description (supersedes "Claude opens PRs") | PRs opened through Claude's tooling get an attribution footer that cannot be removed from there | — |
 | 2026-10-29 | Whisper: `small` baked into the image; `medium` and `large-v3` downloaded on first use, announced with size and license | Keeps the image lean and the first run offline; larger models stay one flag away | P2, P3, P5 |
 | 2026-10-29 | Transcription language comes from the caller or is detected; never hard-coded (the pilot hard-coded Turkish) | Core is language-neutral | P1 |
 | 2026-10-29 | Every model is listed in `stagorix/models.py` with source repo and license; `stagorix models list` shows them | Licensing and visibility | P3, P6 |
