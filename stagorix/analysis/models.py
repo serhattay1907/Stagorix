@@ -44,7 +44,7 @@ class FaceTrack(BaseModel):
     detections: list[FaceDetection]
     face_ratio: float = Field(ge=0, le=1, description="Share of sampled frames with a face.")
     crop_width: int = Field(description="Width of the full-height 9:16 window in source pixels.")
-    crop_x: list[int] = Field(description="Left edge of the window for every frame.")
+    crop_x: list[float] = Field(description="Left edge of the window for every frame (sub-pixel).")
 
 
 class Cutout(BaseModel):

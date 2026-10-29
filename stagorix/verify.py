@@ -210,7 +210,7 @@ def check_framing() -> tuple[bool, str]:
         + ["-c:v", "libx264", "-preset", "veryfast", "-pix_fmt", "yuv420p", str(src)]
     )
     track = track_faces(src)
-    centred = set(track.crop_x) == {(1920 - track.crop_width) // 2}
+    centred = all(abs(x - (1920 - track.crop_width) / 2) < 0.01 for x in track.crop_x)
     out = render_vertical(src, track, OUT_DIR / "vertical.mp4")
     got = probe(out)
     ok = centred and (got.width, got.height, got.frames) == (1080, 1920, 60)
