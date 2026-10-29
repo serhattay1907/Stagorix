@@ -36,8 +36,17 @@ jobs:
         working-directory: render
 
   golden:
-    name: Golden test (Docker)
-    runs-on: ubuntu-latest
+    name: Golden test (Docker, ${{ matrix.arch }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x86_64
+            runner: ubuntu-latest
+          # Same CPU architecture as Apple Silicon Macs, whose Docker runs linux/arm64.
+          - arch: arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@v7
       - name: Build image
@@ -48,6 +57,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: golden-output
+          name: golden-output-${{ matrix.arch }}
           path: workspace/verify/
           retention-days: 14
