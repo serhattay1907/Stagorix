@@ -4,6 +4,7 @@ Append-only. Newest first. Each entry names the principle(s) it serves (P1–P7,
 
 | Date | Decision | Rationale | Principle |
 | --- | --- | --- | --- |
+| 2026-10-29 | macOS install test deferred; it must pass before the public release (12.0 gate) | No Mac available now; Windows and Linux already verified, macOS covered natively by CI | P2 |
 | 2026-10-29 | Remotion's official agent skills are installed locally with one documented command, not copied into the repo (supersedes 2026-10-28 "ship with the repo") | The skills have no stated license; Remotion itself is not MIT; no agent-specific folders in the repo | P6, P7 |
 | 2026-10-29 | Our own project skills live in `.agents/skills/<name>/` | Agent-neutral location | P7 |
 | 2026-10-29 | README states Remotion's license (free up to 3 employees, company license above) | Users of an MIT project must not be surprised by a dependency's terms | P6 |
