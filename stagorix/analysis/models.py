@@ -45,3 +45,18 @@ class FaceTrack(BaseModel):
     face_ratio: float = Field(ge=0, le=1, description="Share of sampled frames with a face.")
     crop_width: int = Field(description="Width of the full-height 9:16 window in source pixels.")
     crop_x: list[int] = Field(description="Left edge of the window for every frame.")
+
+
+class Cutout(BaseModel):
+    source: str
+    frames: int = Field(ge=0, description="RGBA frames written, from the start of the video.")
+    fps: float
+    model: str
+    person_ratio: float = Field(ge=0, le=1, description="Average share of each frame marked as person.")
+
+
+class VoiceTrack(BaseModel):
+    source: str
+    lufs_before: float
+    lufs_after: float
+    target_lufs: float

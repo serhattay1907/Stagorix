@@ -50,6 +50,11 @@ RUN python -c "from huggingface_hub import snapshot_download; \
 snapshot_download('Systran/faster-whisper-small', local_dir='/opt/models/whisper/small'); \
 from huggingface_hub import hf_hub_download; \
 hf_hub_download('opencv/face_detection_yunet', 'face_detection_yunet_2023mar.onnx', local_dir='/opt/models/yunet')"
+RUN python -c "import hashlib, os, urllib.request; \
+os.makedirs('/opt/models/u2net', exist_ok=True); p = '/opt/models/u2net/u2net_human_seg.onnx'; \
+urllib.request.urlretrieve('https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2net_human_seg.onnx', p); \
+assert hashlib.sha256(open(p, 'rb').read()).hexdigest() == \
+'01eb6a29a5c4d8edb30b56adad9bb3a2a0535338e480724a213e0acfd2d1c73c', 'u2net checksum mismatch'"
 
 # Render: exact packages from package-lock.json plus Remotion's pinned browser.
 COPY render/package.json render/package-lock.json render/

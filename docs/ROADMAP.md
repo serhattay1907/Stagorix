@@ -47,7 +47,7 @@ Source of truth for progress. 12 phases after Phase 0. Owner tags: **(S)** = Ser
 
 ## Phase 3 — Core engine
 
-- [ ] 3.1 Analysis: Whisper, face tracking, person cutout (ported from pilot) (C)
+- [x] 3.1 Analysis: Whisper, face tracking, person cutout (ported from pilot) (C)
 - [ ] 3.2 Flub detector (C)
 - [ ] 3.3 Effect library v1: pilot effects as Zod-typed components (C)
 - [ ] 3.4 Layouts: full face, split screen, card over face, inside a phone (C)

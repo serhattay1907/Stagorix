@@ -170,7 +170,33 @@ def run_verify(update: bool = False, browser: str | None = None) -> list[Step]:
     steps.append(_timed("Compare with golden", compare))
     steps.append(_timed("Transcribe sample", check_transcript))
     steps.append(_timed("Vertical framing", check_framing))
+    steps.append(_timed("Person cutout", check_cutout))
+    steps.append(_timed("Voice clean-up", check_voice))
     return steps
+
+
+def check_cutout() -> tuple[bool, str]:
+    """Run segmentation on the vertical clip from the framing step: RGBA frames must come out."""
+    import cv2
+
+    from stagorix.analysis.cutout import cut_out
+
+    vertical = OUT_DIR / "vertical.mp4"
+    if not vertical.exists():
+        return False, "vertical.mp4 missing (framing step failed)"
+    result = cut_out(vertical, OUT_DIR / "cutout", seconds=0.5)
+    first = cv2.imread(str(OUT_DIR / "cutout" / "0000.png"), cv2.IMREAD_UNCHANGED)
+    ok = result.frames == 15 and first is not None and first.shape == (1920, 1080, 4)
+    return ok, f"{result.frames} RGBA frames · {result.model}"
+
+
+def check_voice() -> tuple[bool, str]:
+    """Clean the speech sample: loudness must land within 1 LU of the target."""
+    from stagorix.analysis.voice import clean_voice
+
+    voice = clean_voice(GOLDEN_DIR / SPEECH_FIXTURE, OUT_DIR / "voice.wav")
+    ok = abs(voice.lufs_after - voice.target_lufs) <= 1.0
+    return ok, f"{voice.lufs_before} → {voice.lufs_after} LUFS (target {voice.target_lufs})"
 
 
 def check_framing() -> tuple[bool, str]:

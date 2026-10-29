@@ -74,3 +74,33 @@ def ensure_yunet() -> Path:
 
         hf_hub_download(repo_id=YUNET.repo, filename=YUNET_FILE, local_dir=path.parent)
     return path
+
+
+U2NET = ModelInfo(
+    name="u2net_human_seg", repo="danielgatis/rembg (release v0.0.0)", license="Apache-2.0", size_mb=168
+)
+U2NET_URL = "https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2net_human_seg.onnx"
+U2NET_SHA256 = "01eb6a29a5c4d8edb30b56adad9bb3a2a0535338e480724a213e0acfd2d1c73c"
+
+
+def u2net_path() -> Path:
+    return models_dir() / "u2net" / "u2net_human_seg.onnx"
+
+
+def ensure_u2net() -> Path:
+    """Return the person-segmentation model, downloading it once and checking its SHA-256."""
+    import hashlib
+    import urllib.request
+
+    path = u2net_path()
+    if path.exists():
+        return path
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix(".part")
+    urllib.request.urlretrieve(U2NET_URL, tmp)
+    digest = hashlib.sha256(tmp.read_bytes()).hexdigest()
+    if digest != U2NET_SHA256:
+        tmp.unlink()
+        raise RuntimeError(f"u2net_human_seg checksum mismatch: {digest}")
+    tmp.rename(path)
+    return path
