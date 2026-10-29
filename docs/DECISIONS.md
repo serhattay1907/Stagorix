@@ -4,6 +4,9 @@ Append-only. Newest first. Each entry names the principle(s) it serves (P1–P7,
 
 | Date | Decision | Rationale | Principle |
 | --- | --- | --- | --- |
+| 2026-10-29 | Person cutout runs U²-Net (`u2net_human_seg`, Apache-2.0) directly with onnxruntime instead of the `rembg` package; model URL and SHA-256 pinned | Same model, far fewer dependencies (no numba, scikit-image, pymatting); download integrity checked | P2, P4, P6 |
+| 2026-10-29 | Cutout covers only the opening seconds (default 3 s, `--cutout-seconds`) | Slowest step on CPU (~0.5 s/frame); titles-behind-speaker is a hook effect | P2, P5 |
+| 2026-10-29 | Voice clean-up: high-pass 80 Hz, light compression, normalised to −16 LUFS; final mix goes to −14 LUFS in 3.6 | Clean, consistent voice before editing; platform loudness is set once at the end | P2 |
 | 2026-10-29 | Video is streamed through ffmpeg pipes, one frame in memory at a time | The pilot loaded all frames and passed 7 GB of RAM | P2 |
 | 2026-10-29 | Virtual camera: YuNet on 640 px frames every 0.1 s, gaps interpolated, two-way smoothing with a 0.5 s time constant; no face → centred crop and a visible warning | Smooth, frame-rate-independent motion; failure is shown, not hidden | P2, P3 |
 | 2026-10-29 | OpenCV 5 (`opencv-python-headless`), YuNet model from `opencv/face_detection_yunet` (MIT), baked into the image | Current API; tiny model, works offline | P2, P6 |

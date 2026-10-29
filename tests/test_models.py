@@ -23,8 +23,13 @@ def test_dockerfile_bakes_yunet() -> None:
     )
 
 
+def test_dockerfile_bakes_u2net_with_checksum() -> None:
+    dockerfile = (ROOT / "Dockerfile").read_text(encoding="utf-8")
+    assert models.U2NET_URL in dockerfile and models.U2NET_SHA256 in dockerfile
+
+
 def test_every_model_records_source_and_license() -> None:
-    for m in [*models.WHISPER_MODELS.values(), models.YUNET]:
+    for m in [*models.WHISPER_MODELS.values(), models.YUNET, models.U2NET]:
         assert m.repo and m.license and m.size_mb > 0
 
 

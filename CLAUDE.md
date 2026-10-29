@@ -51,7 +51,7 @@ Stagorix is an open-source, brand-agnostic, multi-agent pipeline that turns news
 | Install Python deps | `uv sync` |
 | CLI | `uv run stagorix --help` |
 | Environment check | `uv run stagorix doctor` |
-| Analyze a video | `uv run stagorix analyze <file> [--language xx] [--skip-transcript] [--skip-framing]` |
+| Analyze a video | `uv run stagorix analyze <file> [--language xx] [--cutout-seconds 3] [--skip-transcript\|--skip-framing\|--skip-voice]` |
 | Models | `uv run stagorix models list` · `uv run stagorix models download <name>` |
 | Tests | `uv run pytest` |
 | Lint / format | `uv run ruff check .` · `uv run ruff format .` |

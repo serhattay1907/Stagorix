@@ -150,6 +150,9 @@ def models_list() -> None:
     y = models.YUNET
     here = "[green]yes[/]" if models.yunet_path().exists() else "no"
     table.add_row("face", y.name, "<1 MB", y.license, y.repo, here)
+    u = models.U2NET
+    here = "[green]yes[/]" if models.u2net_path().exists() else "no"
+    table.add_row("cutout", u.name, f"{u.size_mb} MB", u.license, u.repo, here)
     console.print(table)
 
 
@@ -178,10 +181,15 @@ def analyze(
     out: Annotated[Path | None, typer.Option("--out", help="Output folder.")] = None,
     skip_transcript: Annotated[bool, typer.Option("--skip-transcript", help="Skip transcription.")] = False,
     skip_framing: Annotated[
-        bool, typer.Option("--skip-framing", help="Skip face tracking and 9:16 crop.")
+        bool, typer.Option("--skip-framing", help="Skip face tracking, 9:16 crop and cutout.")
     ] = False,
+    cutout_seconds: Annotated[
+        float,
+        typer.Option("--cutout-seconds", min=0, help="Seconds of person cutout from the start; 0 skips."),
+    ] = 3.0,
+    skip_voice: Annotated[bool, typer.Option("--skip-voice", help="Skip voice clean-up.")] = False,
 ) -> None:
-    """Analyze a video: word-level transcript, face tracking and a 9:16 vertical cut."""
+    """Analyze a video: transcript, face tracking, 9:16 cut, person cutout and voice clean-up."""
     import time
 
     from rich.progress import BarColumn, Progress, TextColumn, TimeElapsedColumn
@@ -248,6 +256,40 @@ def analyze(
             if done:
                 _, seconds = done
                 table.add_row("Vertical 9:16", "[green]ok[/]", f"{seconds:.1f}s", "1080×1920 → vertical.mp4")
+                if cutout_seconds > 0:
+                    from stagorix.analysis.cutout import cut_out
+
+                    if not models.u2net_path().exists():
+                        size = f"~{models.U2NET.size_mb} MB, {models.U2NET.license}"
+                        console.print(f"[yellow]First use:[/] downloading {models.U2NET.name} ({size}).")
+                    done = run_step(
+                        "Person cutout",
+                        lambda p: cut_out(out_dir / "vertical.mp4", out_dir / "cutout", cutout_seconds, p),
+                    )
+                    if done:
+                        cutout, seconds = done
+                        (out_dir / "cutout.json").write_text(
+                            cutout.model_dump_json(indent=2), encoding="utf-8"
+                        )
+                        per_frame = seconds / cutout.frames if cutout.frames else 0
+                        status = "[green]ok[/]" if cutout.person_ratio >= 0.05 else "[yellow]warn[/]"
+                        note = "" if cutout.person_ratio >= 0.05 else " · no person found"
+                        detail = (
+                            f"{cutout.frames} frames · {per_frame:.2f}s/frame"
+                            f" · person {cutout.person_ratio:.0%}"
+                            f"{note} → cutout/"
+                        )
+                        table.add_row("Person cutout", status, f"{seconds:.1f}s", detail)
+
+    if not skip_voice:
+        from stagorix.analysis.voice import clean_voice
+
+        done = run_step("Voice clean-up", lambda p: clean_voice(source, out_dir / "voice.wav"))
+        if done:
+            voice, seconds = done
+            (out_dir / "voice.json").write_text(voice.model_dump_json(indent=2), encoding="utf-8")
+            detail = f"{voice.lufs_before} → {voice.lufs_after} LUFS (target {voice.target_lufs}) → voice.wav"
+            table.add_row("Voice clean-up", "[green]ok[/]", f"{seconds:.1f}s", detail)
 
     console.print(table)
     console.print(f"Output: {out_dir}")
