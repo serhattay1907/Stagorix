@@ -44,10 +44,12 @@ WORKDIR /app
 COPY pyproject.toml uv.lock .python-version README.md ./
 RUN uv sync --frozen --no-dev --no-install-project
 
-# Default Whisper model, baked in so the first run works offline. Must match
-# DEFAULT_WHISPER in stagorix/models.py (checked by tests/test_models.py).
+# Default models, baked in so the first run works offline. Must match
+# stagorix/models.py (checked by tests/test_models.py).
 RUN python -c "from huggingface_hub import snapshot_download; \
-snapshot_download('Systran/faster-whisper-small', local_dir='/opt/models/whisper/small')"
+snapshot_download('Systran/faster-whisper-small', local_dir='/opt/models/whisper/small'); \
+from huggingface_hub import hf_hub_download; \
+hf_hub_download('opencv/face_detection_yunet', 'face_detection_yunet_2023mar.onnx', local_dir='/opt/models/yunet')"
 
 # Render: exact packages from package-lock.json plus Remotion's pinned browser.
 COPY render/package.json render/package-lock.json render/

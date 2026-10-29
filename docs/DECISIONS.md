@@ -4,6 +4,9 @@ Append-only. Newest first. Each entry names the principle(s) it serves (P1–P7,
 
 | Date | Decision | Rationale | Principle |
 | --- | --- | --- | --- |
+| 2026-10-29 | Video is streamed through ffmpeg pipes, one frame in memory at a time | The pilot loaded all frames and passed 7 GB of RAM | P2 |
+| 2026-10-29 | Virtual camera: YuNet on 640 px frames every 0.1 s, gaps interpolated, two-way smoothing with a 0.5 s time constant; no face → centred crop and a visible warning | Smooth, frame-rate-independent motion; failure is shown, not hidden | P2, P3 |
+| 2026-10-29 | OpenCV 5 (`opencv-python-headless`), YuNet model from `opencv/face_detection_yunet` (MIT), baked into the image | Current API; tiny model, works offline | P2, P6 |
 | 2026-10-29 | The owner opens every pull request from a branch Claude pushed; Claude supplies the title and description (supersedes "Claude opens PRs") | PRs opened through Claude's tooling get an attribution footer that cannot be removed from there | — |
 | 2026-10-29 | Whisper: `small` baked into the image; `medium` and `large-v3` downloaded on first use, announced with size and license | Keeps the image lean and the first run offline; larger models stay one flag away | P2, P3, P5 |
 | 2026-10-29 | Transcription language comes from the caller or is detected; never hard-coded (the pilot hard-coded Turkish) | Core is language-neutral | P1 |
