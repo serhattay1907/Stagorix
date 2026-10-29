@@ -92,7 +92,10 @@ def test_slightly_slow_words_are_not_flagged() -> None:
 
 def test_pause_after_comma_is_shortened_less() -> None:
     (flub,) = find_gaps(words("devam ediyor, çok güzel", gaps={2: 0.92}))
-    assert flub.kind is FlubKind.PAUSE and flub.keep == 0.4
+    assert flub.kind is FlubKind.PAUSE and flub.keep == 0.3 and flub.approved
+    (flub,) = find_gaps(words("koltuklar, tenis masası", gaps={1: 0.56}))
+    assert flub.kind is FlubKind.PAUSE and flub.approved
+    assert find_gaps(words("koltuklar, tenis masası", gaps={1: 0.4})) == []
 
 
 def test_list_with_repeated_word_is_kept() -> None:

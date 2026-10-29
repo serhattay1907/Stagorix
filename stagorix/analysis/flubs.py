@@ -15,7 +15,7 @@ import statistics
 from stagorix.analysis.models import Flub, FlubAction, FlubKind, FlubReport, Transcript, Word
 
 PAUSE_KEEP = 0.6  # a long pause at a sentence end is shortened to this, not removed
-CLAUSE_KEEP = 0.4  # same after a comma or similar clause break
+CLAUSE_KEEP = 0.3  # a gap after a comma longer than HESITATION_GAP is shortened to this
 HESITATION_GAP = 0.5  # a gap inside a sentence longer than this is a hesitation
 HESITATION_KEEP = 0.2
 STRETCH_RATIO = 2.5  # word slower than this multiple of the speaker's norm
@@ -77,8 +77,11 @@ def find_gaps(words: list[Word]) -> list[Flub]:
         gap = nxt.start - prev.end
         context = f"{prev.text} … {nxt.text}"
         if _ends_sentence(prev) or _ends_clause(prev):
-            keep, where = (PAUSE_KEEP, "sentence") if _ends_sentence(prev) else (CLAUSE_KEEP, "clause")
-            if gap > PAUSE_KEEP:
+            # Whisper often writes a comma where the speaker hesitated, so clause breaks use the
+            # hesitation threshold; sentence ends keep a full pause.
+            sentence = _ends_sentence(prev)
+            keep, where = (PAUSE_KEEP, "sentence") if sentence else (CLAUSE_KEEP, "clause")
+            if gap > (PAUSE_KEEP if sentence else HESITATION_GAP):
                 found.append(
                     _flub(
                         FlubKind.PAUSE,
