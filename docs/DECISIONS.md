@@ -4,6 +4,8 @@ Append-only. Newest first. Each entry names the principle(s) it serves (P1–P7,
 
 | Date | Decision | Rationale | Principle |
 | --- | --- | --- | --- |
+| 2026-10-29 | Flub approval in the terminal (`flubs --review`, Enter keeps the suggestion) until the control panel exists (6.3) | Approval must be possible now; the panel will reuse the same `flubs.json` | P3 |
+| 2026-10-29 | `stagorix cut` writes a separate preview; the source video is never changed; 10 ms audio fades at every join | Edits stay reversible; joins must not click | P3 |
 | 2026-10-29 | Flub detector works on word timestamps only and measures speaking rate in seconds per letter (supersedes the prototype's Turkish vowel count) | Fast, no extra model, and language-neutral; Unicode punctuation marks sentence ends | P1, P2 |
 | 2026-10-29 | Every flub is a proposal with a confidence score; only those ≥ 60% are pre-approved, and nothing is cut without the user's approval | Emphasis can look like a flub (a stretched short word); the user decides | P3 |
 | 2026-10-29 | Pauses after a sentence are shortened to 0.6 s, gaps over 0.5 s after a comma to 0.3 s, gaps over 0.5 s inside a sentence to 0.2 s; never removed entirely. Stretch threshold 2.5×; tuned on one clean and one flawed recording | Removing every pause makes speech sound rushed and robotic | P3 |

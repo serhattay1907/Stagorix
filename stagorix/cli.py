@@ -199,18 +199,69 @@ def flubs(
         Path | None,
         typer.Option("--out", help="Where to write flubs.json (default: next to the transcript)."),
     ] = None,
+    review: Annotated[
+        bool, typer.Option("--review", help="Approve or reject each edit in the terminal.")
+    ] = False,
 ) -> None:
-    """Find hesitations, stretched words, restarts and long pauses in a transcript. Nothing is cut."""
+    """Find hesitations, stretched words, restarts and long pauses in a transcript. Nothing is cut.
+
+    Running it again starts from fresh suggestions; use --review to set your own choices.
+    """
     from stagorix.analysis.flubs import detect_flubs
-    from stagorix.analysis.models import Transcript
+    from stagorix.analysis.models import FlubAction, Transcript
 
     transcript = Transcript.model_validate_json(transcript_file.read_text(encoding="utf-8"))
     report = detect_flubs(transcript)
     target = out or transcript_file.with_name("flubs.json")
-    target.write_text(report.model_dump_json(indent=2), encoding="utf-8")
     _print_flubs(report)
+    if review:
+        console.print("Enter keeps the suggestion shown in capitals (Y/n = suggested, y/N = not suggested).")
+        for i, f in enumerate(report.flubs, 1):
+            if f.action is FlubAction.REVIEW:
+                continue
+            action = f"{f.action} → {f.keep}s" if f.keep else str(f.action)
+            f.approved = typer.confirm(
+                f"#{i} {f.start:.1f}–{f.end:.1f}s {f.kind} '{f.text}' → {action}?", default=f.approved
+            )
+        listen = [f"{f.start:.1f}s '{f.text}'" for f in report.flubs if f.action is FlubAction.REVIEW]
+        if listen:
+            console.print(f"[yellow]Listen yourself (not edited automatically):[/] {', '.join(listen)}")
+    target.write_text(report.model_dump_json(indent=2), encoding="utf-8")
+    approved = sum(f.approved and f.action is not FlubAction.REVIEW for f in report.flubs)
+    console.print(f"{len(report.flubs)} found · {approved} edits approved → {target}")
+
+
+@app.command()
+def cut(
+    source: Annotated[Path, typer.Argument(help="Video to cut (original or vertical.mp4).", exists=True)],
+    flubs_file: Annotated[
+        Path | None,
+        typer.Option("--flubs", help="flubs.json (default: workspace/analysis/<name>/flubs.json)."),
+    ] = None,
+    out: Annotated[
+        Path | None, typer.Option("--out", help="Preview file (default: next to flubs.json).")
+    ] = None,
+) -> None:
+    """Write a preview with the approved flub edits applied. The source is never changed."""
+    from stagorix.analysis.cut import render_preview
+    from stagorix.analysis.media import MediaError
+    from stagorix.analysis.models import FlubReport
+
+    flubs_path = flubs_file or Path("workspace") / "analysis" / source.stem / "flubs.json"
+    if not flubs_path.exists():
+        console.print(f"[red]{flubs_path} not found.[/] Run `stagorix flubs <transcript.json>` first.")
+        raise typer.Exit(code=1)
+    report = FlubReport.model_validate_json(flubs_path.read_text(encoding="utf-8"))
+    target = out or flubs_path.with_name("preview.mp4")
+    try:
+        with console.status("Rendering preview …"):
+            plan = render_preview(source, report, target)
+    except MediaError as exc:
+        console.print(f"[red]Preview failed:[/] {exc}")
+        raise typer.Exit(code=1) from exc
+    after = plan.duration - plan.removed
     console.print(
-        f"{len(report.flubs)} found · {sum(f.approved for f in report.flubs)} pre-approved → {target}"
+        f"{plan.edits} edits · {plan.duration:.1f}s → {after:.1f}s (−{plan.removed:.1f}s) → {target}"
     )
 
 
