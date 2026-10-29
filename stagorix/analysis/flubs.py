@@ -15,15 +15,18 @@ import statistics
 from stagorix.analysis.models import Flub, FlubAction, FlubKind, FlubReport, Transcript, Word
 
 PAUSE_KEEP = 0.6  # a long pause at a sentence end is shortened to this, not removed
+CLAUSE_KEEP = 0.4  # same after a comma or similar clause break
 HESITATION_GAP = 0.5  # a gap inside a sentence longer than this is a hesitation
 HESITATION_KEEP = 0.2
-STRETCH_RATIO = 2.0  # word slower than this multiple of the speaker's norm
+STRETCH_RATIO = 2.5  # word slower than this multiple of the speaker's norm
+SHORT_WORD_MAX_CONFIDENCE = 0.5  # never pre-approve a stretched short word
 SHORT_WORD = 2  # letters; short words are often stretched on purpose for emphasis
 MAX_REPEAT_WORDS = 4
 MAX_RESTART_DISTANCE = 3  # words allowed between the first take and the restart
 APPROVE_FROM = 0.6
 
 SENTENCE_END = re.compile(r"[.!?…。！？؟।]+[\"'”’»)\]]*$")
+CLAUSE_END = re.compile(r"[,;:،、，；：]+[\"'”’»)\]]*$")
 
 
 def _letters(text: str) -> int:
@@ -36,6 +39,10 @@ def _norm(text: str) -> str:
 
 def _ends_sentence(word: Word) -> bool:
     return bool(SENTENCE_END.search(word.text))
+
+
+def _ends_clause(word: Word) -> bool:
+    return bool(CLAUSE_END.search(word.text))
 
 
 def letter_seconds(words: list[Word]) -> float:
@@ -69,7 +76,8 @@ def find_gaps(words: list[Word]) -> list[Flub]:
     for prev, nxt in zip(words, words[1:], strict=False):
         gap = nxt.start - prev.end
         context = f"{prev.text} … {nxt.text}"
-        if _ends_sentence(prev):
+        if _ends_sentence(prev) or _ends_clause(prev):
+            keep, where = (PAUSE_KEEP, "sentence") if _ends_sentence(prev) else (CLAUSE_KEEP, "clause")
             if gap > PAUSE_KEEP:
                 found.append(
                     _flub(
@@ -79,8 +87,8 @@ def find_gaps(words: list[Word]) -> list[Flub]:
                         context,
                         0.9,
                         FlubAction.SHORTEN,
-                        keep=PAUSE_KEEP,
-                        detail=f"{gap:.2f}s pause after a sentence → {PAUSE_KEEP}s",
+                        keep=keep,
+                        detail=f"{gap:.2f}s pause after a {where} → {keep}s",
                     )
                 )
         elif gap > HESITATION_GAP:
@@ -90,7 +98,7 @@ def find_gaps(words: list[Word]) -> list[Flub]:
                     prev.end,
                     nxt.start,
                     context,
-                    0.4 + 0.5 * (gap - HESITATION_GAP),  # 0.5 s → 0.4, 1.0 s → 0.65, 1.6 s → 0.95
+                    0.6 + 0.5 * (gap - HESITATION_GAP),  # 0.5 s → 0.6, 1.0 s → 0.85
                     FlubAction.SHORTEN,
                     keep=HESITATION_KEEP,
                     detail=f"{gap:.2f}s gap inside a sentence → {HESITATION_KEEP}s",
@@ -111,14 +119,17 @@ def find_stretches(words: list[Word], per_letter: float) -> list[Flub]:
         ratio = (w.end - w.start) / (n * per_letter)
         if ratio < STRETCH_RATIO:
             continue
-        conf = 0.5 + 0.3 * (ratio - STRETCH_RATIO)  # ×2 → 0.5, ×3 → 0.8
+        conf = 0.55 + 0.4 * (ratio - STRETCH_RATIO)  # ×2.5 → 0.55, ×3 → 0.75
         notes = []
         if n <= SHORT_WORD:
-            conf *= 0.5
+            conf = min(conf * 0.5, SHORT_WORD_MAX_CONFIDENCE)
             notes.append("short word, may be emphasis")
         if i in (0, last):
             conf *= 0.8
             notes.append("edge word, timing less reliable")
+        elif _ends_sentence(w):
+            conf *= 0.7
+            notes.append("last word of a sentence, often drawn out")
         note = f" ({'; '.join(notes)})" if notes else ""
         found.append(
             _flub(
@@ -149,8 +160,8 @@ def find_repeats(words: list[Word]) -> list[Flub]:
                 if keys[j : j + n] != first:
                     continue
                 take = words[i:j]
-                if any(_ends_sentence(w) for w in take):
-                    continue  # finished sentence: deliberate repetition, keep it
+                if any(_ends_sentence(w) for w in take) or _ends_clause(take[-1]):
+                    continue  # finished sentence or clause: deliberate repetition (a list), keep it
                 hit = (n, j)
                 break
             if hit:
@@ -162,6 +173,8 @@ def find_repeats(words: list[Word]) -> list[Flub]:
         take = words[i:j]
         gap_before_restart = words[j].start - words[j - 1].end
         conf = 0.55 + 0.1 * (n - 1) + (0.2 if gap_before_restart > 0.2 else 0)
+        if n == 1 and len(take) > 1:
+            conf -= 0.2  # one shared word followed by different words is weak evidence
         found.append(
             _flub(
                 FlubKind.REPEAT,

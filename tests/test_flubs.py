@@ -40,21 +40,21 @@ def test_short_pause_after_sentence_is_kept() -> None:
 
 
 def test_gap_inside_sentence_is_a_hesitation_scored_by_length() -> None:
-    (short,) = find_gaps(words("ben ofise gittim", gaps={1: 0.6}))
+    (short,) = find_gaps(words("ben ofise gittim", gaps={1: 0.56}))
     (long,) = find_gaps(words("ben ofise gittim", gaps={1: 1.0}))
-    assert short.kind is FlubKind.HESITATION and not short.approved
-    assert long.confidence > short.confidence and long.approved
+    assert short.kind is FlubKind.HESITATION and short.approved
+    assert long.confidence > short.confidence
     assert long.keep == 0.2
 
 
 def test_stretched_word_is_flagged_for_review() -> None:
-    ws = words("sabah ofis çok kalabalıktı bugün", slow={1: 2.6})
+    ws = words("sabah ofis çok kalabalıktı bugün", slow={1: 2.8})
     (flub,) = find_stretches(ws, letter_seconds(ws))
     assert flub.text == "ofis" and flub.action is FlubAction.REVIEW and flub.approved
 
 
 def test_stretched_short_word_gets_low_confidence() -> None:
-    ws = words("sabah bu çok kalabalıktı bugün", slow={1: 3.2})
+    ws = words("sabah bu çok kalabalıktı bugün", slow={1: 4.3})
     (flub,) = find_stretches(ws, letter_seconds(ws))
     assert flub.text == "bu" and not flub.approved
     assert "emphasis" in flub.detail
@@ -83,3 +83,18 @@ def test_language_neutral_punctuation_and_letters() -> None:
     assert flub.kind is FlubKind.PAUSE
     (flub,) = find_gaps(words("こんにちは。 はじめます", gaps={1: 1.0}))
     assert flub.kind is FlubKind.PAUSE
+
+
+def test_slightly_slow_words_are_not_flagged() -> None:
+    ws = words("sabah ofis çok kalabalıktı bugün", slow={1: 2.3})
+    assert find_stretches(ws, letter_seconds(ws)) == []
+
+
+def test_pause_after_comma_is_shortened_less() -> None:
+    (flub,) = find_gaps(words("devam ediyor, çok güzel", gaps={2: 0.92}))
+    assert flub.kind is FlubKind.PAUSE and flub.keep == 0.4
+
+
+def test_list_with_repeated_word_is_kept() -> None:
+    assert find_repeats(words("getirdiği hayat, getirdiği konfor, getirdiği rahatlık.")) == []
+    assert find_repeats(words("bir lisans programına girdim, bir üniversitede okuyorum,")) == []
