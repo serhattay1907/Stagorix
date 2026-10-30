@@ -1,5 +1,6 @@
 import { Composition } from "remotion";
 import { Placeholder, placeholderSchema } from "./compositions/Placeholder";
+import { LAYOUT_REEL_SECONDS, LayoutReel, layoutReelSchema } from "./compositions/LayoutReel";
 import { LOOK_REEL_SECONDS, LookReel } from "./compositions/LookReel";
 import { SHOWCASE_SECONDS, Showcase, showcaseSchema } from "./compositions/Showcase";
 import { SoundReel, soundReelMetadata, soundReelSchema } from "./compositions/SoundReel";
@@ -30,6 +31,14 @@ export const Root: React.FC = () => (
       id="LookReel"
       component={LookReel}
       durationInFrames={Math.round(VIDEO.fps * LOOK_REEL_SECONDS)}
+      {...VIDEO}
+    />
+    <Composition
+      id="LayoutReel"
+      component={LayoutReel}
+      schema={layoutReelSchema}
+      defaultProps={{ theme: neutralTheme, look: "", footage: "", focus: { x: 540, y: 700 } }}
+      durationInFrames={Math.round(VIDEO.fps * LAYOUT_REEL_SECONDS)}
       {...VIDEO}
     />
     <Composition

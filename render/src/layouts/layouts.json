@@ -1,0 +1,37 @@
+{
+  "full": {
+    "name": "Full face",
+    "component": "FullFace",
+    "description": "The speaker fills the frame",
+    "content": "none",
+    "captions": "middle"
+  },
+  "split": {
+    "name": "Split screen",
+    "component": "SplitScreen",
+    "description": "Content on top, speaker below (or swapped)",
+    "content": "image or video",
+    "captions": "middle"
+  },
+  "card": {
+    "name": "Card over face",
+    "component": "CardOverFace",
+    "description": "A content card over the top of the frame; the speaker slides down so the face stays visible",
+    "content": "image or video",
+    "captions": "middle"
+  },
+  "phone": {
+    "name": "Inside a phone",
+    "component": "PhoneFrame",
+    "description": "The speaker (or a screen recording) inside a phone on a brand backdrop",
+    "content": "optional screen recording",
+    "captions": "lower"
+  },
+  "pip": {
+    "name": "Picture in picture",
+    "component": "PictureInPicture",
+    "description": "Content fills the frame, the speaker sits in a corner",
+    "content": "image or video",
+    "captions": "middle"
+  }
+}
