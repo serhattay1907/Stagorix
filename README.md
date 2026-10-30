@@ -46,6 +46,8 @@ cd render && npx skills add remotion-dev/skills
 - [Architecture](docs/ARCHITECTURE.md)
 - [Decisions](docs/DECISIONS.md)
 - [Roadmap](docs/ROADMAP.md)
+- [Motion language](docs/MOTION.md)
+- [References](docs/REFERENCES.md)
 - [Contributor instructions for Claude Code](CLAUDE.md)
 
 ## License

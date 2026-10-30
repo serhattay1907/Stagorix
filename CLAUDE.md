@@ -28,6 +28,7 @@ Stagorix is an open-source, brand-agnostic, multi-agent pipeline that turns news
 | `docs/ARCHITECTURE.md` | System design |
 | `docs/DECISIONS.md` | Decision log (append-only) |
 | `docs/MOTION.md` | Motion language: effect roles, intensity, brand rules |
+| `docs/REFERENCES.md` | Outside projects and edits we learn from, with their licenses |
 | `docs/ROADMAP.md` | Phases and tasks — the source of truth for progress |
 | `brands/<slug>/` | Brand profiles (schema in phase 4) |
 | `stagorix/` | Python core: `cli.py`, `doctor.py` and one subpackage per area (analysis, agents, llm, brands, assets, render, platforms, panel, runs) |

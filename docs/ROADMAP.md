@@ -93,8 +93,8 @@ After the option review gate, requests stay open for good: each wish becomes a n
     - [x] 3.3d-2 Speaker effects: background blur, background swap, outline glow, colour pop; person mattes in two qualities (`stagorix matte`: draft with MediaPipe selfie segmentation, final with U²-Net), only for the effect's seconds
   - [ ] 3.3e Cards from the pilot: quote bubbles, checklist, headline wall, timeline, badge, spotlight
 - [ ] 3.4 Layouts: full face, split screen, card over face, inside a phone (C)
-- [ ] 3.5 New effects: list cards, progress bar, phone mock-up, orbit, pull-back, zoom-through, vertigo, UI/diagram scenes (C)
-- [ ] 3.6 Draft render for previews (540p, lower frame rate, ~4× faster on CPU) and final render only after approval, −14 LUFS (C)
+- [ ] 3.5 New effects: list cards, progress bar, phone mock-up, orbit, pull-back, zoom-through, vertigo, UI/diagram scenes, logo stack (logos supplied by the user, none bundled), word-synced kinetic typography (C); ideas from `docs/REFERENCES.md`
+- [ ] 3.6 Draft render for previews (540p, lower frame rate, ~4× faster on CPU) and final render only after approval, −14 LUFS; a thin renderer interface so Remotion can be swapped (C)
 
 ## Phase 4 — Brand system
 
@@ -103,7 +103,7 @@ After the option review gate, requests stay open for good: each wish becomes a n
   - Learning mode per brand: suggest automatically / ask every time / off
   - Include per-language filler words (e.g. "um", "ııı") passed to Whisper as a hint, so fillers are transcribed and cut instead of hiding inside a neighbouring word
 - [ ] 4.2 Brand setup wizard, after 4.4 (C). First step offers three paths: learn from videos you like (4.4), pick a ready-made look, or expert mode; every step can be skipped
-- [ ] 4.3 Looks (style packs): 10 for v1, e.g. News, Educational, Minimal, Energetic, Corporate, Luxury, Tech, Warm/Lifestyle, Cinematic, Retro (C), approval (S)
+- [ ] 4.3 Looks (style packs): 10 built in 3.3c-3; toward 15+ with a style catalogue drawn from `docs/REFERENCES.md` (C), approval (S)
 - [ ] 4.4 Style card from reference videos (`extract-style`), moved before 4.2 (C), first references (S)
   - Measures cut tempo, speech rate, pauses, zoom frequency and strength, caption position/case/words per line, accent colour, closest bundled font; each value with a confidence, shown for approval and written as profile defaults
   - Reference videos are the user's own files and stay local (only measured parameters are stored); optional download (yt-dlp) is opt-in and at the user's own responsibility
@@ -117,7 +117,7 @@ After the option review gate, requests stay open for good: each wish becomes a n
 - [ ] 5.3 Scorer (C), score approval on 20 samples (S)
 - [ ] 5.4 Writer + verify/rewrite loop (C), tone approval (S)
 - [ ] 5.5 Editor agent (edit plan) (C); free-text feedback ("too many zooms") becomes a proposed profile change, applied only after approval
-- [ ] 5.6 Visual QA agent (`qa-frames`) (C)
+- [ ] 5.6 Visual QA agent (`qa-frames`) with a scoring rubric (C)
 - [ ] 5.7 Project skills: `edit-raw-video`, `news-short`, `extract-style`, `qa-frames` (C)
 - [ ] 5.8 Format and hook library: 20 proven short-form formats, 20 hook types, researched with sources (C), approval (S)
 
@@ -136,7 +136,7 @@ After the option review gate, requests stay open for good: each wish becomes a n
 - [ ] 7.1 Own files (`assets/`) + priority rule (C)
 - [ ] 7.2 Pexels, Pixabay, Mixkit, Lottie clients + license log (C)
 - [ ] 7.3 Sound library to 300+ (more CC0 packs: Kenney impact, digital, sci-fi; hand-picked Freesound CC0) + selection with `stagorix sounds reel` (C), selection (S)
-- [ ] 7.4 Music options (C), selection (S)
+- [ ] 7.4 Music options; cuts and effects snapped to the beat (C), selection (S)
 - [ ] 7.5 `Generator` interface + AI generation plugins (Higgsfield and others), off by default, budget cap (C)
 - [ ] 7.6 Voice-over: local free TTS (Piper); optional paid voice cloning plugin, off, own voice only (C)
 - [ ] 7.7 Import any asset (image, video, audio, voice) with a required license field (C)
@@ -171,7 +171,7 @@ After the option review gate, requests stay open for good: each wish becomes a n
 
 ## Phase 12 — Open source and CV
 
-- [ ] 12.0 Gate: macOS install test from 2.8 passes (S)
+- [ ] 12.0 Gate: macOS install test from 2.8 passes (S); renderer review: Remotion license for companies vs. HyperFrames (Apache-2.0) maturity, decide whether to add or switch (C)
 - [ ] 12.1 README, screenshots, demo GIF (C, GIF S)
 - [ ] 12.2 Scoring evaluation report (C)
 - [ ] 12.3 DaVinci export, optional (C)
