@@ -62,6 +62,7 @@ RUN cd render && npm ci --no-audit --no-fund && npx remotion browser ensure
 
 COPY stagorix stagorix
 COPY render render
+COPY examples examples
 RUN uv sync --frozen --no-dev
 
 CMD ["stagorix", "doctor"]
