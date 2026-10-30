@@ -92,15 +92,19 @@ After the option review gate, requests stay open for good: each wish becomes a n
   - [ ] 3.3e Cards from the pilot: quote bubbles, checklist, headline wall, timeline, badge, spotlight
 - [ ] 3.4 Layouts: full face, split screen, card over face, inside a phone (C)
 - [ ] 3.5 New effects: list cards, progress bar, phone mock-up, orbit, pull-back, zoom-through, vertigo, UI/diagram scenes (C)
-- [ ] 3.6 Preview + final render, −14 LUFS (C)
+- [ ] 3.6 Draft render for previews (540p, lower frame rate, ~4× faster on CPU) and final render only after approval, −14 LUFS (C)
 
 ## Phase 4 — Brand system
 
 - [ ] 4.1 Brand profile schema (`brand.yaml`, `sources.yaml`, `tokens.json`, `motion-system.md`) and the option catalog with brand defaults (C)
+  - Rule history: every change to the profile is recorded with its source (style card, variant pick, user feedback, retention data) and can be undone
+  - Learning mode per brand: suggest automatically / ask every time / off
   - Include per-language filler words (e.g. "um", "ııı") passed to Whisper as a hint, so fillers are transcribed and cut instead of hiding inside a neighbouring word
-- [ ] 4.2 Brand setup wizard (C)
+- [ ] 4.2 Brand setup wizard, after 4.4 (C). First step offers three paths: learn from videos you like (4.4), pick a ready-made look, or expert mode; every step can be skipped
 - [ ] 4.3 Looks (style packs): 10 for v1, e.g. News, Educational, Minimal, Energetic, Corporate, Luxury, Tech, Warm/Lifestyle, Cinematic, Retro (C), approval (S)
-- [ ] 4.4 Style card from reference videos (`extract-style`) (C), first references (S)
+- [ ] 4.4 Style card from reference videos (`extract-style`), moved before 4.2 (C), first references (S)
+  - Measures cut tempo, speech rate, pauses, zoom frequency and strength, caption position/case/words per line, accent colour, closest bundled font; each value with a confidence, shown for approval and written as profile defaults
+  - Reference videos are the user's own files and stay local (only measured parameters are stored); optional download (yt-dlp) is opt-in and at the user's own responsibility
 - [ ] 4.5 First profile: Random Talks Academy (S provides brand info, C sets it up)
 - [ ] 4.6 Font pairs: 20 OFL pairs with Latin Extended support (C), selection (S)
 
@@ -110,7 +114,7 @@ After the option review gate, requests stay open for good: each wish becomes a n
 - [ ] 5.2 Scout + deduplication (C), source list (S)
 - [ ] 5.3 Scorer (C), score approval on 20 samples (S)
 - [ ] 5.4 Writer + verify/rewrite loop (C), tone approval (S)
-- [ ] 5.5 Editor agent (edit plan) (C)
+- [ ] 5.5 Editor agent (edit plan) (C); free-text feedback ("too many zooms") becomes a proposed profile change, applied only after approval
 - [ ] 5.6 Visual QA agent (`qa-frames`) (C)
 - [ ] 5.7 Project skills: `edit-raw-video`, `news-short`, `extract-style`, `qa-frames` (C)
 - [ ] 5.8 Format and hook library: 20 proven short-form formats, 20 hook types, researched with sources (C), approval (S)
@@ -119,7 +123,7 @@ After the option review gate, requests stay open for good: each wish becomes a n
 
 - [ ] 6.1 Run and event log (every step, duration, tokens, cost) (C)
 - [ ] 6.2 Panel: job list, live agent stream, stop / retry (C)
-- [ ] 6.3 Approval screen: edit plan, preview, publish approval (C)
+- [ ] 6.3 Approval screen: edit plan, preview, publish approval; variant pick (2–3 draft openings with different hook, look or tempo; the choice feeds the profile; can be turned off) (C)
 - [ ] 6.4 Brand wizard and settings in the panel; three-layer choice (one-click pack, guided wizard, expert mode), compatibility filter with "show all", search and favourites (C)
 - [ ] 6.5 Optional Notion sync + mobile notifications (C)
 - [ ] 6.6 Optional Langfuse connection (C)
@@ -137,7 +141,7 @@ After the option review gate, requests stay open for good: each wish becomes a n
 
 ## Phase 8 — Upload your own video
 
-- [ ] 8.1 `edit` and `polish` modes (C)
+- [ ] 8.1 `edit` and `polish` modes (C); `stagorix feedback`: structured feedback (tempo, zoom, effect density, caption size) becomes a profile change for this video or always
 - [ ] 8.2 `clip` mode (C)
 - [ ] 8.3 Test with own videos (S)
 - [ ] 8.4 Duration and tempo presets (C)
@@ -161,6 +165,7 @@ After the option review gate, requests stay open for good: each wish becomes a n
 - [ ] 11.1 Produce and publish 3 videos (S + C)
 - [ ] 11.2 Fix issues (C)
 - [ ] 11.3 Metrics and token/time measurement (S + C)
+- [ ] 11.4 Retention data: map audience drop-offs to effects and tempo, suggest motion-rule changes per brand (approval required) (C)
 
 ## Phase 12 — Open source and CV
 
