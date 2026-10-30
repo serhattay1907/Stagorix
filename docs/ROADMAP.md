@@ -86,7 +86,7 @@ After the option review gate, requests stay open for good: each wish becomes a n
   - [ ] 3.3c Pack A
     - [x] 3.3c-1 Caption styles bold, reveal, marker; emoji pop; number pop; camera shake
     - [x] 3.3c-2 Transitions: glitch, iris (mask), zoom blur; showcase over your own footage (`--footage`)
-    - [ ] 3.3c-3 Four preset looks (News, Educational, Minimal, Energetic); showcase rendered in each
+    - [x] 3.3c-3 Ten looks (`stagorix looks`, `showcase --look`, look reel); five more OFL fonts
     - [ ] 3.3c-4 Free sound library with license log, sounds mapped to effects (moved forward from 7.3)
   - [ ] 3.3d Pack B: speaker effects (background swap/blur, outline glow, colour pop) and data cards (counter, charts, A vs B)
   - [ ] 3.3e Cards from the pilot: quote bubbles, checklist, headline wall, timeline, badge, spotlight
@@ -123,6 +123,7 @@ After the option review gate, requests stay open for good: each wish becomes a n
 - [ ] 6.4 Brand wizard and settings in the panel; three-layer choice (one-click pack, guided wizard, expert mode), compatibility filter with "show all", search and favourites (C)
 - [ ] 6.5 Optional Notion sync + mobile notifications (C)
 - [ ] 6.6 Optional Langfuse connection (C)
+- [ ] 6.7 Interface in Turkish and English (i18n; one translation file per language), chosen separately from content language (C)
 
 ## Phase 7 — Asset layer
 

@@ -118,6 +118,9 @@ def showcase(
             help="Analysis folder (e.g. workspace/analysis/raw2) to play the effects over your video.",
         ),
     ] = None,
+    look: Annotated[
+        str | None, typer.Option("--look", help="Ready-made look id; see `stagorix looks`.")
+    ] = None,
     browser: Annotated[
         str | None,
         typer.Option("--browser-executable", help="Use this Chrome/Chromium instead of Remotion's."),
@@ -129,11 +132,48 @@ def showcase(
 
     try:
         with console.status("Rendering showcase …"):
-            path = render_showcase(out, theme, browser, footage)
+            path = render_showcase(out, theme, browser, footage, look)
     except (VerifyError, FileNotFoundError) as exc:
         console.print(f"[red]Showcase failed:[/] {exc}")
         raise typer.Exit(code=1) from exc
     console.print(f"[green]Done:[/] {path}")
+
+
+@app.command()
+def looks(
+    render: Annotated[bool, typer.Option("--render", help="Render every look into one reel video.")] = False,
+    out: Annotated[Path, typer.Option("--out", help="Reel output.")] = Path("workspace/looks.mp4"),
+) -> None:
+    """List the ready-made looks; with --render, write a reel that shows each one."""
+    from stagorix.render.looks import load_looks
+
+    table = Table(title="Looks")
+    for col in ("Id", "Name", "Feel", "Fonts", "Accent", "Captions", "Energy"):
+        table.add_column(col)
+    for lk in load_looks():
+        fonts = lk.display_font if lk.display_font == lk.body_font else f"{lk.display_font} + {lk.body_font}"
+        table.add_row(
+            lk.id,
+            lk.name,
+            lk.description,
+            fonts,
+            f"[{lk.accent}]■[/] {lk.accent}",
+            lk.caption_style,
+            str(lk.energy),
+        )
+    console.print(table)
+    console.print("Use one: stagorix showcase --look <id>")
+    if render:
+        from stagorix.render.showcase import render_showcase
+        from stagorix.verify import VerifyError
+
+        try:
+            with console.status("Rendering the look reel …"):
+                path = render_showcase(out, composition="LookReel")
+        except VerifyError as exc:
+            console.print(f"[red]Reel failed:[/] {exc}")
+            raise typer.Exit(code=1) from exc
+        console.print(f"[green]Done:[/] {path}")
 
 
 @app.command()

@@ -9,6 +9,7 @@ import { NumberPop } from "../effects/NumberPop";
 import { Outro } from "../effects/Outro";
 import { CutoutLayer, TitleBehind } from "../effects/TitleBehind";
 import { Transitions } from "../effects/Transition";
+import { LOOKS } from "../theme/looks";
 import { clamp } from "../theme/motion";
 import { alpha, ThemeProvider, themeSchema, useTheme } from "../theme/theme";
 
@@ -17,6 +18,7 @@ import { alpha, ThemeProvider, themeSchema, useTheme } from "../theme/theme";
 // later as the template picker. Sample text is English because the repo is.
 export const showcaseSchema = z.object({
   theme: themeSchema,
+  look: z.string().default("").describe("Ready-made look id (overrides theme), e.g. news, tech"),
   footage: z.string().default("").describe("Your 9:16 video in render/public; empty = stand-in speaker"),
   cutoutFrames: z.number().int().min(0).default(0).describe("Person cutout frames in render/public/<cutoutDir>"),
   cutoutDir: z.string().default("showcase-input/cutout"),
@@ -37,7 +39,7 @@ const sampleWords = (text: string, start: number, step = 0.32) =>
   text.split(" ").map((w, i) => ({ text: w, start: start + i * step, end: start + i * step + step * 0.85 }));
 
 // A lit studio backdrop with soft bokeh, so the clip needs no media files.
-const Stage: React.FC = () => {
+export const Stage: React.FC = () => {
   const { palette } = useTheme();
   const frame = useCurrentFrame();
   const drift = frame * 0.15;
@@ -72,7 +74,7 @@ const Stage: React.FC = () => {
 };
 
 // Stand-in speaker: soft-lit silhouette with a rim light and a slow breath.
-const Speaker: React.FC = () => {
+export const Speaker: React.FC = () => {
   const { palette } = useTheme();
   const frame = useCurrentFrame();
   const breath = 1 + Math.sin(frame / 22) * 0.006;
@@ -88,7 +90,7 @@ const Speaker: React.FC = () => {
 };
 
 // Chapter title in the corner, so the viewer knows which effect is on screen.
-const Chapter: React.FC<{ index: number; name: string }> = ({ index, name }) => {
+export const Chapter: React.FC<{ index: number; name: string }> = ({ index, name }) => {
   const theme = useTheme();
   const frame = useCurrentFrame();
   const { durationInFrames } = useVideoConfig();
@@ -129,7 +131,7 @@ const Background: React.FC<{ footage: string }> = ({ footage }) => {
   );
 };
 
-const Scenes: React.FC<Omit<ShowcaseProps, "theme">> = ({ footage, cutoutFrames, cutoutDir }) => {
+const Scenes: React.FC<Omit<ShowcaseProps, "theme" | "look">> = ({ footage, cutoutFrames, cutoutDir }) => {
   const { fps } = useVideoConfig();
   const s = (seconds: number) => Math.round(seconds * fps);
   const zooms = [
@@ -190,8 +192,8 @@ const Scenes: React.FC<Omit<ShowcaseProps, "theme">> = ({ footage, cutoutFrames,
   );
 };
 
-export const Showcase: React.FC<ShowcaseProps> = ({ theme, ...rest }) => (
-  <ThemeProvider value={theme}>
+export const Showcase: React.FC<ShowcaseProps> = ({ theme, look, ...rest }) => (
+  <ThemeProvider value={look in LOOKS ? LOOKS[look as keyof typeof LOOKS].theme : theme}>
     <Scenes {...rest} />
   </ThemeProvider>
 );

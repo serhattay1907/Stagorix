@@ -39,7 +39,12 @@ def stage_footage(analysis_dir: Path) -> dict[str, object]:
 
 
 def render_showcase(
-    out: Path, theme: Path | None = None, browser: str | None = None, footage: Path | None = None
+    out: Path,
+    theme: Path | None = None,
+    browser: str | None = None,
+    footage: Path | None = None,
+    look: str | None = None,
+    composition: str = "Showcase",
 ) -> Path:
     """Render the Showcase composition; `theme` is a JSON file like {"theme": {...}}."""
     out = out.resolve()
@@ -49,7 +54,9 @@ def render_showcase(
         props.update(json.loads(theme.read_text(encoding="utf-8")))
     if footage is not None:
         props.update(stage_footage(footage))
-    args = ["render", "src/index.ts", "Showcase", str(out), "--codec=h264"]
+    if look:
+        props["look"] = look
+    args = ["render", "src/index.ts", composition, str(out), "--codec=h264"]
     if props:
         props_file = out.with_suffix(".props.json")
         props_file.write_text(json.dumps(props), encoding="utf-8")

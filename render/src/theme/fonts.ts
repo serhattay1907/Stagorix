@@ -12,6 +12,26 @@ import "@fontsource/montserrat/latin-800.css";
 import "@fontsource/montserrat/latin-900.css";
 import "@fontsource/montserrat/latin-ext-800.css";
 import "@fontsource/montserrat/latin-ext-900.css";
+import "@fontsource/oswald/latin-700.css";
+import "@fontsource/oswald/latin-ext-700.css";
+import "@fontsource/playfair-display/latin-800.css";
+import "@fontsource/playfair-display/latin-ext-800.css";
+import "@fontsource/playfair-display/latin-900.css";
+import "@fontsource/playfair-display/latin-ext-900.css";
+import "@fontsource/space-grotesk/latin-500.css";
+import "@fontsource/space-grotesk/latin-ext-500.css";
+import "@fontsource/space-grotesk/latin-700.css";
+import "@fontsource/space-grotesk/latin-ext-700.css";
+import "@fontsource/poppins/latin-500.css";
+import "@fontsource/poppins/latin-ext-500.css";
+import "@fontsource/poppins/latin-700.css";
+import "@fontsource/poppins/latin-ext-700.css";
+import "@fontsource/poppins/latin-800.css";
+import "@fontsource/poppins/latin-ext-800.css";
+import "@fontsource/poppins/latin-900.css";
+import "@fontsource/poppins/latin-ext-900.css";
+import "@fontsource/righteous/latin-400.css";
+import "@fontsource/righteous/latin-ext-400.css";
 import { cancelRender, continueRender, delayRender } from "remotion";
 
 const FALLBACK = "'Noto Sans', 'Noto Color Emoji', sans-serif";
@@ -21,10 +41,15 @@ export const FONTS = {
   montserrat: `Montserrat, ${FALLBACK}`,
   inter: `Inter, ${FALLBACK}`,
   bebas: `'Bebas Neue', ${FALLBACK}`,
+  oswald: `Oswald, ${FALLBACK}`,
+  playfair: `'Playfair Display', ${FALLBACK}`,
+  spaceGrotesk: `'Space Grotesk', ${FALLBACK}`,
+  poppins: `Poppins, ${FALLBACK}`,
+  righteous: `Righteous, ${FALLBACK}`,
   noto: FALLBACK,
 } as const;
 
-const BUNDLED = ["Montserrat", "Inter", "Bebas Neue"];
+const BUNDLED = ["Montserrat", "Inter", "Bebas Neue", "Oswald", "Playfair Display", "Space Grotesk", "Poppins", "Righteous"];
 
 // Wait until every bundled face is loaded, so no frame renders with a fallback font.
 const handle = delayRender("Loading bundled fonts");

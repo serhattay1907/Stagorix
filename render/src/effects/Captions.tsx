@@ -122,7 +122,7 @@ export const Captions: React.FC<CaptionsProps> = (props) => {
           display: "flex",
           justifyContent: "center",
           flexWrap: "wrap",
-          gap: boxed ? "6px 18px" : "4px 24px",
+          gap: boxed ? "6px 18px" : style === "bold" ? "4px 34px" : "4px 24px",
           padding: boxed ? "18px 30px" : 0,
           background: boxed ? alpha(palette.surface, 0.88) : "transparent",
           borderRadius: boxed ? radiusPx(theme, fontSize * 1.6) : 0,

@@ -25,7 +25,11 @@ OUT_DIR = ROOT / "workspace" / "verify"
 
 COMPOSITION = "Placeholder"  # also rendered as a video for the format check
 # Stills compared with tests/golden/<composition>-<frame>.png.
-STILLS = {"Placeholder": (10, 45, 89), "Showcase": (45, 200, 345, 425, 520, 600, 660, 741, 825, 960)}
+STILLS = {
+    "Placeholder": (10, 45, 89),
+    "Showcase": (45, 200, 345, 425, 520, 600, 660, 741, 825, 960),
+    "LookReel": (75, 615, 1047),
+}
 EXPECTED = {"width": 1080, "height": 1920, "fps": 30.0, "frames": 90}
 MIN_SSIM = 0.99
 

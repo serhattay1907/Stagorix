@@ -4,6 +4,9 @@ Append-only. Newest first. Each entry names the principle(s) it serves (P1–P7,
 
 | Date | Decision | Rationale | Principle |
 | --- | --- | --- | --- |
+| 2026-10-30 | Ten ready-made looks (News, Educational, Minimal, Energetic, Corporate, Luxury, Tech, Warm, Cinematic, Retro) defined once in `render/src/theme/looks.json`, read by both the renderer and the Python CLI; a brand starts from a look and may change any value | One source of truth for the wizard, the agents and the renderer; v1 target of 10 looks met early | P1 |
+| 2026-10-30 | Five more bundled OFL fonts: Oswald, Playfair Display, Space Grotesk, Poppins, Righteous (Fontsource, pinned, Latin + Latin Extended) | Each look needs its own typographic voice; same letters on every OS | P2, P6 |
+| 2026-10-30 | Interface language (CLI messages, panel, wizard) will be Turkish and English from the start of the panel (6.7), separate from content language; a new language is one translation file | Users choose the interface language independently of the language of their videos | P1, P3 |
 | 2026-10-30 | Transitions glitch (strong: channel split + slice displacement, seeded per frame), iris (medium, closes and reopens in the accent colour) and zoom blur (medium) | The three most used section changes in short-form edits beyond the whip; the iris carries the brand colour | P1, P2 |
 | 2026-10-30 | `stagorix showcase --footage <analysis folder>` plays the showcase over the user's own 9:16 cut and person cutout; the clip is copied to gitignored render/public/showcase-input/ | Effects are judged on real footage, not a stand-in; user video never leaves the machine | P3, P4 |
 | 2026-10-30 | Working mode: Claude writes, tests and renders the showcase; the owner watches, decides and runs the pre-merge steps; each PR ends with a short "what we learned" note | Faster loop with the owner still in control and learning the code | P3 |
