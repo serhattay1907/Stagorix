@@ -1,6 +1,7 @@
 import { interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import { z } from "zod";
 import { positionSchema, yFor } from "../theme/layout";
+import { formatNumber } from "../theme/format";
 import { clamp, ease, pop, sec } from "../theme/motion";
 import { alpha, radiusPx, useTheme } from "../theme/theme";
 
@@ -31,9 +32,7 @@ export const NumberPop: React.FC<NumberPopProps> = (props) => {
   const land = pop(theme, frame, start + sec(0.7, fps), fps, -3);
   const appear = pop(theme, frame, start, fps);
   const out = interpolate(frame, [end - 6, end], [1, 0], clamp);
-  const shown = new Intl.NumberFormat(locale, { minimumFractionDigits: decimals, maximumFractionDigits: decimals }).format(
-    value * count,
-  );
+  const shown = formatNumber(value * count, locale, decimals);
   const { palette } = theme;
   return (
     <div

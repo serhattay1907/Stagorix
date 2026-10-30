@@ -107,6 +107,22 @@
       "hit": 0
     },
     "grade.leak": null,
+    "chart.bar": {
+      "sound": "swipe-wide",
+      "hit": 0
+    },
+    "chart.line": {
+      "sound": "riser-micro",
+      "hit": 1.45
+    },
+    "compare.versus": {
+      "sound": "impact-thump",
+      "hit": 0.35
+    },
+    "stats.row": {
+      "sound": "tick-counter",
+      "hit": 0.2
+    },
     "outro.card": {
       "sound": "chime-success",
       "hit": 0

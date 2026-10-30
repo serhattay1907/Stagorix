@@ -1,14 +1,18 @@
 import { AbsoluteFill, interpolate, Loop, OffthreadVideo, Sequence, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { z } from "zod";
+import { BarChart } from "../effects/BarChart";
 import { Camera, WhipFlash } from "../effects/Camera";
 import { Captions } from "../effects/Captions";
 import { EmojiPop } from "../effects/EmojiPop";
 import { Grade } from "../effects/Grade";
 import { Label } from "../effects/Label";
+import { LineChart } from "../effects/LineChart";
 import { NumberPop } from "../effects/NumberPop";
 import { Outro } from "../effects/Outro";
+import { StatRow } from "../effects/StatRow";
 import { CutoutLayer, TitleBehind } from "../effects/TitleBehind";
 import { Transitions } from "../effects/Transition";
+import { Versus } from "../effects/Versus";
 import { Sfx, soundCueSchema } from "../sound/Sfx";
 import { LOOKS } from "../theme/looks";
 import { clamp } from "../theme/motion";
@@ -27,9 +31,9 @@ export const showcaseSchema = z.object({
 });
 type ShowcaseProps = z.infer<typeof showcaseSchema>;
 
-export const SHOWCASE_SECONDS = 36;
+export const SHOWCASE_SECONDS = 47;
 const FACE = { x: 540, y: 700 };
-const WHIPS = [3, 30.2];
+const WHIPS = [3, 41.2];
 const TRANSITIONS = [
   { kind: "glitch" as const, at: 22.0 },
   { kind: "iris" as const, at: 24.7 },
@@ -119,7 +123,11 @@ const CHAPTERS: [number, number, string][] = [
   [21.2, 23.4, "Transition · glitch"],
   [23.4, 26.1, "Transition · iris"],
   [26.1, 29.6, "Transition · zoom blur"],
-  [29.6, 36, "Whip · outro card"],
+  [29.6, 32.4, "Data · bar chart"],
+  [32.4, 35.2, "Data · line chart"],
+  [35.2, 38, "Data · A vs B"],
+  [38, 40.6, "Data · stat row"],
+  [40.6, 47, "Whip · outro card"],
 ];
 
 // Your own 9:16 footage (muted, looped) or the stand-in stage.
@@ -173,8 +181,33 @@ const Scenes: React.FC<Omit<ShowcaseProps, "theme" | "look" | "sounds">> = ({ fo
         <Captions words={sampleWords("Sections can change with a glitch,", 21.4)} keywords={["glitch"]} />
         <Captions words={sampleWords("with an iris in the brand colour,", 24.0)} keywords={["iris"]} />
         <Captions words={sampleWords("or with a fast zoom blur.", 26.8)} keywords={["zoom"]} />
+        <BarChart
+          at={29.8}
+          seconds={2.6}
+          title="Where viewers watch"
+          items={[
+            { label: "Phone", value: 82 },
+            { label: "Desktop", value: 12 },
+            { label: "TV", value: 6 },
+          ]}
+          highlight="Phone"
+          suffix="%"
+        />
+        <Captions words={sampleWords("Data cards make numbers clear.", 30.2)} keywords={["clear"]} position="lower" />
+        <LineChart at={32.6} seconds={2.6} title="Views per week" points={[12, 14, 13, 19, 24, 22, 31, 38]} from="Week 1" to="Week 8" suffix="K" />
+        <Versus at={35.4} seconds={2.6} title="Watch time" a={{ label: "With captions", value: 41 }} b={{ label: "Without", value: 27 }} suffix=" s" />
+        <StatRow
+          at={38.2}
+          seconds={2.4}
+          title="One video, end to end"
+          stats={[
+            { value: 3, label: "steps" },
+            { value: 12, label: "minutes" },
+            { value: 0, label: "cost", prefix: "$" },
+          ]}
+        />
         <Outro
-          from={30.5}
+          from={41.5}
           heading="Be honest:"
           title="How many can you say YES to?"
           highlight="YES"

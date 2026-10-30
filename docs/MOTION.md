@@ -49,6 +49,10 @@ Every effect has a default sound (or none), set in `render/src/sound/sounds.json
 | transition.iris | whoosh-reverse | the cut (sucks in, then stops) |
 | transition.zoomblur | riser-micro | the cut (+0.1 s) |
 | label | notify-blip | the label appearing |
+| chart.bar | swipe-wide | the card entering |
+| chart.line | riser-micro | the line reaching its last point (+1.45 s) |
+| compare.versus | impact-thump | the VS badge landing (+0.35 s) |
+| stats.row | tick-counter | the numbers counting (+0.2 s) |
 | outro.card | chime-success | the card |
 | grade.leak | none | it rides on a whip |
 
