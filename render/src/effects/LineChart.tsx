@@ -3,7 +3,7 @@ import { z } from "zod";
 import { formatNumber } from "../theme/format";
 import { clamp, ease } from "../theme/motion";
 import { alpha, useTheme } from "../theme/theme";
-import { DataCard, dataCardSchema } from "./parts/DataCard";
+import { DataCard, dataCardSchema } from "./common/DataCard";
 
 // A trend that draws itself left to right; the last value is called out at the end of
 // the line. For "it went up/down" moments, not for reading exact values.

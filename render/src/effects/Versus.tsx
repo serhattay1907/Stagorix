@@ -3,7 +3,7 @@ import { z } from "zod";
 import { formatNumber } from "../theme/format";
 import { clamp, ease, pop } from "../theme/motion";
 import { alpha, radiusPx, useTheme } from "../theme/theme";
-import { DataCard, dataCardSchema } from "./parts/DataCard";
+import { DataCard, dataCardSchema } from "./common/DataCard";
 
 // A vs B: two values side by side, a VS badge that lands, and a split bar that shows
 // the share. The winner (higher value, or `winner`) takes the accent colour.

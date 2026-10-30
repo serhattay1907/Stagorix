@@ -3,7 +3,7 @@ import { z } from "zod";
 import { formatNumber } from "../theme/format";
 import { clamp, ease } from "../theme/motion";
 import { alpha, radiusPx, useTheme } from "../theme/theme";
-import { DataCard, dataCardSchema } from "./parts/DataCard";
+import { DataCard, dataCardSchema } from "./common/DataCard";
 
 // Ranked horizontal bars (readable on a phone, labels never rotate). Bars grow one after
 // another, values count up, and the highlighted item takes the accent colour.

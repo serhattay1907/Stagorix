@@ -3,7 +3,7 @@ import { z } from "zod";
 import { formatNumber } from "../theme/format";
 import { clamp, ease } from "../theme/motion";
 import { alpha, useTheme } from "../theme/theme";
-import { DataCard, dataCardSchema } from "./parts/DataCard";
+import { DataCard, dataCardSchema } from "./common/DataCard";
 
 // Two or three key numbers in a row, counting up one after another ("3 tools · 2 h · $0").
 export const statRowSchema = dataCardSchema.extend({

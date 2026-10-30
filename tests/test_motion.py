@@ -72,3 +72,23 @@ def test_unknown_and_non_signature_effects_are_errors() -> None:
 def test_effect_past_the_end_is_an_error() -> None:
     found = check_plan(plan(("title.behind", 0, 2), ("outro.card", 27, 5)))
     assert [v.rule for v in found if v.severity is Severity.ERROR] == ["past-end"]
+
+
+def test_no_render_source_is_gitignored() -> None:
+    """A source file matched by .gitignore never reaches the repo or the Docker image."""
+    import shutil
+    import subprocess
+
+    import pytest
+
+    if shutil.which("git") is None or not (ROOT / ".git").exists():
+        pytest.skip("needs a git checkout")
+    out = subprocess.run(
+        ["git", "ls-files", "--others", "--ignored", "--exclude-standard", "render/src", "stagorix", "tests"],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout
+    ignored = [p for p in out.splitlines() if "__pycache__" not in p]
+    assert not ignored, ignored
