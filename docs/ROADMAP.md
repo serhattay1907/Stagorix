@@ -18,6 +18,37 @@ Source of truth for progress. 12 phases after Phase 0. Owner tags: **(S)** = Ser
 | 11 | First real week (Random Talks Academy) | ⬜ |
 | 12 | Open source and CV | ⬜ |
 
+## Milestones
+
+| Milestone | What the user gets | Done when |
+| --- | --- | --- |
+| **MVP** | Own raw video → cut, captioned, effect-rich, branded vertical Short, with approval | Phase 3, the core of 4.1 and 8.1 |
+| **v1** | Every option dimension at its v1 target, three-layer choice, option review gate passed | End of phase 8 (8.5) |
+| **Pro** | Every option dimension at its Pro target, publishing and automation | End of phase 12 |
+
+## Option targets
+
+The user chooses from a rich, curated catalog; nothing is locked (filters are a default view with "show all", expert mode shows everything, every choice can be undone). Exact lists are researched and approved in the task that builds them.
+
+| Dimension | v1 | Pro | Task |
+| --- | --- | --- | --- |
+| Content formats | 20 | 25+ | 5.8 |
+| Hook types | 20 | 30+ | 5.8 |
+| Looks (style packs) | 10 | 15+ | 4.3 |
+| Font pairs (OFL) | 20 | 30+ | 4.6 |
+| Caption styles | 15 | 20+ | 3.3 |
+| Effects | 40 | 60+ | 3.3–3.5 |
+| Layouts | 10 | 12+ | 3.4 |
+| Sound effects (curated, licensed) | ~150 in 12 categories | 300+ | 3.3c-4, 7.3 |
+| Music | 12 moods × 5 tracks | 20+ moods | 7.4 |
+| Voice-over | Local free TTS, 2–4 voices per language | + paid voice cloning plugin (off, budget cap, own voice only) | 7.6 |
+| Visual sources | Own files, stock B-roll, Lottie, import with license field | + AI generation plugins (off, budget cap) | 7.1–7.5, 7.7 |
+| Duration | 15 / 30 / 45 / 60 / 90 s / 3 min | per platform rules | 8.4 |
+| Tempo | 3 levels | 5 levels | 8.4 |
+| Calls to action | 12 types | 20+ | 9.4 |
+
+After the option review gate, requests stay open for good: each wish becomes a numbered request (E-01, E-02, …) delivered as one small PR.
+
 ## Phase 0 — Setup ✅
 
 - [x] 0.1 GitHub repo (C)
@@ -65,12 +96,13 @@ Source of truth for progress. 12 phases after Phase 0. Owner tags: **(S)** = Ser
 
 ## Phase 4 — Brand system
 
-- [ ] 4.1 Brand profile schema (`brand.yaml`, `sources.yaml`, `tokens.json`, `motion-system.md`) (C)
+- [ ] 4.1 Brand profile schema (`brand.yaml`, `sources.yaml`, `tokens.json`, `motion-system.md`) and the option catalog with brand defaults (C)
   - Include per-language filler words (e.g. "um", "ııı") passed to Whisper as a hint, so fillers are transcribed and cut instead of hiding inside a neighbouring word
 - [ ] 4.2 Brand setup wizard (C)
-- [ ] 4.3 Style packs: News, Educational, Minimal, Energetic (C), approval (S)
+- [ ] 4.3 Looks (style packs): 10 for v1, e.g. News, Educational, Minimal, Energetic, Corporate, Luxury, Tech, Warm/Lifestyle, Cinematic, Retro (C), approval (S)
 - [ ] 4.4 Style card from reference videos (`extract-style`) (C), first references (S)
 - [ ] 4.5 First profile: Random Talks Academy (S provides brand info, C sets it up)
+- [ ] 4.6 Font pairs: 20 OFL pairs with Latin Extended support (C), selection (S)
 
 ## Phase 5 — Agents (LangGraph)
 
@@ -81,13 +113,14 @@ Source of truth for progress. 12 phases after Phase 0. Owner tags: **(S)** = Ser
 - [ ] 5.5 Editor agent (edit plan) (C)
 - [ ] 5.6 Visual QA agent (`qa-frames`) (C)
 - [ ] 5.7 Project skills: `edit-raw-video`, `news-short`, `extract-style`, `qa-frames` (C)
+- [ ] 5.8 Format and hook library: 20 proven short-form formats, 20 hook types, researched with sources (C), approval (S)
 
 ## Phase 6 — Control panel
 
 - [ ] 6.1 Run and event log (every step, duration, tokens, cost) (C)
 - [ ] 6.2 Panel: job list, live agent stream, stop / retry (C)
 - [ ] 6.3 Approval screen: edit plan, preview, publish approval (C)
-- [ ] 6.4 Brand wizard and settings in the panel (C)
+- [ ] 6.4 Brand wizard and settings in the panel; three-layer choice (one-click pack, guided wizard, expert mode), compatibility filter with "show all", search and favourites (C)
 - [ ] 6.5 Optional Notion sync + mobile notifications (C)
 - [ ] 6.6 Optional Langfuse connection (C)
 
@@ -97,20 +130,24 @@ Source of truth for progress. 12 phases after Phase 0. Owner tags: **(S)** = Ser
 - [ ] 7.2 Pexels, Pixabay, Mixkit, Lottie clients + license log (C)
 - [ ] 7.3 Sound library + sound showcase (C), selection (S)
 - [ ] 7.4 Music options (C), selection (S)
-- [ ] 7.5 `Generator` interface + Higgsfield plugin, off by default (C)
+- [ ] 7.5 `Generator` interface + AI generation plugins (Higgsfield and others), off by default, budget cap (C)
+- [ ] 7.6 Voice-over: local free TTS (Piper); optional paid voice cloning plugin, off, own voice only (C)
+- [ ] 7.7 Import any asset (image, video, audio, voice) with a required license field (C)
 
 ## Phase 8 — Upload your own video
 
 - [ ] 8.1 `edit` and `polish` modes (C)
 - [ ] 8.2 `clip` mode (C)
 - [ ] 8.3 Test with own videos (S)
+- [ ] 8.4 Duration and tempo presets (C)
+- [ ] 8.5 Option review gate: every option tried on real videos, each marked keep / fix / remove (S); v1 milestone
 
 ## Phase 9 — Publishing
 
 - [ ] 9.1 Platform layer: YouTube and Instagram profiles (C)
 - [ ] 9.2 YouTube: Google Cloud project + OAuth (S), approved upload (C)
 - [ ] 9.3 Instagram: app permission (S), temporary hosting + approved publish (C)
-- [ ] 9.4 Call-to-comment endings (C)
+- [ ] 9.4 Calls to action: 12 types (C)
 
 ## Phase 10 — Automation
 
