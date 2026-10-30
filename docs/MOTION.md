@@ -57,6 +57,12 @@ Every effect has a default sound (or none), set in `render/src/sound/sounds.json
 | speaker.swap | whoosh-airy | the new backdrop (+0.3 s) |
 | speaker.glow | chime-soft | the glow (+0.3 s) |
 | speaker.colorpop | impact-soft | the colour drain (+0.3 s) |
+| quote.bubbles | pop-mouth | the first bubble (+0.1 s) |
+| list.checklist | pop-high | the first item (+0.25 s) |
+| headline.wall | impact-boom | the big line landing (+1.2 s) |
+| timeline | swipe-down | the line starting (+0.2 s) |
+| badge | impact-punch | the stamp |
+| spotlight | whoosh-reverse | the circle closing (+0.5 s) |
 | outro.card | chime-success | the card |
 | grade.leak | none | it rides on a whip |
 

@@ -80,10 +80,10 @@ After the option review gate, requests stay open for good: each wish becomes a n
 
 - [x] 3.1 Analysis: Whisper, face tracking, person cutout (ported from pilot) (C)
 - [x] 3.2 Flub detector (C) — 3.2a detection + confidence list, 3.2b terminal approval + cut preview
-- [ ] 3.3 Effect library v1: pilot effects as Zod-typed components (C)
+- [x] 3.3 Effect library v1: pilot effects as Zod-typed components (C)
   - [x] 3.3a Talking-head effects on a theme scale: captions (5 styles), title behind speaker + cutout layer, camera zooms and whips, label, outro, grade; bundled fonts; named positions in a safe area; `Showcase` composition and `stagorix showcase`
   - [x] 3.3b Motion language: effect roles, intensity and spacing rules, set per brand (`docs/MOTION.md`, `stagorix effects`, `stagorix check-plan`)
-  - [ ] 3.3c Pack A
+  - [x] 3.3c Pack A
     - [x] 3.3c-1 Caption styles bold, reveal, marker; emoji pop; number pop; camera shake
     - [x] 3.3c-2 Transitions: glitch, iris (mask), zoom blur; showcase over your own footage (`--footage`)
     - [x] 3.3c-3 Ten looks (`stagorix looks`, `showcase --look`, look reel); five more OFL fonts
@@ -91,7 +91,7 @@ After the option review gate, requests stay open for good: each wish becomes a n
   - [x] 3.3d Pack B
     - [x] 3.3d-1 Data cards: bar chart, line chart, A vs B, stat row (role info; numbers in the brand's locale)
     - [x] 3.3d-2 Speaker effects: background blur, background swap, outline glow, colour pop; person mattes in two qualities (`stagorix matte`: draft with MediaPipe selfie segmentation, final with U²-Net), only for the effect's seconds
-  - [ ] 3.3e Cards from the pilot: quote bubbles, checklist, headline wall, timeline, badge, spotlight
+  - [x] 3.3e Cards from the pilot: quote bubbles, checklist, headline wall, timeline, badge, spotlight
 - [ ] 3.4 Layouts: full face, split screen, card over face, inside a phone (C)
 - [ ] 3.5 New effects: list cards, progress bar, phone mock-up, orbit, pull-back, zoom-through, vertigo, UI/diagram scenes, logo stack (logos supplied by the user, none bundled), word-synced kinetic typography (C)
 - [ ] 3.6 Draft render for previews (540p, lower frame rate, ~4× faster on CPU) and final render only after approval, −14 LUFS; a thin renderer interface so Remotion can be swapped (C)

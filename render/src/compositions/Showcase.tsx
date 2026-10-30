@@ -1,16 +1,22 @@
 import { AbsoluteFill, interpolate, Loop, OffthreadVideo, Sequence, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { z } from "zod";
+import { Badge } from "../effects/Badge";
 import { BarChart } from "../effects/BarChart";
 import { Camera, WhipFlash } from "../effects/Camera";
 import { Captions } from "../effects/Captions";
+import { Checklist } from "../effects/Checklist";
 import { EmojiPop } from "../effects/EmojiPop";
 import { Grade } from "../effects/Grade";
+import { HeadlineWall } from "../effects/HeadlineWall";
 import { Label } from "../effects/Label";
 import { LineChart } from "../effects/LineChart";
 import { NumberPop } from "../effects/NumberPop";
 import { Outro } from "../effects/Outro";
+import { QuoteBubbles } from "../effects/QuoteBubbles";
 import { MattedVideo, SpeakerBackdrop, SpeakerPerson } from "../effects/SpeakerFx";
+import { Spotlight } from "../effects/Spotlight";
 import { StatRow } from "../effects/StatRow";
+import { Timeline } from "../effects/Timeline";
 import { CutoutLayer, TitleBehind } from "../effects/TitleBehind";
 import { Transitions } from "../effects/Transition";
 import { Versus } from "../effects/Versus";
@@ -35,9 +41,9 @@ export const showcaseSchema = z.object({
 });
 type ShowcaseProps = z.infer<typeof showcaseSchema>;
 
-export const SHOWCASE_SECONDS = 58;
+export const SHOWCASE_SECONDS = 74;
 const FACE = { x: 540, y: 700 };
-const WHIPS = [3, 51.6];
+const WHIPS = [3, 67.2];
 const TRANSITIONS = [
   { kind: "glitch" as const, at: 22.0 },
   { kind: "iris" as const, at: 24.7 },
@@ -141,7 +147,13 @@ const CHAPTERS: [number, number, string][] = [
   [43.2, 45.8, "Speaker · background swap"],
   [45.8, 48.4, "Speaker · outline glow"],
   [48.4, 51, "Speaker · colour pop"],
-  [51, 58, "Whip · outro card"],
+  [51, 53.6, "Card · quote bubbles"],
+  [53.6, 56.2, "Card · checklist"],
+  [56.2, 58.8, "Card · headline wall"],
+  [58.8, 61.4, "Card · timeline"],
+  [61.4, 64, "Card · badge"],
+  [64, 66.6, "Card · spotlight"],
+  [66.6, 74, "Whip · outro card"],
 ];
 
 // Your own 9:16 footage (muted, looped) or the stand-in stage.
@@ -248,8 +260,40 @@ const Scenes: React.FC<Omit<ShowcaseProps, "theme" | "look" | "sounds">> = ({
         <Captions words={sampleWords("Swap the background for your brand.", 43.5)} keywords={["brand."]} position="lower" />
         <Captions words={sampleWords("A glow around the speaker.", 46.1)} keywords={["glow"]} position="lower" />
         <Captions words={sampleWords("The speaker pops in full colour.", 48.7)} keywords={["colour."]} position="lower" />
+        <QuoteBubbles
+          at={51.2}
+          seconds={2.4}
+          label="What people say"
+          bubbles={[
+            { text: "Editing takes all day…", side: "left", at: 0.1 },
+            { text: "No time to post 😩", side: "right", at: 0.6 },
+          ]}
+          strikeAt={1.5}
+          stamp="Not anymore"
+        />
+        <Checklist at={53.8} seconds={2.4} title="Before you post" items={["Hook in 1 second", "Captions on", "One clear ask"]} />
+        <HeadlineWall
+          at={56.3}
+          seconds={2.5}
+          headlines={[{ text: "Shorts views up again" }, { text: "Captions boost watch time", accent: true }, { text: "Hooks decide in 1 s" }]}
+          punch="90%"
+          caption="watch with sound off"
+          punchAt={1.2}
+        />
+        <Timeline
+          at={59}
+          seconds={2.4}
+          title="One video, one day"
+          events={[
+            { when: "09:00", what: "Record" },
+            { when: "09:20", what: "Cut and caption" },
+            { when: "09:30", what: "Publish", highlight: true },
+          ]}
+        />
+        <Badge at={61.6} seconds={2.2} text="New" sub="Speaker effects are here" />
+        <Spotlight at={64.2} seconds={2.2} x={FACE.x} y={FACE.y} radius={250} label="Look here" />
         <Outro
-          from={52}
+          from={67.6}
           heading="Be honest:"
           title="How many can you say YES to?"
           highlight="YES"
