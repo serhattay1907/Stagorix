@@ -1,5 +1,5 @@
 {
-  "duration": 47,
+  "duration": 58,
   "effects": [
     {
       "effect": "title.behind",
@@ -92,15 +92,39 @@
       "reason": "Sums up the key numbers"
     },
     {
+      "effect": "speaker.blur",
+      "at": 40.8,
+      "seconds": 2.4,
+      "reason": "Keeps attention on the speaker"
+    },
+    {
+      "effect": "speaker.swap",
+      "at": 43.4,
+      "seconds": 2.4,
+      "reason": "Puts the speaker in the brand's world"
+    },
+    {
+      "effect": "speaker.glow",
+      "at": 46.0,
+      "seconds": 2.4,
+      "reason": "Marks the speaker's key line"
+    },
+    {
+      "effect": "speaker.colorpop",
+      "at": 48.6,
+      "seconds": 2.4,
+      "reason": "Stresses a personal moment"
+    },
+    {
       "effect": "camera.whip",
-      "at": 41.05,
+      "at": 51.45,
       "seconds": 0.35,
       "reason": "Moves to the closing"
     },
     {
       "effect": "outro.card",
-      "at": 41.5,
-      "seconds": 5.5,
+      "at": 52.0,
+      "seconds": 6.0,
       "reason": "Call to comment"
     }
   ]

@@ -231,6 +231,50 @@ def check_plan_cmd(
         raise typer.Exit(code=1)
 
 
+@app.command()
+def matte(
+    source: Annotated[
+        Path, typer.Argument(help="Video, or an analysis folder (uses its vertical.mp4).", exists=True)
+    ],
+    quality: Annotated[
+        str, typer.Option("--quality", "-q", help="draft (fast, softer edges) or final (U²-Net, slow).")
+    ] = "draft",
+    plan_file: Annotated[
+        Path | None,
+        typer.Option("--plan", help="Edit plan; only the seconds of its speaker effects get a matte."),
+    ] = None,
+    out: Annotated[
+        Path | None, typer.Option("--out", help="Output folder (default: next to the video).")
+    ] = None,
+) -> None:
+    """Write person mattes for speaker effects (background blur/swap, glow, colour pop)."""
+    from stagorix.analysis.matte import Quality, plan_ranges, write_mattes
+    from stagorix.render.motion import EditPlan
+
+    try:
+        q = Quality(quality)
+    except ValueError:
+        console.print(f"[red]Unknown quality[/] '{quality}': use draft or final")
+        raise typer.Exit(code=1) from None
+    video = source / "vertical.mp4" if source.is_dir() else source
+    target = out or video.parent / f"matte-{q}"
+    ranges = None
+    if plan_file:
+        plan = EditPlan.model_validate_json(plan_file.read_text(encoding="utf-8"))
+        ranges = plan_ranges(plan)
+        if not ranges:
+            console.print("[yellow]The plan has no speaker effects; nothing to do.[/]")
+            return
+    try:
+        with console.status(f"Writing {q} mattes …"):
+            result = write_mattes(video, target, q, ranges)
+    except RuntimeError as exc:  # MediaError included
+        console.print(f"[red]Matte failed:[/] {exc}")
+        raise typer.Exit(code=1) from exc
+    spans = ", ".join(f"{a:.1f}–{b:.1f}s" for a, b in result.ranges)
+    console.print(f"[green]{result.written} mattes[/] ({result.model}, {spans}) in {target}")
+
+
 @sounds_app.command("list")
 def sounds_list(
     category: Annotated[
@@ -356,6 +400,9 @@ def models_list() -> None:
     u = models.U2NET
     here = "[green]yes[/]" if models.u2net_path().exists() else "no"
     table.add_row("cutout", u.name, f"{u.size_mb} MB", u.license, u.repo, here)
+    f = models.SELFIE
+    here = "[green]yes[/]" if models.selfie_path().exists() else "no"
+    table.add_row("matte (draft)", f.name, "<1 MB", f.license, f.repo, here)
     console.print(table)
 
 

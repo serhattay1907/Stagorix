@@ -123,6 +123,22 @@
       "sound": "tick-counter",
       "hit": 0.2
     },
+    "speaker.blur": {
+      "sound": "whoosh-low",
+      "hit": 0.3
+    },
+    "speaker.swap": {
+      "sound": "whoosh-airy",
+      "hit": 0.3
+    },
+    "speaker.glow": {
+      "sound": "chime-soft",
+      "hit": 0.3
+    },
+    "speaker.colorpop": {
+      "sound": "impact-soft",
+      "hit": 0.3
+    },
     "outro.card": {
       "sound": "chime-success",
       "hit": 0

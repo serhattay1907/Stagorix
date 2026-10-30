@@ -51,10 +51,17 @@ def stage_footage(analysis_dir: Path) -> dict[str, object]:
     if cutout.is_dir():
         shutil.copytree(cutout, INPUT_DIR / "cutout")
         frames = len(list((INPUT_DIR / "cutout").glob("*.png")))
+    # Speaker effects need a person matte; a draft matte of the whole clip takes seconds.
+    from stagorix.analysis.matte import Quality, write_mattes
+
+    matte = write_mattes(INPUT_DIR / "vertical.mp4", INPUT_DIR / "matte", Quality.DRAFT)
     return {
         "footage": "showcase-input/vertical.mp4",
         "cutoutFrames": frames,
         "cutoutDir": "showcase-input/cutout",
+        "matteDir": "showcase-input/matte",
+        "matteFrames": matte.written,
+        "matteFps": matte.fps,
     }
 
 

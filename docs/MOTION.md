@@ -53,6 +53,10 @@ Every effect has a default sound (or none), set in `render/src/sound/sounds.json
 | chart.line | riser-micro | the line reaching its last point (+1.45 s) |
 | compare.versus | impact-thump | the VS badge landing (+0.35 s) |
 | stats.row | tick-counter | the numbers counting (+0.2 s) |
+| speaker.blur | whoosh-low | the blur fading in (+0.3 s) |
+| speaker.swap | whoosh-airy | the new backdrop (+0.3 s) |
+| speaker.glow | chime-soft | the glow (+0.3 s) |
+| speaker.colorpop | impact-soft | the colour drain (+0.3 s) |
 | outro.card | chime-success | the card |
 | grade.leak | none | it rides on a whip |
 

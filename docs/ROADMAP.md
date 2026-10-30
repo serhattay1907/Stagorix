@@ -88,9 +88,9 @@ After the option review gate, requests stay open for good: each wish becomes a n
     - [x] 3.3c-2 Transitions: glitch, iris (mask), zoom blur; showcase over your own footage (`--footage`)
     - [x] 3.3c-3 Ten looks (`stagorix looks`, `showcase --look`, look reel); five more OFL fonts
     - [x] 3.3c-4 Sound library: 149 sounds in 12 categories (49 synthesized, 100 Kenney CC0) with a license log, a default sound per effect, one sound per beat, `stagorix sounds`
-  - [ ] 3.3d Pack B
+  - [x] 3.3d Pack B
     - [x] 3.3d-1 Data cards: bar chart, line chart, A vs B, stat row (role info; numbers in the brand's locale)
-    - [ ] 3.3d-2 Speaker effects: background swap/blur, outline glow, colour pop (needs a person matte for the effect's seconds)
+    - [x] 3.3d-2 Speaker effects: background blur, background swap, outline glow, colour pop; person mattes in two qualities (`stagorix matte`: draft with MediaPipe selfie segmentation, final with U²-Net), only for the effect's seconds
   - [ ] 3.3e Cards from the pilot: quote bubbles, checklist, headline wall, timeline, badge, spotlight
 - [ ] 3.4 Layouts: full face, split screen, card over face, inside a phone (C)
 - [ ] 3.5 New effects: list cards, progress bar, phone mock-up, orbit, pull-back, zoom-through, vertigo, UI/diagram scenes (C)

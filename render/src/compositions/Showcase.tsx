@@ -9,6 +9,7 @@ import { Label } from "../effects/Label";
 import { LineChart } from "../effects/LineChart";
 import { NumberPop } from "../effects/NumberPop";
 import { Outro } from "../effects/Outro";
+import { MattedVideo, SpeakerBackdrop, SpeakerPerson } from "../effects/SpeakerFx";
 import { StatRow } from "../effects/StatRow";
 import { CutoutLayer, TitleBehind } from "../effects/TitleBehind";
 import { Transitions } from "../effects/Transition";
@@ -27,19 +28,28 @@ export const showcaseSchema = z.object({
   footage: z.string().default("").describe("Your 9:16 video in render/public; empty = stand-in speaker"),
   cutoutFrames: z.number().int().min(0).default(0).describe("Person cutout frames in render/public/<cutoutDir>"),
   cutoutDir: z.string().default("showcase-input/cutout"),
+  matteDir: z.string().default("").describe("Person mattes for speaker effects; `stagorix showcase --footage` fills it"),
+  matteFrames: z.number().int().min(0).default(0),
+  matteFps: z.number().positive().default(30),
   sounds: z.array(soundCueSchema).default([]).describe("Sound cues; `stagorix showcase` fills them from the plan"),
 });
 type ShowcaseProps = z.infer<typeof showcaseSchema>;
 
-export const SHOWCASE_SECONDS = 47;
+export const SHOWCASE_SECONDS = 58;
 const FACE = { x: 540, y: 700 };
-const WHIPS = [3, 41.2];
+const WHIPS = [3, 51.6];
 const TRANSITIONS = [
   { kind: "glitch" as const, at: 22.0 },
   { kind: "iris" as const, at: 24.7 },
   { kind: "zoomblur" as const, at: 27.4 },
 ];
 const SHAKES = [13.9];
+const SPEAKER = [
+  { kind: "blur" as const, at: 40.8, seconds: 2.4 },
+  { kind: "swap" as const, at: 43.4, seconds: 2.4 },
+  { kind: "glow" as const, at: 46.0, seconds: 2.4 },
+  { kind: "colorpop" as const, at: 48.6, seconds: 2.4 },
+];
 
 const sampleWords = (text: string, start: number, step = 0.32) =>
   text.split(" ").map((w, i) => ({ text: w, start: start + i * step, end: start + i * step + step * 0.85 }));
@@ -127,7 +137,11 @@ const CHAPTERS: [number, number, string][] = [
   [32.4, 35.2, "Data · line chart"],
   [35.2, 38, "Data · A vs B"],
   [38, 40.6, "Data · stat row"],
-  [40.6, 47, "Whip · outro card"],
+  [40.6, 43.2, "Speaker · background blur"],
+  [43.2, 45.8, "Speaker · background swap"],
+  [45.8, 48.4, "Speaker · outline glow"],
+  [48.4, 51, "Speaker · colour pop"],
+  [51, 58, "Whip · outro card"],
 ];
 
 // Your own 9:16 footage (muted, looped) or the stand-in stage.
@@ -141,7 +155,14 @@ const Background: React.FC<{ footage: string }> = ({ footage }) => {
   );
 };
 
-const Scenes: React.FC<Omit<ShowcaseProps, "theme" | "look" | "sounds">> = ({ footage, cutoutFrames, cutoutDir }) => {
+const Scenes: React.FC<Omit<ShowcaseProps, "theme" | "look" | "sounds">> = ({
+  footage,
+  cutoutFrames,
+  cutoutDir,
+  matteDir,
+  matteFrames,
+  matteFps,
+}) => {
   const { fps } = useVideoConfig();
   const s = (seconds: number) => Math.round(seconds * fps);
   const zooms = [
@@ -158,7 +179,9 @@ const Scenes: React.FC<Omit<ShowcaseProps, "theme" | "look" | "sounds">> = ({ fo
     <AbsoluteFill>
       <Transitions items={TRANSITIONS} origin={FACE}>
         <Camera {...camera}>
-          <Background footage={footage} />
+          <SpeakerBackdrop items={SPEAKER}>
+            <Background footage={footage} />
+          </SpeakerBackdrop>
         </Camera>
         <Sequence durationInFrames={s(3)}>
           <TitleBehind
@@ -169,7 +192,22 @@ const Scenes: React.FC<Omit<ShowcaseProps, "theme" | "look" | "sounds">> = ({ fo
             ]}
           />
         </Sequence>
-        <Camera {...camera}>{footage ? <CutoutLayer dir={cutoutDir} frames={cutoutFrames} /> : <Speaker />}</Camera>
+        <Camera {...camera}>
+          {footage ? (
+            <>
+              <CutoutLayer dir={cutoutDir} frames={cutoutFrames} />
+              {matteDir && (
+                <SpeakerPerson items={SPEAKER}>
+                  <MattedVideo src={footage} matteDir={matteDir} matteFps={matteFps} matteFrames={matteFrames} />
+                </SpeakerPerson>
+              )}
+            </>
+          ) : (
+            <SpeakerPerson items={SPEAKER} always>
+              <Speaker />
+            </SpeakerPerson>
+          )}
+        </Camera>
         <Label text="What does it take?" from={3.3} to={5.1} position="upper" />
         <Captions words={sampleWords("Every word is timed, and keywords stand out.", 5.3)} keywords={["keywords"]} style="highlight" />
         <Captions words={sampleWords("A boxed style keeps captions readable anywhere.", 8.1)} keywords={["readable"]} style="boxed" position="lower" />
@@ -206,8 +244,12 @@ const Scenes: React.FC<Omit<ShowcaseProps, "theme" | "look" | "sounds">> = ({ fo
             { value: 0, label: "cost", prefix: "$" },
           ]}
         />
+        <Captions words={sampleWords("Blur the room, keep the speaker sharp.", 40.9)} keywords={["sharp."]} position="lower" />
+        <Captions words={sampleWords("Swap the background for your brand.", 43.5)} keywords={["brand."]} position="lower" />
+        <Captions words={sampleWords("A glow around the speaker.", 46.1)} keywords={["glow"]} position="lower" />
+        <Captions words={sampleWords("The speaker pops in full colour.", 48.7)} keywords={["colour."]} position="lower" />
         <Outro
-          from={41.5}
+          from={52}
           heading="Be honest:"
           title="How many can you say YES to?"
           highlight="YES"

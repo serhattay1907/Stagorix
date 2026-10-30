@@ -49,7 +49,8 @@ RUN uv sync --frozen --no-dev --no-install-project
 RUN python -c "from huggingface_hub import snapshot_download; \
 snapshot_download('Systran/faster-whisper-small', local_dir='/opt/models/whisper/small'); \
 from huggingface_hub import hf_hub_download; \
-hf_hub_download('opencv/face_detection_yunet', 'face_detection_yunet_2023mar.onnx', local_dir='/opt/models/yunet')"
+hf_hub_download('opencv/face_detection_yunet', 'face_detection_yunet_2023mar.onnx', local_dir='/opt/models/yunet'); \
+hf_hub_download('onnx-community/mediapipe_selfie_segmentation', 'onnx/model.onnx', revision='be49485c8e027524be38591817fc5cd31bd9d00e', local_dir='/opt/models/selfie')"
 RUN python -c "import hashlib, os, urllib.request; \
 os.makedirs('/opt/models/u2net', exist_ok=True); p = '/opt/models/u2net/u2net_human_seg.onnx'; \
 urllib.request.urlretrieve('https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2net_human_seg.onnx', p); \
