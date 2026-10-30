@@ -37,7 +37,7 @@ def showcase_cues() -> list[dict[str, object]]:
     return [{"sound": c.sound, "at": c.at} for c in plan_cues(plan)]
 
 
-def stage_footage(analysis_dir: Path) -> dict[str, object]:
+def stage_footage(analysis_dir: Path, matte: bool = True) -> dict[str, object]:
     """Copy vertical.mp4 and cutout/ from an analysis folder; return the matching props."""
     vertical = analysis_dir / "vertical.mp4"
     if not vertical.exists():
@@ -51,6 +51,8 @@ def stage_footage(analysis_dir: Path) -> dict[str, object]:
     if cutout.is_dir():
         shutil.copytree(cutout, INPUT_DIR / "cutout")
         frames = len(list((INPUT_DIR / "cutout").glob("*.png")))
+    if not matte:
+        return {"footage": "showcase-input/vertical.mp4"}
     # Speaker effects need a person matte; a draft matte of the whole clip takes seconds.
     from stagorix.analysis.matte import Quality, write_mattes
 
@@ -85,7 +87,7 @@ def render_showcase(
     if theme is not None:
         props.update(json.loads(theme.read_text(encoding="utf-8")))
     if footage is not None:
-        props.update(stage_footage(footage))
+        props.update(stage_footage(footage, matte=composition == "Showcase"))
     if look:
         props["look"] = look
     args = ["render", "src/index.ts", composition, str(out), "--codec=h264"]

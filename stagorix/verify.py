@@ -54,6 +54,7 @@ STILLS = {
         2100,
     ),
     "LookReel": (75, 615, 1047),
+    "LayoutReel": (54, 162, 270, 378, 486),
 }
 EXPECTED = {"width": 1080, "height": 1920, "fps": 30.0, "frames": 90}
 MIN_SSIM = 0.99

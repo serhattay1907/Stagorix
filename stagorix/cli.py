@@ -179,6 +179,42 @@ def looks(
 
 
 @app.command()
+def layouts(
+    render: Annotated[
+        bool, typer.Option("--render", help="Render every layout into one reel video.")
+    ] = False,
+    footage: Annotated[
+        Path | None,
+        typer.Option("--footage", help="Analysis folder (e.g. workspace/analysis/raw2) to use your video."),
+    ] = None,
+    look: Annotated[
+        str | None, typer.Option("--look", help="Ready-made look id; see `stagorix looks`.")
+    ] = None,
+    out: Annotated[Path, typer.Option("--out", help="Reel output.")] = Path("workspace/layouts.mp4"),
+) -> None:
+    """List the layouts (how speaker and content share the frame); with --render, write a reel."""
+    from stagorix.render.layouts import load_layouts
+
+    table = Table(title="Layouts")
+    for col in ("Id", "Name", "What it does", "Content", "Captions"):
+        table.add_column(col)
+    for lay in load_layouts():
+        table.add_row(lay.id, lay.name, lay.description, lay.content, lay.captions)
+    console.print(table)
+    if render:
+        from stagorix.render.showcase import render_showcase
+        from stagorix.verify import VerifyError
+
+        try:
+            with console.status("Rendering the layout reel …"):
+                path = render_showcase(out, footage=footage, look=look, composition="LayoutReel")
+        except (VerifyError, FileNotFoundError) as exc:
+            console.print(f"[red]Reel failed:[/] {exc}")
+            raise typer.Exit(code=1) from exc
+        console.print(f"[green]Done:[/] {path}")
+
+
+@app.command()
 def effects() -> None:
     """List the effect library with each effect's role and intensity."""
     from stagorix.render.motion import CATALOG
