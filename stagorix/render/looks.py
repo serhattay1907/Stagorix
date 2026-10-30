@@ -19,6 +19,7 @@ class Look(BaseModel):
     accent: str
     caption_style: str
     energy: int
+    sound_volume: float
 
 
 def load_looks() -> list[Look]:
@@ -33,6 +34,7 @@ def load_looks() -> list[Look]:
             accent=v["palette"]["accent"],
             caption_style=v["captions"]["style"],
             energy=v["energy"],
+            sound_volume=v["sound"]["volume"],
         )
         for k, v in data.items()
     ]

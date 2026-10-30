@@ -12,3 +12,4 @@ def test_ten_looks_with_known_fonts_and_styles() -> None:
         assert lk.display_font in FONTS and lk.body_font in FONTS, lk.id
         assert lk.caption_style in CAPTION_STYLES, lk.id
         assert 1 <= lk.energy <= 5
+        assert 0 <= lk.sound_volume <= 1

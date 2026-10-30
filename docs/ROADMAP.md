@@ -87,7 +87,7 @@ After the option review gate, requests stay open for good: each wish becomes a n
     - [x] 3.3c-1 Caption styles bold, reveal, marker; emoji pop; number pop; camera shake
     - [x] 3.3c-2 Transitions: glitch, iris (mask), zoom blur; showcase over your own footage (`--footage`)
     - [x] 3.3c-3 Ten looks (`stagorix looks`, `showcase --look`, look reel); five more OFL fonts
-    - [ ] 3.3c-4 Free sound library with license log, sounds mapped to effects (moved forward from 7.3)
+    - [x] 3.3c-4 Sound library: 149 sounds in 12 categories (49 synthesized, 100 Kenney CC0) with a license log, a default sound per effect, one sound per beat, `stagorix sounds`
   - [ ] 3.3d Pack B: speaker effects (background swap/blur, outline glow, colour pop) and data cards (counter, charts, A vs B)
   - [ ] 3.3e Cards from the pilot: quote bubbles, checklist, headline wall, timeline, badge, spotlight
 - [ ] 3.4 Layouts: full face, split screen, card over face, inside a phone (C)
@@ -129,7 +129,7 @@ After the option review gate, requests stay open for good: each wish becomes a n
 
 - [ ] 7.1 Own files (`assets/`) + priority rule (C)
 - [ ] 7.2 Pexels, Pixabay, Mixkit, Lottie clients + license log (C)
-- [ ] 7.3 Sound library + sound showcase (C), selection (S)
+- [ ] 7.3 Sound library to 300+ (more CC0 packs: Kenney impact, digital, sci-fi; hand-picked Freesound CC0) + selection with `stagorix sounds reel` (C), selection (S)
 - [ ] 7.4 Music options (C), selection (S)
 - [ ] 7.5 `Generator` interface + AI generation plugins (Higgsfield and others), off by default, budget cap (C)
 - [ ] 7.6 Voice-over: local free TTS (Piper); optional paid voice cloning plugin, off, own voice only (C)

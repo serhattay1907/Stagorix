@@ -14,6 +14,7 @@ const toTheme = (look: LookData): Theme =>
     radius: look.radius,
     energy: look.energy,
     captions: look.captions,
+    sound: look.sound,
   });
 
 export const LOOKS = Object.fromEntries(

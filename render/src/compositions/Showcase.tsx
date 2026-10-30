@@ -9,6 +9,7 @@ import { NumberPop } from "../effects/NumberPop";
 import { Outro } from "../effects/Outro";
 import { CutoutLayer, TitleBehind } from "../effects/TitleBehind";
 import { Transitions } from "../effects/Transition";
+import { Sfx, soundCueSchema } from "../sound/Sfx";
 import { LOOKS } from "../theme/looks";
 import { clamp } from "../theme/motion";
 import { alpha, ThemeProvider, themeSchema, useTheme } from "../theme/theme";
@@ -22,6 +23,7 @@ export const showcaseSchema = z.object({
   footage: z.string().default("").describe("Your 9:16 video in render/public; empty = stand-in speaker"),
   cutoutFrames: z.number().int().min(0).default(0).describe("Person cutout frames in render/public/<cutoutDir>"),
   cutoutDir: z.string().default("showcase-input/cutout"),
+  sounds: z.array(soundCueSchema).default([]).describe("Sound cues; `stagorix showcase` fills them from the plan"),
 });
 type ShowcaseProps = z.infer<typeof showcaseSchema>;
 
@@ -131,7 +133,7 @@ const Background: React.FC<{ footage: string }> = ({ footage }) => {
   );
 };
 
-const Scenes: React.FC<Omit<ShowcaseProps, "theme" | "look">> = ({ footage, cutoutFrames, cutoutDir }) => {
+const Scenes: React.FC<Omit<ShowcaseProps, "theme" | "look" | "sounds">> = ({ footage, cutoutFrames, cutoutDir }) => {
   const { fps } = useVideoConfig();
   const s = (seconds: number) => Math.round(seconds * fps);
   const zooms = [
@@ -192,8 +194,9 @@ const Scenes: React.FC<Omit<ShowcaseProps, "theme" | "look">> = ({ footage, cuto
   );
 };
 
-export const Showcase: React.FC<ShowcaseProps> = ({ theme, look, ...rest }) => (
+export const Showcase: React.FC<ShowcaseProps> = ({ theme, look, sounds, ...rest }) => (
   <ThemeProvider value={look in LOOKS ? LOOKS[look as keyof typeof LOOKS].theme : theme}>
     <Scenes {...rest} />
+    <Sfx cues={sounds} />
   </ThemeProvider>
 );

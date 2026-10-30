@@ -21,6 +21,9 @@
       "style": "boxed",
       "case": "upper",
       "position": "lower"
+    },
+    "sound": {
+      "volume": 0.7
     }
   },
   "educational": {
@@ -45,6 +48,9 @@
       "style": "marker",
       "case": "as-is",
       "position": "middle"
+    },
+    "sound": {
+      "volume": 0.6
     }
   },
   "minimal": {
@@ -69,6 +75,9 @@
       "style": "plain",
       "case": "as-is",
       "position": "lower"
+    },
+    "sound": {
+      "volume": 0.45
     }
   },
   "energetic": {
@@ -93,6 +102,9 @@
       "style": "bold",
       "case": "upper",
       "position": "middle"
+    },
+    "sound": {
+      "volume": 1.0
     }
   },
   "corporate": {
@@ -117,6 +129,9 @@
       "style": "boxed",
       "case": "as-is",
       "position": "lower"
+    },
+    "sound": {
+      "volume": 0.55
     }
   },
   "luxury": {
@@ -141,6 +156,9 @@
       "style": "plain",
       "case": "as-is",
       "position": "lower"
+    },
+    "sound": {
+      "volume": 0.45
     }
   },
   "tech": {
@@ -165,6 +183,9 @@
       "style": "karaoke",
       "case": "as-is",
       "position": "middle"
+    },
+    "sound": {
+      "volume": 0.8
     }
   },
   "warm": {
@@ -189,6 +210,9 @@
       "style": "highlight",
       "case": "as-is",
       "position": "middle"
+    },
+    "sound": {
+      "volume": 0.65
     }
   },
   "cinematic": {
@@ -213,6 +237,9 @@
       "style": "reveal",
       "case": "upper",
       "position": "lower"
+    },
+    "sound": {
+      "volume": 0.75
     }
   },
   "retro": {
@@ -237,6 +264,9 @@
       "style": "bold",
       "case": "upper",
       "position": "middle"
+    },
+    "sound": {
+      "volume": 0.85
     }
   }
 }

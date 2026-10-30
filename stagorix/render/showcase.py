@@ -12,9 +12,29 @@ import json
 import shutil
 from pathlib import Path
 
-from stagorix.verify import RENDER_DIR, _remotion
+from stagorix.verify import RENDER_DIR, VerifyError, _remotion
 
 INPUT_DIR = RENDER_DIR / "public" / "showcase-input"
+PLAN_FILE = RENDER_DIR.parent / "examples" / "plans" / "showcase.json"
+
+
+def ensure_sounds() -> None:
+    """Build the sound files on first use (in Docker they are built into the image)."""
+    from stagorix.assets.sounds import build, is_built
+
+    if not is_built():
+        report = build()
+        if report.skipped:
+            raise VerifyError("some sounds could not be built:\n" + "\n".join(report.skipped))
+
+
+def showcase_cues() -> list[dict[str, object]]:
+    """Sound cues for the showcase, from its edit plan: the same path a real edit takes."""
+    from stagorix.assets.sounds import plan_cues
+    from stagorix.render.motion import EditPlan
+
+    plan = EditPlan.model_validate_json(PLAN_FILE.read_text(encoding="utf-8"))
+    return [{"sound": c.sound, "at": c.at} for c in plan_cues(plan)]
 
 
 def stage_footage(analysis_dir: Path) -> dict[str, object]:
@@ -45,11 +65,16 @@ def render_showcase(
     footage: Path | None = None,
     look: str | None = None,
     composition: str = "Showcase",
+    props: dict[str, object] | None = None,
 ) -> Path:
-    """Render the Showcase composition; `theme` is a JSON file like {"theme": {...}}."""
+    """Render the Showcase (or another) composition; `theme` is a JSON file like {"theme": {...}}."""
     out = out.resolve()
     out.parent.mkdir(parents=True, exist_ok=True)
-    props: dict[str, object] = {}
+    props = dict(props or {})
+    if composition in ("Showcase", "SoundReel"):
+        ensure_sounds()
+    if composition == "Showcase":
+        props["sounds"] = showcase_cues()
     if theme is not None:
         props.update(json.loads(theme.read_text(encoding="utf-8")))
     if footage is not None:

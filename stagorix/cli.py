@@ -26,6 +26,8 @@ brand_app = typer.Typer(help="Manage brand profiles.", no_args_is_help=True)
 app.add_typer(brand_app, name="brand")
 models_app = typer.Typer(help="List and download ML models.", no_args_is_help=True)
 app.add_typer(models_app, name="models")
+sounds_app = typer.Typer(help="The sound effect library: list, build, listen.", no_args_is_help=True)
+app.add_typer(sounds_app, name="sounds")
 
 console = Console()
 
@@ -227,6 +229,82 @@ def check_plan_cmd(
     )
     if errors:
         raise typer.Exit(code=1)
+
+
+@sounds_app.command("list")
+def sounds_list(
+    category: Annotated[
+        str | None, typer.Option("--category", "-c", help="Show the sounds of one category.")
+    ] = None,
+) -> None:
+    """Sounds by category, with each pack's author and license."""
+    from stagorix.assets.sounds import load_catalog
+
+    cat = load_catalog()
+    if category:
+        if category not in cat.categories:
+            console.print(f"[red]Unknown category[/] '{category}'. Categories: {', '.join(cat.categories)}")
+            raise typer.Exit(code=1)
+        table = Table(title=f"Sounds · {cat.categories[category].name}")
+        for col in ("Id", "Seconds", "Pack", "License"):
+            table.add_column(col)
+        for snd in (x for x in cat.sounds if x.category == category):
+            table.add_row(snd.id, f"{snd.seconds:.2f}", cat.packs[snd.pack].name, cat.packs[snd.pack].license)
+        console.print(table)
+        return
+    table = Table(title=f"Sound library · {len(cat.sounds)} sounds")
+    for col in ("Category", "Id", "Sounds", "Mix level"):
+        table.add_column(col)
+    for cid, c in cat.categories.items():
+        n = sum(x.category == cid for x in cat.sounds)
+        table.add_row(c.name, cid, str(n), f"{c.gain:.2f}")
+    console.print(table)
+    for p in cat.packs.values():
+        console.print(f"• {p.name} — {p.author}, [bold]{p.license}[/], {p.source}")
+    used = {k: v.sound for k, v in cat.effects.items() if v}
+    console.print("Effect sounds: " + ", ".join(f"{k} → {v}" for k, v in used.items()))
+
+
+@sounds_app.command("build")
+def sounds_build(
+    synth_only: Annotated[
+        bool, typer.Option("--synth-only", help="Only the synthesized sounds; no download.")
+    ] = False,
+) -> None:
+    """Write every sound to render/public/sounds (downloads CC0 packs once, checks sha256)."""
+    from stagorix.assets.sounds import OUT_DIR, build
+
+    with console.status("Building sounds …"):
+        report = build(synth_only=synth_only)
+    console.print(f"[green]{report.built} sounds[/] in {OUT_DIR} ({report.downloaded} from CC0 packs)")
+    for line in report.skipped:
+        console.print(f"[yellow]skipped[/] {line}")
+    if report.skipped and not synth_only:
+        raise typer.Exit(code=1)
+
+
+@sounds_app.command("reel")
+def sounds_reel(
+    category: Annotated[str | None, typer.Option("--category", "-c", help="Only this category.")] = None,
+    out: Annotated[Path, typer.Option("--out", help="Reel output.")] = Path("workspace/sounds.mp4"),
+) -> None:
+    """Render a video that plays each sound with its name and license, to listen and pick."""
+    from stagorix.assets.sounds import load_catalog
+    from stagorix.render.showcase import render_showcase
+    from stagorix.verify import VerifyError
+
+    cat = load_catalog()
+    ids = [x.id for x in cat.sounds if category is None or x.category == category]
+    if not ids:
+        console.print(f"[red]No sounds[/] in category '{category}'")
+        raise typer.Exit(code=1)
+    try:
+        with console.status(f"Rendering {len(ids)} sounds …"):
+            path = render_showcase(out, composition="SoundReel", props={"sounds": ids})
+    except VerifyError as exc:
+        console.print(f"[red]Reel failed:[/] {exc}")
+        raise typer.Exit(code=1) from exc
+    console.print(f"[green]Done:[/] {path}")
 
 
 @app.command()

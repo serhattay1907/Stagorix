@@ -65,4 +65,7 @@ COPY render render
 COPY examples examples
 RUN uv sync --frozen --no-dev
 
+# Sound library: synthesized sounds plus CC0 packs, each file checked against its sha256.
+RUN stagorix sounds build
+
 CMD ["stagorix", "doctor"]
