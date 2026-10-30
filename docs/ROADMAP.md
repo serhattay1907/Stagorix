@@ -93,7 +93,7 @@ After the option review gate, requests stay open for good: each wish becomes a n
     - [x] 3.3d-2 Speaker effects: background blur, background swap, outline glow, colour pop; person mattes in two qualities (`stagorix matte`: draft with MediaPipe selfie segmentation, final with U²-Net), only for the effect's seconds
   - [ ] 3.3e Cards from the pilot: quote bubbles, checklist, headline wall, timeline, badge, spotlight
 - [ ] 3.4 Layouts: full face, split screen, card over face, inside a phone (C)
-- [ ] 3.5 New effects: list cards, progress bar, phone mock-up, orbit, pull-back, zoom-through, vertigo, UI/diagram scenes, logo stack (logos supplied by the user, none bundled), word-synced kinetic typography (C); ideas from `docs/REFERENCES.md`
+- [ ] 3.5 New effects: list cards, progress bar, phone mock-up, orbit, pull-back, zoom-through, vertigo, UI/diagram scenes, logo stack (logos supplied by the user, none bundled), word-synced kinetic typography (C)
 - [ ] 3.6 Draft render for previews (540p, lower frame rate, ~4× faster on CPU) and final render only after approval, −14 LUFS; a thin renderer interface so Remotion can be swapped (C)
 
 ## Phase 4 — Brand system

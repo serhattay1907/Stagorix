@@ -12,15 +12,3 @@ Outside work we learn from. Nothing here is copied into the repo: we take ideas,
 | [heygen-com/hyperframes](https://github.com/heygen-com/hyperframes) | Apache-2.0 | Candidate second renderer (HTML to video, headless Chrome + ffmpeg); reviewed again at 12.0 | 3.6, 12.0 |
 
 Looked at and not used: JohnHeibel/PDoomVideo and joeseesun/opus-video-prompts (no license), JohnHeibel/ClaudeAnimationBase (cartoon kit, off-topic; its character belongs to Anthropic), Higgsfield Katana (generates new footage; reconsidered in 7.5 if it gets a public API).
-
-## Edits we study
-
-Short-form videos whose editing we use as a reference. Only the link and what we take from it are recorded.
-
-| Video | What we take | Task |
-| --- | --- | --- |
-| _(links to add)_ | Card over the speaker's face | 3.4 |
-| _(links to add)_ | One-word captions (tune the `pop` style) | 3.3 |
-| _(links to add)_ | Glitch transition (tune timing and strength) | 3.3 |
-| _(links to add)_ | Logo stack | 3.5 |
-| _(all of the above)_ | Test references for the style card | 4.4 |
