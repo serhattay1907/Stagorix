@@ -1,4 +1,4 @@
-import { AbsoluteFill, interpolate, Loop, OffthreadVideo, Sequence, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
+import { AbsoluteFill, Img, interpolate, Loop, OffthreadVideo, Sequence, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { z } from "zod";
 import { Badge } from "../effects/Badge";
 import { BarChart } from "../effects/BarChart";
@@ -14,7 +14,7 @@ import { LineChart } from "../effects/LineChart";
 import { NumberPop } from "../effects/NumberPop";
 import { Outro } from "../effects/Outro";
 import { QuoteBubbles } from "../effects/QuoteBubbles";
-import { MattedVideo, SpeakerBackdrop, SpeakerPerson } from "../effects/SpeakerFx";
+import { MattedVideo, SpeakerBackdrop, SpeakerPerson, useSpeakerFx } from "../effects/SpeakerFx";
 import { Spotlight } from "../effects/Spotlight";
 import { StatRow } from "../effects/StatRow";
 import { Timeline } from "../effects/Timeline";
@@ -38,6 +38,8 @@ export const showcaseSchema = z.object({
   matteDir: z.string().default("").describe("Person mattes for speaker effects; `stagorix showcase --footage` fills it"),
   matteFrames: z.number().int().min(0).default(0),
   matteFps: z.number().positive().default(30),
+  footageFrames: z.number().int().min(0).default(0).describe("Footage length in frames; it loops"),
+  plate: z.string().default("").describe("Clean plate (background without the speaker) in render/public"),
   sounds: z.array(soundCueSchema).default([]).describe("Sound cues; `stagorix showcase` fills them from the plan"),
 });
 type ShowcaseProps = z.infer<typeof showcaseSchema>;
@@ -175,11 +177,18 @@ const DuringMove: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 };
 
 // Your own 9:16 footage (muted, looped) or the stand-in stage.
-const Background: React.FC<{ footage: string }> = ({ footage }) => {
+// Looped to its own length, so a clip shorter than the showcase restarts instead of
+// freezing on its last frame. While the speaker is on its own layer (speaker effects,
+// camera moves), the background is the clean plate, so no halo or ghost of the speaker shows.
+const Background: React.FC<{ footage: string; loop: number; plate: string }> = ({ footage, loop, plate }) => {
   const { durationInFrames } = useVideoConfig();
+  const fx = useSpeakerFx(SPEAKER);
+  const move = useCameraMove(MOVES);
   if (!footage) return <Stage />;
+  const separated = (fx && fx.kind !== "swap") || (move && move.kind !== "zoomthrough");
+  if (plate && separated) return <Img src={staticFile(plate)} style={{ width: "100%", height: "100%", objectFit: "cover" }} />;
   return (
-    <Loop durationInFrames={durationInFrames}>
+    <Loop durationInFrames={loop || durationInFrames}>
       <OffthreadVideo src={staticFile(footage)} muted style={{ width: "100%", height: "100%", objectFit: "cover" }} />
     </Loop>
   );
@@ -192,6 +201,8 @@ const Scenes: React.FC<Omit<ShowcaseProps, "theme" | "look" | "sounds">> = ({
   matteDir,
   matteFrames,
   matteFps,
+  footageFrames,
+  plate,
 }) => {
   const { fps } = useVideoConfig();
   const s = (seconds: number) => Math.round(seconds * fps);
@@ -211,7 +222,7 @@ const Scenes: React.FC<Omit<ShowcaseProps, "theme" | "look" | "sounds">> = ({
         <Camera {...camera}>
           <MoveLayer items={MOVES} origin={FACE} layer="background">
             <SpeakerBackdrop items={SPEAKER}>
-              <Background footage={footage} />
+              <Background footage={footage} loop={footageFrames} plate={plate} />
             </SpeakerBackdrop>
           </MoveLayer>
         </Camera>
@@ -231,12 +242,12 @@ const Scenes: React.FC<Omit<ShowcaseProps, "theme" | "look" | "sounds">> = ({
                 <CutoutLayer dir={cutoutDir} frames={cutoutFrames} />
                 {matteDir && (
                   <SpeakerPerson items={SPEAKER}>
-                    <MattedVideo src={footage} matteDir={matteDir} matteFps={matteFps} matteFrames={matteFrames} />
+                    <MattedVideo src={footage} matteDir={matteDir} matteFps={matteFps} matteFrames={matteFrames} loopFrames={footageFrames} />
                   </SpeakerPerson>
                 )}
                 {matteDir && (
                   <DuringMove>
-                    <MattedVideo src={footage} matteDir={matteDir} matteFps={matteFps} matteFrames={matteFrames} />
+                    <MattedVideo src={footage} matteDir={matteDir} matteFps={matteFps} matteFrames={matteFrames} loopFrames={footageFrames} />
                   </DuringMove>
                 )}
               </>

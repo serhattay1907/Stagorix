@@ -23,7 +23,7 @@ export const Root: React.FC = () => (
       id="Showcase"
       component={Showcase}
       schema={showcaseSchema}
-      defaultProps={{ theme: neutralTheme, look: "", footage: "", cutoutFrames: 0, cutoutDir: "showcase-input/cutout", matteDir: "", matteFrames: 0, matteFps: 30, sounds: [] }}
+      defaultProps={{ theme: neutralTheme, look: "", footage: "", cutoutFrames: 0, cutoutDir: "showcase-input/cutout", matteDir: "", matteFrames: 0, matteFps: 30, footageFrames: 0, plate: "", sounds: [] }}
       durationInFrames={VIDEO.fps * SHOWCASE_SECONDS}
       {...VIDEO}
     />

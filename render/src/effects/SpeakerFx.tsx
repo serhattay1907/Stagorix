@@ -1,4 +1,4 @@
-import { AbsoluteFill, interpolate, OffthreadVideo, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
+import { AbsoluteFill, interpolate, Loop, OffthreadVideo, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { z } from "zod";
 import { clamp, ease } from "../theme/motion";
 import { alpha, useTheme } from "../theme/theme";
@@ -108,9 +108,19 @@ export const mattedVideoSchema = z.object({
   matteDir: z.string(),
   matteFps: z.number().positive(),
   matteFrames: z.number().int().min(0),
+  loopFrames: z.number().int().min(0).default(0).describe("Length of the footage in composition frames; it loops"),
 });
 export const MattedVideo: React.FC<z.input<typeof mattedVideoSchema>> = (props) => {
-  const { src, matteDir, matteFps, matteFrames } = mattedVideoSchema.parse(props);
+  const p = mattedVideoSchema.parse(props);
+  const { durationInFrames } = useVideoConfig();
+  return (
+    <Loop durationInFrames={p.loopFrames || durationInFrames}>
+      <MattedFrame {...p} />
+    </Loop>
+  );
+};
+
+const MattedFrame: React.FC<z.infer<typeof mattedVideoSchema>> = ({ src, matteDir, matteFps, matteFrames }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const index = Math.min(Math.floor((frame / fps) * matteFps), Math.max(matteFrames - 1, 0));

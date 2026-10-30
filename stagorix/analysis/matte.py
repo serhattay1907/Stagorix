@@ -64,6 +64,31 @@ def _selfie_mask(session, frame_bgr: np.ndarray) -> np.ndarray:  # type: ignore[
     return np.clip(mask * 255, 0, 255).astype(np.uint8)
 
 
+def clean_mask(mask: np.ndarray) -> np.ndarray:
+    """Tighten a raw matte: steeper edge, no faint haze over the background, no loose blobs.
+
+    Faint values far from the person made glows and moves paint over background objects;
+    a soft fringe made halos. Keeps every blob that is at least 1.5 % of the frame.
+    """
+    import cv2
+
+    m = mask.astype(np.float32) / 255.0
+    m = np.clip((m - 0.3) / 0.4, 0.0, 1.0)
+    m = m * m * (3 - 2 * m)  # smoothstep
+    solid = (m > 0.5).astype(np.uint8)
+    n, labels, stats, _ = cv2.connectedComponentsWithStats(solid, connectivity=8)
+    keep = np.zeros_like(solid)
+    min_area = 0.015 * solid.size
+    for i in range(1, n):
+        if stats[i, cv2.CC_STAT_AREA] >= min_area:
+            keep[labels == i] = 1
+    keep = cv2.dilate(keep, np.ones((9, 9), np.uint8))
+    m = m * keep
+    m = cv2.erode(m, np.ones((3, 3), np.uint8))
+    m = cv2.GaussianBlur(m, (0, 0), 1.2)
+    return np.clip(m * 255, 0, 255).astype(np.uint8)
+
+
 def _masker(quality: Quality) -> tuple[Callable[[np.ndarray], np.ndarray], str]:
     import cv2
     import onnxruntime as ort
@@ -103,7 +128,9 @@ def write_mattes(
             break
         if not any(a <= i < b for a, b in wanted):
             continue
-        cv2.imwrite(str(out_dir / f"{i:05d}.png"), mask_of(frame), [cv2.IMWRITE_PNG_COMPRESSION, 6])
+        cv2.imwrite(
+            str(out_dir / f"{i:05d}.png"), clean_mask(mask_of(frame)), [cv2.IMWRITE_PNG_COMPRESSION, 6]
+        )
         written += 1
         if on_progress and count:
             on_progress(written / count)
@@ -132,3 +159,43 @@ def plan_ranges(plan) -> list[tuple[float, float]]:  # type: ignore[no-untyped-d
         for e in plan.effects
         if e.effect in CATALOG and CATALOG[e.effect].component == SPEAKER_COMPONENT
     ]
+
+
+def write_plate(video: Path, matte_dir: Path, out: Path, samples: int = 24) -> Path:
+    """A clean plate: the background without the speaker, for effects that move or blur it.
+
+    Takes the per-pixel median of background pixels over sampled frames (the speaker moves,
+    so most of the background shows up in some frame) and inpaints what is never visible.
+    Blur and camera moves then show this plate instead of a background with the speaker in it,
+    so no halo or ghost of the speaker appears.
+    """
+    import cv2
+
+    info = probe(video)
+    have = sorted(int(p.stem) for p in matte_dir.glob("*.png"))
+    if not have:
+        raise FileNotFoundError(f"no mattes in {matte_dir}")
+    picks = set(have[:: max(1, len(have) // samples)][:samples])
+    stack: list[np.ndarray] = []
+    for i, frame in enumerate(iter_frames(video, info, width=MATTE_SIZE[0])):
+        if i > max(picks):
+            break
+        if i not in picks:
+            continue
+        mask = cv2.imread(str(matte_dir / f"{i:05d}.png"), cv2.IMREAD_GRAYSCALE)
+        person = cv2.dilate((mask > 20).astype(np.uint8), np.ones((31, 31), np.uint8)).astype(bool)
+        f = cv2.resize(frame, MATTE_SIZE, interpolation=cv2.INTER_AREA).astype(np.float32)
+        f[person] = np.nan
+        stack.append(f)
+    import warnings
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)  # all-NaN pixels are filled below
+        plate = np.nanmedian(np.stack(stack), axis=0)
+    hole = np.isnan(plate).any(axis=2)
+    plate = np.nan_to_num(plate).astype(np.uint8)
+    if hole.any():
+        plate = cv2.inpaint(plate, hole.astype(np.uint8) * 255, 9, cv2.INPAINT_TELEA)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    cv2.imwrite(str(out), plate, [cv2.IMWRITE_JPEG_QUALITY, 92])
+    return out
