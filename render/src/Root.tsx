@@ -37,7 +37,7 @@ export const Root: React.FC = () => (
       id="LayoutReel"
       component={LayoutReel}
       schema={layoutReelSchema}
-      defaultProps={{ theme: neutralTheme, look: "", footage: "", focus: { x: 540, y: 700 } }}
+      defaultProps={{ theme: neutralTheme, look: "", footage: "", focus: { x: 540, y: 700 }, matteDir: "", matteFrames: 0, matteFps: 30 }}
       durationInFrames={Math.round(VIDEO.fps * LAYOUT_REEL_SECONDS)}
       {...VIDEO}
     />

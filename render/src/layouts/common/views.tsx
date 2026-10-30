@@ -1,5 +1,6 @@
-import { AbsoluteFill, Img, Loop, OffthreadVideo, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
+import { AbsoluteFill, Img, interpolate, Loop, OffthreadVideo, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { z } from "zod";
+import { clamp, ease } from "../../theme/motion";
 import { alpha, useTheme } from "../../theme/theme";
 import { cropToBox } from "./crop";
 
@@ -124,4 +125,37 @@ export const ContentView: React.FC<{ content: Content }> = ({ content }) => {
   if (c.src && c.kind === "video")
     return <OffthreadVideo src={staticFile(c.src)} muted style={{ width: "100%", height: "100%", objectFit: "cover" }} />;
   return c.kind === "screen" ? <ScreenStandIn /> : <BrollStandIn />;
+};
+
+/** Slow push-in on still or B-roll content (Ken Burns), so a static shot keeps moving. */
+export const KenBurns: React.FC<{ amount?: number; children: React.ReactNode }> = ({ amount = 0.08, children }) => {
+  const frame = useCurrentFrame();
+  const { durationInFrames } = useVideoConfig();
+  const k = Math.min(1, frame / Math.max(1, durationInFrames));
+  return <AbsoluteFill style={{ transform: `scale(${1 + amount * k})`, transformOrigin: "50% 40%" }}>{children}</AbsoluteFill>;
+};
+
+/** The speaker slid down so the face sits at `faceAt` (share of the height), over a blurred
+ *  copy of the same shot; leaves the top of the frame free for a card or a player. */
+export const SpeakerBelow: React.FC<{ focus: Focus; faceAt: number; children: React.ReactNode }> = ({ focus, faceAt, children }) => {
+  const theme = useTheme();
+  const frame = useCurrentFrame();
+  const { fps, width, height } = useVideoConfig();
+  const slide = interpolate(frame, [0, 0.45 * fps], [0, 1], { ...clamp, easing: ease });
+  const shift = Math.max(0, height * faceAt - focus.y) * slide;
+  const fade = `linear-gradient(180deg, transparent 0px, black ${Math.min(shift, 160)}px)`;
+  return (
+    <AbsoluteFill style={{ background: theme.palette.background }}>
+      <AbsoluteFill style={{ filter: "blur(28px) brightness(0.55)", transform: "scale(1.1)" }}>
+        <SpeakerView width={width} height={height} focus={focus}>
+          {children}
+        </SpeakerView>
+      </AbsoluteFill>
+      <AbsoluteFill style={{ transform: `translateY(${shift}px)`, maskImage: fade, WebkitMaskImage: fade }}>
+        <SpeakerView width={width} height={height} focus={focus}>
+          {children}
+        </SpeakerView>
+      </AbsoluteFill>
+    </AbsoluteFill>
+  );
 };
