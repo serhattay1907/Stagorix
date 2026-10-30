@@ -31,6 +31,9 @@ export const themeSchema = z.object({
     case: z.enum(["as-is", "upper"]),
     position: positionSchema,
   }),
+  sound: z
+    .object({ volume: z.number().min(0).max(1).describe("Sound effects level: 0 off … 1 full") })
+    .default({ volume: 0.7 }),
 });
 
 export type Theme = z.infer<typeof themeSchema>;
@@ -50,6 +53,7 @@ export const neutralTheme: Theme = {
   radius: 2,
   energy: 3,
   captions: { style: "highlight", case: "as-is", position: "middle" },
+  sound: { volume: 0.7 },
 };
 
 const ThemeContext = createContext<Theme>(neutralTheme);

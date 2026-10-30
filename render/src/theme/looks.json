@@ -1,0 +1,272 @@
+{
+  "news": {
+    "name": "News",
+    "description": "Clear, serious, fast",
+    "palette": {
+      "background": "#0B1220",
+      "surface": "#16233A",
+      "text": "#FFFFFF",
+      "muted": "#AEB8C8",
+      "accent": "#E63946",
+      "positive": "#2EC4B6",
+      "negative": "#E63946"
+    },
+    "font": {
+      "display": "oswald",
+      "body": "inter"
+    },
+    "radius": 1,
+    "energy": 3,
+    "captions": {
+      "style": "boxed",
+      "case": "upper",
+      "position": "lower"
+    },
+    "sound": {
+      "volume": 0.7
+    }
+  },
+  "educational": {
+    "name": "Educational",
+    "description": "Calm, clear, numbered",
+    "palette": {
+      "background": "#101425",
+      "surface": "#1C2340",
+      "text": "#FFFFFF",
+      "muted": "#B9C1D9",
+      "accent": "#5B8CFF",
+      "positive": "#3DD68C",
+      "negative": "#FF5A4E"
+    },
+    "font": {
+      "display": "montserrat",
+      "body": "inter"
+    },
+    "radius": 3,
+    "energy": 2,
+    "captions": {
+      "style": "marker",
+      "case": "as-is",
+      "position": "middle"
+    },
+    "sound": {
+      "volume": 0.6
+    }
+  },
+  "minimal": {
+    "name": "Minimal",
+    "description": "Quiet, light, lots of space",
+    "palette": {
+      "background": "#F4F2EE",
+      "surface": "#FFFFFF",
+      "text": "#111111",
+      "muted": "#5C5C5C",
+      "accent": "#FF5A36",
+      "positive": "#2A9D8F",
+      "negative": "#E63946"
+    },
+    "font": {
+      "display": "inter",
+      "body": "inter"
+    },
+    "radius": 0,
+    "energy": 1,
+    "captions": {
+      "style": "plain",
+      "case": "as-is",
+      "position": "lower"
+    },
+    "sound": {
+      "volume": 0.45
+    }
+  },
+  "energetic": {
+    "name": "Energetic",
+    "description": "Loud, colourful, punchy",
+    "palette": {
+      "background": "#14001F",
+      "surface": "#2A0B3D",
+      "text": "#FFFFFF",
+      "muted": "#E2C8F5",
+      "accent": "#FF2E88",
+      "positive": "#00F5D4",
+      "negative": "#FFBE0B"
+    },
+    "font": {
+      "display": "poppins",
+      "body": "poppins"
+    },
+    "radius": 4,
+    "energy": 5,
+    "captions": {
+      "style": "bold",
+      "case": "upper",
+      "position": "middle"
+    },
+    "sound": {
+      "volume": 1.0
+    }
+  },
+  "corporate": {
+    "name": "Corporate",
+    "description": "Trustworthy, tidy, restrained",
+    "palette": {
+      "background": "#0F172A",
+      "surface": "#1E293B",
+      "text": "#F8FAFC",
+      "muted": "#94A3B8",
+      "accent": "#0EA5E9",
+      "positive": "#22C55E",
+      "negative": "#EF4444"
+    },
+    "font": {
+      "display": "inter",
+      "body": "inter"
+    },
+    "radius": 2,
+    "energy": 2,
+    "captions": {
+      "style": "boxed",
+      "case": "as-is",
+      "position": "lower"
+    },
+    "sound": {
+      "volume": 0.55
+    }
+  },
+  "luxury": {
+    "name": "Luxury",
+    "description": "Elegant, slow, gold on black",
+    "palette": {
+      "background": "#0C0A08",
+      "surface": "#1A1612",
+      "text": "#F5EFE6",
+      "muted": "#B8AA93",
+      "accent": "#C9A45C",
+      "positive": "#C9A45C",
+      "negative": "#B5543C"
+    },
+    "font": {
+      "display": "playfair",
+      "body": "inter"
+    },
+    "radius": 0,
+    "energy": 1,
+    "captions": {
+      "style": "plain",
+      "case": "as-is",
+      "position": "lower"
+    },
+    "sound": {
+      "volume": 0.45
+    }
+  },
+  "tech": {
+    "name": "Tech",
+    "description": "Sharp, neon, futuristic",
+    "palette": {
+      "background": "#05070A",
+      "surface": "#0E141B",
+      "text": "#E6F1FF",
+      "muted": "#8AA0B8",
+      "accent": "#39FF88",
+      "positive": "#39FF88",
+      "negative": "#FF3366"
+    },
+    "font": {
+      "display": "spaceGrotesk",
+      "body": "spaceGrotesk"
+    },
+    "radius": 1,
+    "energy": 4,
+    "captions": {
+      "style": "karaoke",
+      "case": "as-is",
+      "position": "middle"
+    },
+    "sound": {
+      "volume": 0.8
+    }
+  },
+  "warm": {
+    "name": "Warm",
+    "description": "Friendly, soft, lifestyle",
+    "palette": {
+      "background": "#2A1E17",
+      "surface": "#3A2A20",
+      "text": "#FFF7EE",
+      "muted": "#E5CDB8",
+      "accent": "#FF8A5B",
+      "positive": "#7BC67E",
+      "negative": "#E76F51"
+    },
+    "font": {
+      "display": "poppins",
+      "body": "poppins"
+    },
+    "radius": 4,
+    "energy": 3,
+    "captions": {
+      "style": "highlight",
+      "case": "as-is",
+      "position": "middle"
+    },
+    "sound": {
+      "volume": 0.65
+    }
+  },
+  "cinematic": {
+    "name": "Cinematic",
+    "description": "Documentary, dramatic, wide",
+    "palette": {
+      "background": "#000000",
+      "surface": "#111111",
+      "text": "#F2F2F2",
+      "muted": "#A6A6A6",
+      "accent": "#F2C14E",
+      "positive": "#9BC53D",
+      "negative": "#E55934"
+    },
+    "font": {
+      "display": "bebas",
+      "body": "inter"
+    },
+    "radius": 0,
+    "energy": 2,
+    "captions": {
+      "style": "reveal",
+      "case": "upper",
+      "position": "lower"
+    },
+    "sound": {
+      "volume": 0.75
+    }
+  },
+  "retro": {
+    "name": "Retro",
+    "description": "Playful, 70s colours",
+    "palette": {
+      "background": "#1D3557",
+      "surface": "#264A75",
+      "text": "#F1FAEE",
+      "muted": "#A8DADC",
+      "accent": "#FFBF00",
+      "positive": "#2EC4B6",
+      "negative": "#E63946"
+    },
+    "font": {
+      "display": "righteous",
+      "body": "poppins"
+    },
+    "radius": 3,
+    "energy": 4,
+    "captions": {
+      "style": "bold",
+      "case": "upper",
+      "position": "middle"
+    },
+    "sound": {
+      "volume": 0.85
+    }
+  }
+}

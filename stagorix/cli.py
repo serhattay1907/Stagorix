@@ -26,6 +26,8 @@ brand_app = typer.Typer(help="Manage brand profiles.", no_args_is_help=True)
 app.add_typer(brand_app, name="brand")
 models_app = typer.Typer(help="List and download ML models.", no_args_is_help=True)
 app.add_typer(models_app, name="models")
+sounds_app = typer.Typer(help="The sound effect library: list, build, listen.", no_args_is_help=True)
+app.add_typer(sounds_app, name="sounds")
 
 console = Console()
 
@@ -118,6 +120,9 @@ def showcase(
             help="Analysis folder (e.g. workspace/analysis/raw2) to play the effects over your video.",
         ),
     ] = None,
+    look: Annotated[
+        str | None, typer.Option("--look", help="Ready-made look id; see `stagorix looks`.")
+    ] = None,
     browser: Annotated[
         str | None,
         typer.Option("--browser-executable", help="Use this Chrome/Chromium instead of Remotion's."),
@@ -129,11 +134,48 @@ def showcase(
 
     try:
         with console.status("Rendering showcase …"):
-            path = render_showcase(out, theme, browser, footage)
+            path = render_showcase(out, theme, browser, footage, look)
     except (VerifyError, FileNotFoundError) as exc:
         console.print(f"[red]Showcase failed:[/] {exc}")
         raise typer.Exit(code=1) from exc
     console.print(f"[green]Done:[/] {path}")
+
+
+@app.command()
+def looks(
+    render: Annotated[bool, typer.Option("--render", help="Render every look into one reel video.")] = False,
+    out: Annotated[Path, typer.Option("--out", help="Reel output.")] = Path("workspace/looks.mp4"),
+) -> None:
+    """List the ready-made looks; with --render, write a reel that shows each one."""
+    from stagorix.render.looks import load_looks
+
+    table = Table(title="Looks")
+    for col in ("Id", "Name", "Feel", "Fonts", "Accent", "Captions", "Energy"):
+        table.add_column(col)
+    for lk in load_looks():
+        fonts = lk.display_font if lk.display_font == lk.body_font else f"{lk.display_font} + {lk.body_font}"
+        table.add_row(
+            lk.id,
+            lk.name,
+            lk.description,
+            fonts,
+            f"[{lk.accent}]■[/] {lk.accent}",
+            lk.caption_style,
+            str(lk.energy),
+        )
+    console.print(table)
+    console.print("Use one: stagorix showcase --look <id>")
+    if render:
+        from stagorix.render.showcase import render_showcase
+        from stagorix.verify import VerifyError
+
+        try:
+            with console.status("Rendering the look reel …"):
+                path = render_showcase(out, composition="LookReel")
+        except VerifyError as exc:
+            console.print(f"[red]Reel failed:[/] {exc}")
+            raise typer.Exit(code=1) from exc
+        console.print(f"[green]Done:[/] {path}")
 
 
 @app.command()
@@ -190,6 +232,126 @@ def check_plan_cmd(
 
 
 @app.command()
+def matte(
+    source: Annotated[
+        Path, typer.Argument(help="Video, or an analysis folder (uses its vertical.mp4).", exists=True)
+    ],
+    quality: Annotated[
+        str, typer.Option("--quality", "-q", help="draft (fast, softer edges) or final (U²-Net, slow).")
+    ] = "draft",
+    plan_file: Annotated[
+        Path | None,
+        typer.Option("--plan", help="Edit plan; only the seconds of its speaker effects get a matte."),
+    ] = None,
+    out: Annotated[
+        Path | None, typer.Option("--out", help="Output folder (default: next to the video).")
+    ] = None,
+) -> None:
+    """Write person mattes for speaker effects (background blur/swap, glow, colour pop)."""
+    from stagorix.analysis.matte import Quality, plan_ranges, write_mattes
+    from stagorix.render.motion import EditPlan
+
+    try:
+        q = Quality(quality)
+    except ValueError:
+        console.print(f"[red]Unknown quality[/] '{quality}': use draft or final")
+        raise typer.Exit(code=1) from None
+    video = source / "vertical.mp4" if source.is_dir() else source
+    target = out or video.parent / f"matte-{q}"
+    ranges = None
+    if plan_file:
+        plan = EditPlan.model_validate_json(plan_file.read_text(encoding="utf-8"))
+        ranges = plan_ranges(plan)
+        if not ranges:
+            console.print("[yellow]The plan has no speaker effects; nothing to do.[/]")
+            return
+    try:
+        with console.status(f"Writing {q} mattes …"):
+            result = write_mattes(video, target, q, ranges)
+    except RuntimeError as exc:  # MediaError included
+        console.print(f"[red]Matte failed:[/] {exc}")
+        raise typer.Exit(code=1) from exc
+    spans = ", ".join(f"{a:.1f}–{b:.1f}s" for a, b in result.ranges)
+    console.print(f"[green]{result.written} mattes[/] ({result.model}, {spans}) in {target}")
+
+
+@sounds_app.command("list")
+def sounds_list(
+    category: Annotated[
+        str | None, typer.Option("--category", "-c", help="Show the sounds of one category.")
+    ] = None,
+) -> None:
+    """Sounds by category, with each pack's author and license."""
+    from stagorix.assets.sounds import load_catalog
+
+    cat = load_catalog()
+    if category:
+        if category not in cat.categories:
+            console.print(f"[red]Unknown category[/] '{category}'. Categories: {', '.join(cat.categories)}")
+            raise typer.Exit(code=1)
+        table = Table(title=f"Sounds · {cat.categories[category].name}")
+        for col in ("Id", "Seconds", "Pack", "License"):
+            table.add_column(col)
+        for snd in (x for x in cat.sounds if x.category == category):
+            table.add_row(snd.id, f"{snd.seconds:.2f}", cat.packs[snd.pack].name, cat.packs[snd.pack].license)
+        console.print(table)
+        return
+    table = Table(title=f"Sound library · {len(cat.sounds)} sounds")
+    for col in ("Category", "Id", "Sounds", "Mix level"):
+        table.add_column(col)
+    for cid, c in cat.categories.items():
+        n = sum(x.category == cid for x in cat.sounds)
+        table.add_row(c.name, cid, str(n), f"{c.gain:.2f}")
+    console.print(table)
+    for p in cat.packs.values():
+        console.print(f"• {p.name} — {p.author}, [bold]{p.license}[/], {p.source}")
+    used = {k: v.sound for k, v in cat.effects.items() if v}
+    console.print("Effect sounds: " + ", ".join(f"{k} → {v}" for k, v in used.items()))
+
+
+@sounds_app.command("build")
+def sounds_build(
+    synth_only: Annotated[
+        bool, typer.Option("--synth-only", help="Only the synthesized sounds; no download.")
+    ] = False,
+) -> None:
+    """Write every sound to render/public/sounds (downloads CC0 packs once, checks sha256)."""
+    from stagorix.assets.sounds import OUT_DIR, build
+
+    with console.status("Building sounds …"):
+        report = build(synth_only=synth_only)
+    console.print(f"[green]{report.built} sounds[/] in {OUT_DIR} ({report.downloaded} from CC0 packs)")
+    for line in report.skipped:
+        console.print(f"[yellow]skipped[/] {line}")
+    if report.skipped and not synth_only:
+        raise typer.Exit(code=1)
+
+
+@sounds_app.command("reel")
+def sounds_reel(
+    category: Annotated[str | None, typer.Option("--category", "-c", help="Only this category.")] = None,
+    out: Annotated[Path, typer.Option("--out", help="Reel output.")] = Path("workspace/sounds.mp4"),
+) -> None:
+    """Render a video that plays each sound with its name and license, to listen and pick."""
+    from stagorix.assets.sounds import load_catalog
+    from stagorix.render.showcase import render_showcase
+    from stagorix.verify import VerifyError
+
+    cat = load_catalog()
+    ids = [x.id for x in cat.sounds if category is None or x.category == category]
+    if not ids:
+        console.print(f"[red]No sounds[/] in category '{category}'")
+        raise typer.Exit(code=1)
+    try:
+        with console.status(f"Rendering {len(ids)} sounds …"):
+            path = render_showcase(out, composition="SoundReel", props={"sounds": ids})
+    except VerifyError as exc:
+        console.print(f"[red]Reel failed:[/] {exc}")
+        raise typer.Exit(code=1) from exc
+    console.print(f"[green]Done:[/] {path}")
+
+
+@app.command()
 def run(
     mode: Annotated[Mode, typer.Argument(help="Input mode.")],
     brand: Annotated[str, typer.Option("--brand", "-b", help="Brand profile slug.")],
@@ -238,6 +400,9 @@ def models_list() -> None:
     u = models.U2NET
     here = "[green]yes[/]" if models.u2net_path().exists() else "no"
     table.add_row("cutout", u.name, f"{u.size_mb} MB", u.license, u.repo, here)
+    f = models.SELFIE
+    here = "[green]yes[/]" if models.selfie_path().exists() else "no"
+    table.add_row("matte (draft)", f.name, "<1 MB", f.license, f.repo, here)
     console.print(table)
 
 

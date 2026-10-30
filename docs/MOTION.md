@@ -33,11 +33,46 @@ Effects that start within 0.3 s of each other share one **beat** (a whip with a 
 
 The defaults are a starting point, not a verdict: they will be tuned with real videos and retention data.
 
+## Sound
+
+Every effect has a default sound (or none), set in `render/src/sound/sounds.json`:
+
+| Effect | Sound | Lines up on |
+| --- | --- | --- |
+| title.behind | impact-punch | the accent line landing (+0.4 s) |
+| camera.zoom | impact-thump | the punch-in |
+| camera.whip | whoosh-fast | the middle of the whip |
+| camera.shake | impact-hit | the shake |
+| emoji.pop | pop-bubble | the pop |
+| number.pop | tick-counter | the count (ticks slow down, then land) |
+| transition.glitch | glitch-stutter | the cut |
+| transition.iris | whoosh-reverse | the cut (sucks in, then stops) |
+| transition.zoomblur | riser-micro | the cut (+0.1 s) |
+| label | notify-blip | the label appearing |
+| chart.bar | swipe-wide | the card entering |
+| chart.line | riser-micro | the line reaching its last point (+1.45 s) |
+| compare.versus | impact-thump | the VS badge landing (+0.35 s) |
+| stats.row | tick-counter | the numbers counting (+0.2 s) |
+| speaker.blur | whoosh-low | the blur fading in (+0.3 s) |
+| speaker.swap | whoosh-airy | the new backdrop (+0.3 s) |
+| speaker.glow | chime-soft | the glow (+0.3 s) |
+| speaker.colorpop | impact-soft | the colour drain (+0.3 s) |
+| outro.card | chime-success | the card |
+| grade.leak | none | it rides on a whip |
+
+- **One sound per beat.** When effects share a beat, only the strongest one sounds (a whip with a light leak is one whoosh; a shake with an emoji is one hit). Stacked sounds turn to mush.
+- **Each sound has a hit point** (`peak`): the moment in the file that lines up with the effect, so a whoosh peaks on the whip, not after it.
+- **Levels:** every file is loudness-matched (loudest 50 ms at −14 dBFS RMS, peaks under −1 dBFS); the category gain (0.4–0.7) sets the mix about 8–12 dB under the voice, and the brand's `sound.volume` (0 = off) scales it all. Calm looks are quieter (Minimal, Luxury 0.45), loud looks louder (Energetic 1.0).
+- **Phones first:** most viewers hear Shorts on a phone speaker, which plays almost nothing under ~150 Hz. Impacts and drops carry harmonics so they stay audible; `drop-long` is the one sub-only sound, for headphones and cinematic cuts.
+
 ## Commands
 
 ```bash
 uv run stagorix effects                                 # the library with roles and intensities
 uv run stagorix check-plan examples/plans/showcase.json # check a plan; --rules rules.json for a brand's rules
+uv run stagorix sounds list [-c whoosh]                 # the sound library by category, with licenses
+uv run stagorix sounds build                            # write the sound files (downloads CC0 packs once)
+uv run stagorix sounds reel [-c impact]                 # a video that plays each sound, to listen and pick
 ```
 
 Every edit plan entry carries a `reason`, shown to the user next to the effect in the approval step.

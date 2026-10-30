@@ -1,0 +1,298 @@
+{
+  "packs": {
+    "stagorix": {
+      "name": "Stagorix synthesized sounds",
+      "author": "Stagorix contributors",
+      "license": "MIT",
+      "source": "https://github.com/serhattay1907/stagorix",
+      "recipe": "stagorix/assets/synth.py"
+    },
+    "kenney-interface": {
+      "name": "Interface Sounds 1.0",
+      "author": "Kenney (www.kenney.nl)",
+      "license": "CC0-1.0",
+      "source": "https://kenney.nl/assets/interface-sounds",
+      "download": "https://raw.githubusercontent.com/Calinou/kenney-interface-sounds/4596a49eaf5a533948d49a47467f606bcdea70ff/addons/kenney_interface_sounds/"
+    }
+  },
+  "categories": {
+    "whoosh": {
+      "name": "Whoosh",
+      "gain": 0.55
+    },
+    "swipe": {
+      "name": "Swipe",
+      "gain": 0.5
+    },
+    "riser": {
+      "name": "Riser",
+      "gain": 0.5
+    },
+    "impact": {
+      "name": "Impact",
+      "gain": 0.7
+    },
+    "drop": {
+      "name": "Drop",
+      "gain": 0.7
+    },
+    "pop": {
+      "name": "Pop",
+      "gain": 0.55
+    },
+    "click": {
+      "name": "Click",
+      "gain": 0.45
+    },
+    "chime": {
+      "name": "Chime",
+      "gain": 0.45
+    },
+    "notify": {
+      "name": "Notification",
+      "gain": 0.45
+    },
+    "error": {
+      "name": "Error",
+      "gain": 0.45
+    },
+    "glitch": {
+      "name": "Glitch",
+      "gain": 0.4
+    },
+    "tick": {
+      "name": "Tick",
+      "gain": 0.4
+    }
+  },
+  "effects": {
+    "title.behind": {
+      "sound": "impact-punch",
+      "hit": 0.4
+    },
+    "camera.zoom": {
+      "sound": "impact-thump",
+      "hit": 0
+    },
+    "camera.whip": {
+      "sound": "whoosh-fast",
+      "hit": "middle"
+    },
+    "camera.shake": {
+      "sound": "impact-hit",
+      "hit": 0
+    },
+    "emoji.pop": {
+      "sound": "pop-bubble",
+      "hit": 0
+    },
+    "number.pop": {
+      "sound": "tick-counter",
+      "hit": 0
+    },
+    "transition.glitch": {
+      "sound": "glitch-stutter",
+      "hit": "middle"
+    },
+    "transition.iris": {
+      "sound": "whoosh-reverse",
+      "hit": "middle"
+    },
+    "transition.zoomblur": {
+      "sound": "riser-micro",
+      "hit": 0.1
+    },
+    "label": {
+      "sound": "notify-blip",
+      "hit": 0
+    },
+    "grade.leak": null,
+    "chart.bar": {
+      "sound": "swipe-wide",
+      "hit": 0
+    },
+    "chart.line": {
+      "sound": "riser-micro",
+      "hit": 1.45
+    },
+    "compare.versus": {
+      "sound": "impact-thump",
+      "hit": 0.35
+    },
+    "stats.row": {
+      "sound": "tick-counter",
+      "hit": 0.2
+    },
+    "speaker.blur": {
+      "sound": "whoosh-low",
+      "hit": 0.3
+    },
+    "speaker.swap": {
+      "sound": "whoosh-airy",
+      "hit": 0.3
+    },
+    "speaker.glow": {
+      "sound": "chime-soft",
+      "hit": 0.3
+    },
+    "speaker.colorpop": {
+      "sound": "impact-soft",
+      "hit": 0.3
+    },
+    "outro.card": {
+      "sound": "chime-success",
+      "hit": 0
+    }
+  },
+  "sounds": [
+    {"id": "whoosh-soft", "category": "whoosh", "pack": "stagorix", "seconds": 0.7, "peak": 0.35},
+    {"id": "whoosh-fast", "category": "whoosh", "pack": "stagorix", "seconds": 0.45, "peak": 0.2},
+    {"id": "whoosh-long", "category": "whoosh", "pack": "stagorix", "seconds": 1.2, "peak": 0.6},
+    {"id": "whoosh-airy", "category": "whoosh", "pack": "stagorix", "seconds": 0.8, "peak": 0.4},
+    {"id": "whoosh-low", "category": "whoosh", "pack": "stagorix", "seconds": 0.9, "peak": 0.45},
+    {"id": "whoosh-reverse", "category": "whoosh", "pack": "stagorix", "seconds": 0.7, "peak": 0.5249999999999999},
+    {"id": "swipe-up", "category": "swipe", "pack": "stagorix", "seconds": 0.22, "peak": 0.14},
+    {"id": "swipe-down", "category": "swipe", "pack": "stagorix", "seconds": 0.22, "peak": 0.08},
+    {"id": "swipe-short", "category": "swipe", "pack": "stagorix", "seconds": 0.14, "peak": 0.06},
+    {"id": "swipe-wide", "category": "swipe", "pack": "stagorix", "seconds": 0.3, "peak": 0.12},
+    {"id": "riser-short", "category": "riser", "pack": "stagorix", "seconds": 1.0, "peak": 1.0},
+    {"id": "riser-long", "category": "riser", "pack": "stagorix", "seconds": 2.0, "peak": 2.0},
+    {"id": "riser-bright", "category": "riser", "pack": "stagorix", "seconds": 1.2, "peak": 1.2},
+    {"id": "riser-micro", "category": "riser", "pack": "stagorix", "seconds": 0.45, "peak": 0.45},
+    {"id": "riser-noise", "category": "riser", "pack": "stagorix", "seconds": 1.5, "peak": 1.5},
+    {"id": "riser-pitch", "category": "riser", "pack": "stagorix", "seconds": 1.2, "peak": 1.2},
+    {"id": "impact-punch", "category": "impact", "pack": "stagorix", "seconds": 0.5, "peak": 0.0},
+    {"id": "impact-boom", "category": "impact", "pack": "stagorix", "seconds": 1.8, "peak": 0.0},
+    {"id": "impact-thump", "category": "impact", "pack": "stagorix", "seconds": 0.3, "peak": 0.0},
+    {"id": "impact-hit", "category": "impact", "pack": "stagorix", "seconds": 0.45, "peak": 0.0},
+    {"id": "impact-soft", "category": "impact", "pack": "stagorix", "seconds": 0.4, "peak": 0.0},
+    {"id": "drop-sub", "category": "drop", "pack": "stagorix", "seconds": 1.4, "peak": 0.0},
+    {"id": "drop-short", "category": "drop", "pack": "stagorix", "seconds": 0.7, "peak": 0.0},
+    {"id": "drop-long", "category": "drop", "pack": "stagorix", "seconds": 2.2, "peak": 0.0},
+    {"id": "drop-pitch", "category": "drop", "pack": "stagorix", "seconds": 0.6, "peak": 0.0},
+    {"id": "pop-bubble", "category": "pop", "pack": "stagorix", "seconds": 0.12, "peak": 0.0},
+    {"id": "pop-mouth", "category": "pop", "pack": "stagorix", "seconds": 0.1, "peak": 0.0},
+    {"id": "pop-high", "category": "pop", "pack": "stagorix", "seconds": 0.1, "peak": 0.0},
+    {"id": "pop-low", "category": "pop", "pack": "stagorix", "seconds": 0.14, "peak": 0.0},
+    {"id": "pop-double", "category": "pop", "pack": "stagorix", "seconds": 0.175, "peak": 0.0},
+    {"id": "chime-ding", "category": "chime", "pack": "stagorix", "seconds": 1.2, "peak": 0.0},
+    {"id": "chime-high", "category": "chime", "pack": "stagorix", "seconds": 1.0, "peak": 0.0},
+    {"id": "chime-success", "category": "chime", "pack": "stagorix", "seconds": 1.3, "peak": 0.0},
+    {"id": "chime-triple", "category": "chime", "pack": "stagorix", "seconds": 1.4, "peak": 0.0},
+    {"id": "chime-soft", "category": "chime", "pack": "stagorix", "seconds": 1.0, "peak": 0.0},
+    {"id": "notify-up", "category": "notify", "pack": "stagorix", "seconds": 0.6, "peak": 0.0},
+    {"id": "notify-blip", "category": "notify", "pack": "stagorix", "seconds": 0.35, "peak": 0.0},
+    {"id": "notify-two", "category": "notify", "pack": "stagorix", "seconds": 0.6, "peak": 0.0},
+    {"id": "error-buzz", "category": "error", "pack": "stagorix", "seconds": 0.45, "peak": 0.0},
+    {"id": "error-low", "category": "error", "pack": "stagorix", "seconds": 0.3, "peak": 0.0},
+    {"id": "error-triple", "category": "error", "pack": "stagorix", "seconds": 0.55, "peak": 0.0},
+    {"id": "glitch-stutter", "category": "glitch", "pack": "stagorix", "seconds": 0.4, "peak": 0.2},
+    {"id": "glitch-short", "category": "glitch", "pack": "stagorix", "seconds": 0.2, "peak": 0.1},
+    {"id": "glitch-long", "category": "glitch", "pack": "stagorix", "seconds": 0.8, "peak": 0.4},
+    {"id": "glitch-digital", "category": "glitch", "pack": "stagorix", "seconds": 0.35, "peak": 0.17},
+    {"id": "tick-single", "category": "tick", "pack": "stagorix", "seconds": 0.06, "peak": 0.0},
+    {"id": "tick-counter", "category": "tick", "pack": "stagorix", "seconds": 0.95, "peak": 0.0},
+    {"id": "tick-clock", "category": "tick", "pack": "stagorix", "seconds": 0.7, "peak": 0.0},
+    {"id": "shutter-camera", "category": "click", "pack": "stagorix", "seconds": 0.25, "peak": 0.0},
+    {"id": "kenney-back-001", "category": "swipe", "pack": "kenney-interface", "file": "back_001.wav", "sha256": "6fb44d6dc1fd0bbc1e7abb586bab4a838719f91428af2648a37d4acdc7530617", "seconds": 0.068, "peak": 0.005},
+    {"id": "kenney-back-002", "category": "swipe", "pack": "kenney-interface", "file": "back_002.wav", "sha256": "45f1c9df0db7af4c55166bad72568dcbd6e729ee362ce470b88d9deee51a5e5c", "seconds": 0.091, "peak": 0.005},
+    {"id": "kenney-back-003", "category": "swipe", "pack": "kenney-interface", "file": "back_003.wav", "sha256": "e94add60e393265d3028f6797bb6971811847301e02c7bf30d7a021df15aae10", "seconds": 0.094, "peak": 0.01},
+    {"id": "kenney-back-004", "category": "swipe", "pack": "kenney-interface", "file": "back_004.wav", "sha256": "cfc3b43cfe3d3157258d643a4bcb787b03416358a0c03c9ec16622610f07558f", "seconds": 0.094, "peak": 0.005},
+    {"id": "kenney-bong-001", "category": "chime", "pack": "kenney-interface", "file": "bong_001.wav", "sha256": "f5d5f83b13edc5321352c2ba57972d1400151e3f27f1c18fcda07d261358511a", "seconds": 0.132, "peak": 0.006},
+    {"id": "kenney-click-001", "category": "click", "pack": "kenney-interface", "file": "click_001.wav", "sha256": "ea67c9d78750e5a356bf53ef8c2063b52cc3ccdae6ae8afeec87f97f79ae692d", "seconds": 0.115, "peak": 0.005},
+    {"id": "kenney-click-002", "category": "click", "pack": "kenney-interface", "file": "click_002.wav", "sha256": "3ebdb096e13b11d2ff1383e035847acb6a70e159edfb06bc94d59cbe40b1b713", "seconds": 0.012, "peak": 0.005},
+    {"id": "kenney-click-003", "category": "click", "pack": "kenney-interface", "file": "click_003.wav", "sha256": "b035afe3fe08b0fd3517c612bdfd362799bffe762d2cbf8f09e6a50322067358", "seconds": 0.019, "peak": 0.005},
+    {"id": "kenney-click-004", "category": "click", "pack": "kenney-interface", "file": "click_004.wav", "sha256": "435a6701378802f98739dbcb39f70a505f6cce88b91886eef4f680192e93412c", "seconds": 0.022, "peak": 0.005},
+    {"id": "kenney-click-005", "category": "click", "pack": "kenney-interface", "file": "click_005.wav", "sha256": "d6006cd60538f3e02d9d2980bff5fb73481b9d5abf1145761739e09baec640ee", "seconds": 0.019, "peak": 0.006},
+    {"id": "kenney-close-001", "category": "swipe", "pack": "kenney-interface", "file": "close_001.wav", "sha256": "423ae3dd2981045649bed82653e43f9770c2baad6da7582d004f9161ef9b0439", "seconds": 0.148, "peak": 0.005},
+    {"id": "kenney-close-002", "category": "swipe", "pack": "kenney-interface", "file": "close_002.wav", "sha256": "f22922e05f6ae75d7bed5b5ebf01c9fbb2c9f5d85333a2c0f750f7649b3c3169", "seconds": 0.327, "peak": 0.005},
+    {"id": "kenney-close-003", "category": "swipe", "pack": "kenney-interface", "file": "close_003.wav", "sha256": "89462a66c1d5fd580a1add174fcf836e511d866aaea5842d0bd63af24c587603", "seconds": 0.327, "peak": 0.005},
+    {"id": "kenney-close-004", "category": "swipe", "pack": "kenney-interface", "file": "close_004.wav", "sha256": "add36fd4e420ecb327381eadf8bd0576f0ab56e64716cd655eda4d07e0bf2aa0", "seconds": 0.335, "peak": 0.005},
+    {"id": "kenney-confirmation-001", "category": "notify", "pack": "kenney-interface", "file": "confirmation_001.wav", "sha256": "f9d0ef5a5c740c2ac250ac3876db9e4340669044a5bf78ae09192918db3e2ebc", "seconds": 0.295, "peak": 0.005},
+    {"id": "kenney-confirmation-002", "category": "notify", "pack": "kenney-interface", "file": "confirmation_002.wav", "sha256": "b23339f3fdcd9f54520ca73caa3a9ae93ecfb3675acdaf1468990feb5d55d5fa", "seconds": 0.562, "peak": 0.005},
+    {"id": "kenney-confirmation-003", "category": "notify", "pack": "kenney-interface", "file": "confirmation_003.wav", "sha256": "d9b3719731a409c8109c5a049aceffbff9ff6c0ffe074a02fe52664393139b79", "seconds": 0.324, "peak": 0.005},
+    {"id": "kenney-confirmation-004", "category": "notify", "pack": "kenney-interface", "file": "confirmation_004.wav", "sha256": "b96886d049331b30203658b72278572cd9078d25ab9a88aedf872d0383a40d8c", "seconds": 0.501, "peak": 0.166},
+    {"id": "kenney-drop-001", "category": "pop", "pack": "kenney-interface", "file": "drop_001.wav", "sha256": "0aa0b07692c5d37177f078c39d246d12f2685b553ed06887671797737e5cd432", "seconds": 0.132, "peak": 0.005},
+    {"id": "kenney-drop-002", "category": "pop", "pack": "kenney-interface", "file": "drop_002.wav", "sha256": "72973e674ac557ebf29a843c6cc39bc9c7682bd684a737ba46812eea32cac21e", "seconds": 0.202, "peak": 0.005},
+    {"id": "kenney-drop-003", "category": "pop", "pack": "kenney-interface", "file": "drop_003.wav", "sha256": "c62109152dd126f65fcae62775c5f42e7ccc646edeae770a2b62e33e82f054a0", "seconds": 0.199, "peak": 0.005},
+    {"id": "kenney-drop-004", "category": "pop", "pack": "kenney-interface", "file": "drop_004.wav", "sha256": "8bec0bc73a2536c81467790f41529a0c335b3915baa2caf3d248b6ebacce93a2", "seconds": 0.295, "peak": 0.005},
+    {"id": "kenney-error-001", "category": "error", "pack": "kenney-interface", "file": "error_001.wav", "sha256": "d77546b0baa89f37eca6b86f59b54a654ce5afe3d5a73492d0963168cc4ab5bf", "seconds": 0.173, "peak": 0.005},
+    {"id": "kenney-error-002", "category": "error", "pack": "kenney-interface", "file": "error_002.wav", "sha256": "4d48b7d740ccb35d74fed1cfca1a4efd826659ad295bd0b0f907e5d56918dbac", "seconds": 0.165, "peak": 0.005},
+    {"id": "kenney-error-003", "category": "error", "pack": "kenney-interface", "file": "error_003.wav", "sha256": "350375a1a4adb8fe6f7b4cd775cdbb9a3015e2473b31a0e6fad9e3b3a1e8a9fd", "seconds": 0.556, "peak": 0.061},
+    {"id": "kenney-error-004", "category": "error", "pack": "kenney-interface", "file": "error_004.wav", "sha256": "3ac988f34d53623343c77060c950ee5671684eacd9bb382a32d145e011c44984", "seconds": 0.104, "peak": 0.005},
+    {"id": "kenney-error-005", "category": "error", "pack": "kenney-interface", "file": "error_005.wav", "sha256": "8e685ba1d408d3029c1a084a238265fa0a2b439d374fbfc8ba6cfef6edfefb7b", "seconds": 0.518, "peak": 0.052},
+    {"id": "kenney-error-006", "category": "error", "pack": "kenney-interface", "file": "error_006.wav", "sha256": "7ed3f06867e213edcb7b314c693e30a6ffe5ea5c694c19b130c4727810a5729a", "seconds": 0.521, "peak": 0.094},
+    {"id": "kenney-error-007", "category": "error", "pack": "kenney-interface", "file": "error_007.wav", "sha256": "9d326005be0cdef35ef7fc52a81eed4b77a0dcbf0346503fd5d5da76743cdb1f", "seconds": 0.205, "peak": 0.005},
+    {"id": "kenney-error-008", "category": "error", "pack": "kenney-interface", "file": "error_008.wav", "sha256": "4b744634a2a860a5ec584fc5d8a73489756255297028509cc98c4c4dba18120c", "seconds": 0.139, "peak": 0.013},
+    {"id": "kenney-glass-001", "category": "chime", "pack": "kenney-interface", "file": "glass_001.wav", "sha256": "39182b395a30b34e18cbcf842922552b23da5b010a52b7777557e02a405f083e", "seconds": 0.292, "peak": 0.005},
+    {"id": "kenney-glass-002", "category": "chime", "pack": "kenney-interface", "file": "glass_002.wav", "sha256": "bb9f5cc2ac93cd6f810d7642ddb2b825b9b067ffdaedd6197c68135850e9cb5f", "seconds": 0.129, "peak": 0.005},
+    {"id": "kenney-glass-003", "category": "chime", "pack": "kenney-interface", "file": "glass_003.wav", "sha256": "4d0e3e12541fd177b1acb56b1c26fc587f213fea41b15d505b81789fceaa53bc", "seconds": 0.126, "peak": 0.051},
+    {"id": "kenney-glass-004", "category": "chime", "pack": "kenney-interface", "file": "glass_004.wav", "sha256": "54dd436b826bed6360cc32c059776dc98942bb5abd35b036c8fda075482adef7", "seconds": 0.713, "peak": 0.005},
+    {"id": "kenney-glass-005", "category": "chime", "pack": "kenney-interface", "file": "glass_005.wav", "sha256": "1b996d5d334b17fc02bf6c46c8da8f401075ca3d0f605accb7db6de5f6808df9", "seconds": 0.132, "peak": 0.005},
+    {"id": "kenney-glass-006", "category": "chime", "pack": "kenney-interface", "file": "glass_006.wav", "sha256": "12d3de80a48f8dd1a96874b120efc8e7cf35278b303b6fb27a35fbce9f0b37ea", "seconds": 0.132, "peak": 0.005},
+    {"id": "kenney-glitch-001", "category": "glitch", "pack": "kenney-interface", "file": "glitch_001.wav", "sha256": "2ea6b5166dc9295cda99d2845bffb030a00e48cfb8d3c52addd4adb5df6217d0", "seconds": 0.025, "peak": 0.005},
+    {"id": "kenney-glitch-002", "category": "glitch", "pack": "kenney-interface", "file": "glitch_002.wav", "sha256": "960e1cacd202f1c944c98d90fe8f0389d98c5f7e83415fbcff76291da950e9e8", "seconds": 0.036, "peak": 0.005},
+    {"id": "kenney-glitch-003", "category": "glitch", "pack": "kenney-interface", "file": "glitch_003.wav", "sha256": "adf21d2bb6812539d183a91137d4164b69f0938c8214adc2fec7b56b01a157ae", "seconds": 0.012, "peak": 0.005},
+    {"id": "kenney-glitch-004", "category": "glitch", "pack": "kenney-interface", "file": "glitch_004.wav", "sha256": "b8b4130ec1df4ecdff19fe9642d405adf5ae16c270f7589bd41aeb98a27c4ade", "seconds": 0.028, "peak": 0.013},
+    {"id": "kenney-maximize-001", "category": "swipe", "pack": "kenney-interface", "file": "maximize_001.wav", "sha256": "c49992256551200a65d77cbdaf9cb691c8a698aaca0a37b56d6be03fef58aa77", "seconds": 0.261, "peak": 0.253},
+    {"id": "kenney-maximize-002", "category": "swipe", "pack": "kenney-interface", "file": "maximize_002.wav", "sha256": "7f42ca2985be87673de70f094db5fdf562ef61abc94df981e4eea309d94327a8", "seconds": 0.258, "peak": 0.253},
+    {"id": "kenney-maximize-003", "category": "swipe", "pack": "kenney-interface", "file": "maximize_003.wav", "sha256": "3233c5bad496e64a707177583e34f2ed786212e3da87c123e11ad4ae1e77dfee", "seconds": 0.212, "peak": 0.171},
+    {"id": "kenney-maximize-004", "category": "swipe", "pack": "kenney-interface", "file": "maximize_004.wav", "sha256": "ac0ec4c5fde2dd10c5531e9b3093db59f853e6877f906d5e5afa6ba774f0c5e3", "seconds": 0.428, "peak": 0.37},
+    {"id": "kenney-maximize-005", "category": "swipe", "pack": "kenney-interface", "file": "maximize_005.wav", "sha256": "fc738ef2ccf71848ae43473a85965d480cb86ddc63ad0606fefce73de29f0b8d", "seconds": 0.528, "peak": 0.478},
+    {"id": "kenney-maximize-006", "category": "swipe", "pack": "kenney-interface", "file": "maximize_006.wav", "sha256": "98bfee28b13cab4260b582c38a55cbd41bce0dec827558a37639b09169b10216", "seconds": 0.387, "peak": 0.065},
+    {"id": "kenney-maximize-007", "category": "swipe", "pack": "kenney-interface", "file": "maximize_007.wav", "sha256": "ef388248f8b2286e085e6975a347a76c6c7887f3e543cea705a8e2be5a6046bb", "seconds": 0.193, "peak": 0.005},
+    {"id": "kenney-maximize-008", "category": "swipe", "pack": "kenney-interface", "file": "maximize_008.wav", "sha256": "54158364c319072eca8aed73c3985ca544321e3def37ce28c741858c314877d9", "seconds": 0.245, "peak": 0.154},
+    {"id": "kenney-maximize-009", "category": "swipe", "pack": "kenney-interface", "file": "maximize_009.wav", "sha256": "fbd14d5c5c42bf3641ddb622c25f6e8a81339ceec66b5dd182008c09b45f6b08", "seconds": 0.228, "peak": 0.029},
+    {"id": "kenney-minimize-001", "category": "swipe", "pack": "kenney-interface", "file": "minimize_001.wav", "sha256": "2b28be6ccfda4e06df7afa6fd1c25912122cd3cf1161ca91a8a3e9904f4362ae", "seconds": 0.271, "peak": 0.005},
+    {"id": "kenney-minimize-002", "category": "swipe", "pack": "kenney-interface", "file": "minimize_002.wav", "sha256": "60dc48d5a2d62fbea98f7855d75acf13e2708677ef1f0f24a77188c465e1e893", "seconds": 0.258, "peak": 0.005},
+    {"id": "kenney-minimize-003", "category": "swipe", "pack": "kenney-interface", "file": "minimize_003.wav", "sha256": "1496cfd47fc89e499d94cea45747d10924c165774ea5f74b9e0787de56e87fbc", "seconds": 0.222, "peak": 0.041},
+    {"id": "kenney-minimize-004", "category": "swipe", "pack": "kenney-interface", "file": "minimize_004.wav", "sha256": "2a287540381ae5df05369015e315663b179ce9248f203d7eb8bf0950338ce4f8", "seconds": 0.431, "peak": 0.048},
+    {"id": "kenney-minimize-005", "category": "swipe", "pack": "kenney-interface", "file": "minimize_005.wav", "sha256": "3786f60baddba2891eca440c1a538537bf4a037ab87de163c3c8630770d2328a", "seconds": 0.547, "peak": 0.048},
+    {"id": "kenney-minimize-006", "category": "swipe", "pack": "kenney-interface", "file": "minimize_006.wav", "sha256": "ac6c45af8d38b7d1fece9836008feb58a9412de6edede0690696878f7a320c4a", "seconds": 0.38, "peak": 0.315},
+    {"id": "kenney-minimize-007", "category": "swipe", "pack": "kenney-interface", "file": "minimize_007.wav", "sha256": "a116f8bf129308446ade530df6e5b2fcfd835c514bb20fabaf2b97e4044194c4", "seconds": 0.186, "peak": 0.18},
+    {"id": "kenney-minimize-008", "category": "swipe", "pack": "kenney-interface", "file": "minimize_008.wav", "sha256": "ddb77be7dd7346054f624f22fd21ac07c76cd7d20fe5cadca9a6dd31e8da5777", "seconds": 0.245, "peak": 0.072},
+    {"id": "kenney-minimize-009", "category": "swipe", "pack": "kenney-interface", "file": "minimize_009.wav", "sha256": "eee107b3775ed4a65c1c5be876b73f32ab46135670c4004d368cf9be25cfda02", "seconds": 0.242, "peak": 0.196},
+    {"id": "kenney-open-001", "category": "swipe", "pack": "kenney-interface", "file": "open_001.wav", "sha256": "c69aab75d09d98363934c68cda0e9d050973eb5c3ab9987ce8fd5d336a8f7fbd", "seconds": 0.148, "peak": 0.143},
+    {"id": "kenney-open-002", "category": "swipe", "pack": "kenney-interface", "file": "open_002.wav", "sha256": "fe6f58e1915885e4aa887a14f0e660476e0ab0b2345bda968dffdb1cd5873710", "seconds": 0.316, "peak": 0.309},
+    {"id": "kenney-open-003", "category": "swipe", "pack": "kenney-interface", "file": "open_003.wav", "sha256": "fc2abeb471373da2436aad5c78b466b6ee19ecb8852a5e829bb948c9ff48af4d", "seconds": 0.316, "peak": 0.309},
+    {"id": "kenney-open-004", "category": "swipe", "pack": "kenney-interface", "file": "open_004.wav", "sha256": "c3f8432c2e78ff9c2423c7a02e186cccc93c37539fdd81fe99bdd1b0560addf8", "seconds": 0.325, "peak": 0.318},
+    {"id": "kenney-pluck-001", "category": "notify", "pack": "kenney-interface", "file": "pluck_001.wav", "sha256": "7d676b0b09b56f7e5964ad274feb7e7307a4e552bed8cd98e1e3cecfb9c10c36", "seconds": 0.112, "peak": 0.005},
+    {"id": "kenney-pluck-002", "category": "notify", "pack": "kenney-interface", "file": "pluck_002.wav", "sha256": "f8ad032b27cb79a66aec1d5994c88167e5fa87ccbb9dbab2f1658f8fcb06413e", "seconds": 0.181, "peak": 0.005},
+    {"id": "kenney-question-001", "category": "notify", "pack": "kenney-interface", "file": "question_001.wav", "sha256": "3c43a9626843f30727f35d290d88bcf4da61a36cdbbc20c13b18966c597f62b6", "seconds": 0.501, "peak": 0.166},
+    {"id": "kenney-question-002", "category": "notify", "pack": "kenney-interface", "file": "question_002.wav", "sha256": "a3ae5f076a3e08d93eb29ed49207cc640e9b1f539232b5d9a25a643e423a5d8a", "seconds": 0.338, "peak": 0.05},
+    {"id": "kenney-question-003", "category": "notify", "pack": "kenney-interface", "file": "question_003.wav", "sha256": "f56ca66770c2d22a522073ffe67b26354ae5b60a260019eb73de9ba5d373737c", "seconds": 0.341, "peak": 0.05},
+    {"id": "kenney-question-004", "category": "notify", "pack": "kenney-interface", "file": "question_004.wav", "sha256": "88ebbd044bbaf716003ec4fea8314027d6d409cf6700b19fe553b48c9e88e2c1", "seconds": 0.338, "peak": 0.05},
+    {"id": "kenney-scratch-001", "category": "glitch", "pack": "kenney-interface", "file": "scratch_001.wav", "sha256": "8db53f023af3410573861dc7b434a052965b6282573b999af17e31d23557d7d2", "seconds": 0.161, "peak": 0.02},
+    {"id": "kenney-scratch-002", "category": "glitch", "pack": "kenney-interface", "file": "scratch_002.wav", "sha256": "43cde183b4bd419965aca6a09b5de9dd2dab2be40625bd7baac5f82bfe386a27", "seconds": 0.161, "peak": 0.056},
+    {"id": "kenney-scratch-003", "category": "glitch", "pack": "kenney-interface", "file": "scratch_003.wav", "sha256": "a780f81592bf48e5615824193bccfbad1ae9673f734e43a4b2bb604a65009b7e", "seconds": 0.125, "peak": 0.005},
+    {"id": "kenney-scratch-004", "category": "glitch", "pack": "kenney-interface", "file": "scratch_004.wav", "sha256": "a9b0e3aff14d785414bdf22294e42bb43e4975c7c30171426aaea217d69328d1", "seconds": 0.347, "peak": 0.025},
+    {"id": "kenney-scratch-005", "category": "glitch", "pack": "kenney-interface", "file": "scratch_005.wav", "sha256": "80dbfdd6406a0c370699ea610b06b63bef2f1ed2588816209d71f9f81c2749a3", "seconds": 0.344, "peak": 0.238},
+    {"id": "kenney-scroll-001", "category": "tick", "pack": "kenney-interface", "file": "scroll_001.wav", "sha256": "bb3fba1afeb65bf7e371f658d1d7734c826a83a1ad6d6608a83f92ec93933341", "seconds": 1.02, "peak": 0.503},
+    {"id": "kenney-scroll-002", "category": "tick", "pack": "kenney-interface", "file": "scroll_002.wav", "sha256": "a6cf83057f2e66a6744cbfcef5dcb6705a875e2d86f908f4f6ef9cac5113999a", "seconds": 1.012, "peak": 0.2},
+    {"id": "kenney-scroll-003", "category": "tick", "pack": "kenney-interface", "file": "scroll_003.wav", "sha256": "0b5781b18dfa8eed60f3bca9a964785fdbeb823a046c81099bca8cbf9a09804d", "seconds": 1.012, "peak": 0.852},
+    {"id": "kenney-scroll-004", "category": "tick", "pack": "kenney-interface", "file": "scroll_004.wav", "sha256": "3d8f2f5ae3def45b44272ec1cd93f4d0088bccba637d1f066b94d69258e1964d", "seconds": 1.001, "peak": 0.005},
+    {"id": "kenney-scroll-005", "category": "tick", "pack": "kenney-interface", "file": "scroll_005.wav", "sha256": "6281128ed59bb3d1f7d6fb40e7b11ab824ef3c46930aeb5f7f242a1a321a2fa2", "seconds": 1.023, "peak": 0.305},
+    {"id": "kenney-select-001", "category": "click", "pack": "kenney-interface", "file": "select_001.wav", "sha256": "3d9e86003f8ebd1a3f6f3d8af65b6b682562a46d532ccd204dcba21305b950ff", "seconds": 0.062, "peak": 0.005},
+    {"id": "kenney-select-002", "category": "click", "pack": "kenney-interface", "file": "select_002.wav", "sha256": "9f15b5f93716a3ff8842cff73ef932e81beac2d19972066f690154c1f9322f2b", "seconds": 0.062, "peak": 0.005},
+    {"id": "kenney-select-003", "category": "click", "pack": "kenney-interface", "file": "select_003.wav", "sha256": "62004129482c8521549ae3c7c8579f81c3618937bfa25dde125fcf0daa6f066a", "seconds": 0.385, "peak": 0.025},
+    {"id": "kenney-select-004", "category": "click", "pack": "kenney-interface", "file": "select_004.wav", "sha256": "50278d1229cebe4bc3a76bbc9e1ef829683e190d4971e4406e38cedbf8a31087", "seconds": 0.385, "peak": 0.021},
+    {"id": "kenney-select-005", "category": "click", "pack": "kenney-interface", "file": "select_005.wav", "sha256": "e0f14f9ca1fbc0fb8dc49bc5133747d86f15c9d79a0c8bcb7973d7526d092841", "seconds": 0.385, "peak": 0.025},
+    {"id": "kenney-select-006", "category": "click", "pack": "kenney-interface", "file": "select_006.wav", "sha256": "f62c605bdea38edd8b1a88e9806d96ac19df43ccfedcc0f424ed156c455341e1", "seconds": 1.949, "peak": 0.041},
+    {"id": "kenney-select-007", "category": "click", "pack": "kenney-interface", "file": "select_007.wav", "sha256": "ccf5a313a22f5bb5e3d5a84a4943b39892218440a59211eb12b24b433109f4f0", "seconds": 0.06, "peak": 0.005},
+    {"id": "kenney-select-008", "category": "click", "pack": "kenney-interface", "file": "select_008.wav", "sha256": "4bca1498b7aae0d49e05e0bdb231aae0f7cd51366f48561438605d5729a2d61a", "seconds": 0.06, "peak": 0.005},
+    {"id": "kenney-switch-001", "category": "click", "pack": "kenney-interface", "file": "switch_001.wav", "sha256": "56a1dd5278d06b4c47c69d7664482bcb3feeac3027fdd8cb6d0883fda7738eb2", "seconds": 0.62, "peak": 0.112},
+    {"id": "kenney-switch-002", "category": "click", "pack": "kenney-interface", "file": "switch_002.wav", "sha256": "57dce5532c75a3aff1e742c59b3b5b1acb83f700d1b9683643201f2aa420a086", "seconds": 0.62, "peak": 0.005},
+    {"id": "kenney-switch-003", "category": "click", "pack": "kenney-interface", "file": "switch_003.wav", "sha256": "f57fcbc345d84d0b8d1bb22c10505b336a131700fe7a9c26da5ae2f39b27683a", "seconds": 0.504, "peak": 0.029},
+    {"id": "kenney-switch-004", "category": "click", "pack": "kenney-interface", "file": "switch_004.wav", "sha256": "70826a511743c6683894b1040e939794e3b083b403ca750340546125fe1fe652", "seconds": 0.504, "peak": 0.005},
+    {"id": "kenney-switch-005", "category": "click", "pack": "kenney-interface", "file": "switch_005.wav", "sha256": "781ddb3db16391be9978fcc321b704d0bf27d8847351aa4d343488f1b617ac70", "seconds": 0.62, "peak": 0.007},
+    {"id": "kenney-switch-006", "category": "click", "pack": "kenney-interface", "file": "switch_006.wav", "sha256": "7670954a43028178dada559edfcf96ebda421fb9da41b673f90d84163f37e451", "seconds": 0.62, "peak": 0.007},
+    {"id": "kenney-switch-007", "category": "click", "pack": "kenney-interface", "file": "switch_007.wav", "sha256": "b9d65ceab61b85aaf5d0871293f8016fcfc4cd58d860834037e3e6d4ca470ee6", "seconds": 0.62, "peak": 0.112},
+    {"id": "kenney-tick-001", "category": "tick", "pack": "kenney-interface", "file": "tick_001.wav", "sha256": "fee217e21731da4be1f0347fd2632296259b8bfdca343c936fe60dc64bce280e", "seconds": 0.045, "peak": 0.005},
+    {"id": "kenney-tick-002", "category": "tick", "pack": "kenney-interface", "file": "tick_002.wav", "sha256": "f94af5d5117af7bc71325c1acb874e7ca485bfd9d37f1b52e68009e54badc67f", "seconds": 0.023, "peak": 0.005},
+    {"id": "kenney-tick-004", "category": "tick", "pack": "kenney-interface", "file": "tick_004.wav", "sha256": "7cf0ab362d64d3cc2d25a89528662ed21abd5c67a425dc0f4d1013871a481bdd", "seconds": 0.055, "peak": 0.047},
+    {"id": "kenney-toggle-001", "category": "click", "pack": "kenney-interface", "file": "toggle_001.wav", "sha256": "100585c697b2b25a5d22c27e5758648ead9714f51eacb455b5bc0a1c9e1365db", "seconds": 0.158, "peak": 0.005},
+    {"id": "kenney-toggle-002", "category": "click", "pack": "kenney-interface", "file": "toggle_002.wav", "sha256": "9eb9b937ff6f0790b00a523084e51669bc4675b13ca80d91e8fcf9eb1b5ca174", "seconds": 0.141, "peak": 0.009},
+    {"id": "kenney-toggle-003", "category": "click", "pack": "kenney-interface", "file": "toggle_003.wav", "sha256": "2f0444087a9f7d8834118878422be5de7c7ebadc68e950233869a826905b8a22", "seconds": 0.161, "peak": 0.005},
+    {"id": "kenney-toggle-004", "category": "click", "pack": "kenney-interface", "file": "toggle_004.wav", "sha256": "954c38c86d1c9b5cff871ff0702ceed06a087b45d1e3b8735b9003ad510dd036", "seconds": 0.074, "peak": 0.005}
+  ]
+}

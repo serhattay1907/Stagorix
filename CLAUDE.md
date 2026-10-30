@@ -28,6 +28,7 @@ Stagorix is an open-source, brand-agnostic, multi-agent pipeline that turns news
 | `docs/ARCHITECTURE.md` | System design |
 | `docs/DECISIONS.md` | Decision log (append-only) |
 | `docs/MOTION.md` | Motion language: effect roles, intensity, brand rules |
+| `docs/REFERENCES.md` | Outside projects and edits we learn from, with their licenses |
 | `docs/ROADMAP.md` | Phases and tasks — the source of truth for progress |
 | `brands/<slug>/` | Brand profiles (schema in phase 4) |
 | `stagorix/` | Python core: `cli.py`, `doctor.py` and one subpackage per area (analysis, agents, llm, brands, assets, render, platforms, panel, runs) |
@@ -57,6 +58,9 @@ Stagorix is an open-source, brand-agnostic, multi-agent pipeline that turns news
 | Find flubs in a transcript | `uv run stagorix flubs <transcript.json> [--review]` |
 | Preview with approved flub edits | `uv run stagorix cut <video> [--flubs flubs.json]` |
 | Effect showcase video | `uv run stagorix showcase [--theme theme.json] [--footage workspace/analysis/<name>]` (in Docker: `docker compose run --rm worker stagorix showcase`) |
+| Looks (style packs) | `uv run stagorix looks [--render]` · `uv run stagorix showcase --look <id>` |
+| Person mattes for speaker effects | `uv run stagorix matte <video or analysis folder> [--quality draft\|final] [--plan plan.json]` |
+| Sound library | `uv run stagorix sounds list [-c <category>]` · `uv run stagorix sounds build` · `uv run stagorix sounds reel [-c <category>]` |
 | Effect library / check an edit plan | `uv run stagorix effects` · `uv run stagorix check-plan <plan.json> [--rules rules.json]` |
 | Models | `uv run stagorix models list` · `uv run stagorix models download <name>` |
 | Tests | `uv run pytest` |
