@@ -111,6 +111,13 @@ def showcase(
         Path | None,
         typer.Option("--theme", help='JSON file like {"theme": {...}}; default is the neutral theme.'),
     ] = None,
+    footage: Annotated[
+        Path | None,
+        typer.Option(
+            "--footage",
+            help="Analysis folder (e.g. workspace/analysis/raw2) to play the effects over your video.",
+        ),
+    ] = None,
     browser: Annotated[
         str | None,
         typer.Option("--browser-executable", help="Use this Chrome/Chromium instead of Remotion's."),
@@ -122,8 +129,8 @@ def showcase(
 
     try:
         with console.status("Rendering showcase …"):
-            path = render_showcase(out, theme, browser)
-    except VerifyError as exc:
+            path = render_showcase(out, theme, browser, footage)
+    except (VerifyError, FileNotFoundError) as exc:
         console.print(f"[red]Showcase failed:[/] {exc}")
         raise typer.Exit(code=1) from exc
     console.print(f"[green]Done:[/] {path}")

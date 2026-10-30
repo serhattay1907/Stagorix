@@ -85,7 +85,7 @@ After the option review gate, requests stay open for good: each wish becomes a n
   - [x] 3.3b Motion language: effect roles, intensity and spacing rules, set per brand (`docs/MOTION.md`, `stagorix effects`, `stagorix check-plan`)
   - [ ] 3.3c Pack A
     - [x] 3.3c-1 Caption styles bold, reveal, marker; emoji pop; number pop; camera shake
-    - [ ] 3.3c-2 Transitions: glitch, mask wipe, zoom blur
+    - [x] 3.3c-2 Transitions: glitch, iris (mask), zoom blur; showcase over your own footage (`--footage`)
     - [ ] 3.3c-3 Four preset looks (News, Educational, Minimal, Energetic); showcase rendered in each
     - [ ] 3.3c-4 Free sound library with license log, sounds mapped to effects (moved forward from 7.3)
   - [ ] 3.3d Pack B: speaker effects (background swap/blur, outline glow, colour pop) and data cards (counter, charts, A vs B)

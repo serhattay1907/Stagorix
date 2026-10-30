@@ -239,3 +239,6 @@ workspace/*
 # Third-party agent skills, installed locally with `npx skills add remotion-dev/skills`
 .agents/skills/remotion*/
 .claude/skills/remotion*/
+
+# Local footage for the showcase (never committed)
+render/public/showcase-input/

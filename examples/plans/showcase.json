@@ -1,5 +1,5 @@
 {
-  "duration": 27,
+  "duration": 36,
   "effects": [
     {
       "effect": "title.behind",
@@ -50,15 +50,33 @@
       "reason": "The key number, said aloud"
     },
     {
+      "effect": "transition.glitch",
+      "at": 21.8,
+      "seconds": 0.4,
+      "reason": "New section: fast, edgy change"
+    },
+    {
+      "effect": "transition.iris",
+      "at": 24.4,
+      "seconds": 0.6,
+      "reason": "New section in the brand colour"
+    },
+    {
+      "effect": "transition.zoomblur",
+      "at": 27.3,
+      "seconds": 0.5,
+      "reason": "New section with momentum"
+    },
+    {
       "effect": "camera.whip",
-      "at": 21.25,
+      "at": 30.05,
       "seconds": 0.35,
       "reason": "Moves to the closing"
     },
     {
       "effect": "outro.card",
-      "at": 21.7,
-      "seconds": 5.3,
+      "at": 30.5,
+      "seconds": 5.5,
       "reason": "Call to comment"
     }
   ]

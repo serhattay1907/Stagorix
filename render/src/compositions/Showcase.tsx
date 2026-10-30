@@ -1,4 +1,4 @@
-import { AbsoluteFill, interpolate, Sequence, useCurrentFrame, useVideoConfig } from "remotion";
+import { AbsoluteFill, interpolate, Loop, OffthreadVideo, Sequence, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { z } from "zod";
 import { Camera, WhipFlash } from "../effects/Camera";
 import { Captions } from "../effects/Captions";
@@ -7,18 +7,30 @@ import { Grade } from "../effects/Grade";
 import { Label } from "../effects/Label";
 import { NumberPop } from "../effects/NumberPop";
 import { Outro } from "../effects/Outro";
-import { TitleBehind } from "../effects/TitleBehind";
+import { CutoutLayer, TitleBehind } from "../effects/TitleBehind";
+import { Transitions } from "../effects/Transition";
 import { clamp } from "../theme/motion";
 import { alpha, ThemeProvider, themeSchema, useTheme } from "../theme/theme";
 
 // Every effect in one clip with sample content, in chapters. Used for review in
 // Remotion Studio (edit the theme in the props panel), for the golden test, and
 // later as the template picker. Sample text is English because the repo is.
-export const showcaseSchema = z.object({ theme: themeSchema });
+export const showcaseSchema = z.object({
+  theme: themeSchema,
+  footage: z.string().default("").describe("Your 9:16 video in render/public; empty = stand-in speaker"),
+  cutoutFrames: z.number().int().min(0).default(0).describe("Person cutout frames in render/public/<cutoutDir>"),
+  cutoutDir: z.string().default("showcase-input/cutout"),
+});
+type ShowcaseProps = z.infer<typeof showcaseSchema>;
 
-export const SHOWCASE_SECONDS = 27;
+export const SHOWCASE_SECONDS = 36;
 const FACE = { x: 540, y: 700 };
-const WHIPS = [3, 21.4];
+const WHIPS = [3, 30.2];
+const TRANSITIONS = [
+  { kind: "glitch" as const, at: 22.0 },
+  { kind: "iris" as const, at: 24.7 },
+  { kind: "zoomblur" as const, at: 27.4 },
+];
 const SHAKES = [13.9];
 
 const sampleWords = (text: string, start: number, step = 0.32) =>
@@ -100,10 +112,24 @@ const CHAPTERS: [number, number, string][] = [
   [13, 15.8, "Captions · bold · emoji · shake"],
   [15.8, 18.6, "Captions · reveal"],
   [18.6, 21.2, "Number pop"],
-  [21.2, 27, "Whip · outro card"],
+  [21.2, 23.4, "Transition · glitch"],
+  [23.4, 26.1, "Transition · iris"],
+  [26.1, 29.6, "Transition · zoom blur"],
+  [29.6, 36, "Whip · outro card"],
 ];
 
-const Scenes: React.FC = () => {
+// Your own 9:16 footage (muted, looped) or the stand-in stage.
+const Background: React.FC<{ footage: string }> = ({ footage }) => {
+  const { durationInFrames } = useVideoConfig();
+  if (!footage) return <Stage />;
+  return (
+    <Loop durationInFrames={durationInFrames}>
+      <OffthreadVideo src={staticFile(footage)} muted style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+    </Loop>
+  );
+};
+
+const Scenes: React.FC<Omit<ShowcaseProps, "theme">> = ({ footage, cutoutFrames, cutoutDir }) => {
   const { fps } = useVideoConfig();
   const s = (seconds: number) => Math.round(seconds * fps);
   const zooms = [
@@ -115,40 +141,44 @@ const Scenes: React.FC = () => {
     { at: 10.1, scale: 1.14, ease: 0.15 },
     { at: 10.7, scale: 1.05, ease: 0.3 },
   ];
+  const camera = { origin: FACE, whips: WHIPS, shakes: SHAKES, zooms };
   return (
     <AbsoluteFill>
-      <Camera origin={FACE} whips={WHIPS} shakes={SHAKES} zooms={zooms}>
-        <Stage />
-      </Camera>
-      <Sequence durationInFrames={s(3)}>
-        <TitleBehind
-          until={3}
-          lines={[
-            { text: "THIS IS", at: 0.2 },
-            { text: "THE HOOK", at: 0.6, accent: true },
-          ]}
+      <Transitions items={TRANSITIONS} origin={FACE}>
+        <Camera {...camera}>
+          <Background footage={footage} />
+        </Camera>
+        <Sequence durationInFrames={s(3)}>
+          <TitleBehind
+            until={3}
+            lines={[
+              { text: "THIS IS", at: 0.2 },
+              { text: "THE HOOK", at: 0.6, accent: true },
+            ]}
+          />
+        </Sequence>
+        <Camera {...camera}>{footage ? <CutoutLayer dir={cutoutDir} frames={cutoutFrames} /> : <Speaker />}</Camera>
+        <Label text="What does it take?" from={3.3} to={5.1} position="upper" />
+        <Captions words={sampleWords("Every word is timed, and keywords stand out.", 5.3)} keywords={["keywords"]} style="highlight" />
+        <Captions words={sampleWords("A boxed style keeps captions readable anywhere.", 8.1)} keywords={["readable"]} style="boxed" position="lower" />
+        <Captions words={sampleWords("One word. Big. Fast.", 10.7, 0.55)} keywords={["big"]} style="pop" />
+        <Captions words={sampleWords("This is the loud style that grabs attention.", 13.1)} keywords={["loud"]} style="bold" />
+        <EmojiPop emoji="🔥" at={13.9} />
+        <Captions words={sampleWords("Words appear the moment they are spoken.", 15.9)} keywords={["spoken"]} style="reveal" />
+        <NumberPop value={73} suffix="%" caption="of viewers watch on mute" at={18.6} />
+        <Captions words={sampleWords("Sections can change with a glitch,", 21.4)} keywords={["glitch"]} />
+        <Captions words={sampleWords("with an iris in the brand colour,", 24.0)} keywords={["iris"]} />
+        <Captions words={sampleWords("or with a fast zoom blur.", 26.8)} keywords={["zoom"]} />
+        <Outro
+          from={30.5}
+          heading="Be honest:"
+          title="How many can you say YES to?"
+          highlight="YES"
+          items={["Plan it", "Build it", "Ship it", "Sell it"]}
+          cta="Write your number below 👇"
+          origin={FACE}
         />
-      </Sequence>
-      <Camera origin={FACE} whips={WHIPS} shakes={SHAKES} zooms={zooms}>
-        <Speaker />
-      </Camera>
-      <Label text="What does it take?" from={3.3} to={5.1} position="upper" />
-      <Captions words={sampleWords("Every word is timed, and keywords stand out.", 5.3)} keywords={["keywords"]} style="highlight" />
-      <Captions words={sampleWords("A boxed style keeps captions readable anywhere.", 8.1)} keywords={["readable"]} style="boxed" position="lower" />
-      <Captions words={sampleWords("One word. Big. Fast.", 10.7, 0.55)} keywords={["big"]} style="pop" />
-      <Captions words={sampleWords("This is the loud style that grabs attention.", 13.1)} keywords={["loud"]} style="bold" />
-      <EmojiPop emoji="🔥" at={13.9} />
-      <Captions words={sampleWords("Words appear the moment they are spoken.", 15.9)} keywords={["spoken"]} style="reveal" />
-      <NumberPop value={73} suffix="%" caption="of viewers watch on mute" at={18.6} />
-      <Outro
-        from={21.7}
-        heading="Be honest:"
-        title="How many can you say YES to?"
-        highlight="YES"
-        items={["Plan it", "Build it", "Ship it", "Sell it"]}
-        cta="Write your number below 👇"
-        origin={FACE}
-      />
+      </Transitions>
       {CHAPTERS.map(([from, to, name], i) => (
         <Sequence key={name} from={s(from)} durationInFrames={s(to - from)}>
           <Chapter index={i + 1} name={name} />
@@ -160,8 +190,8 @@ const Scenes: React.FC = () => {
   );
 };
 
-export const Showcase: React.FC<z.infer<typeof showcaseSchema>> = ({ theme }) => (
+export const Showcase: React.FC<ShowcaseProps> = ({ theme, ...rest }) => (
   <ThemeProvider value={theme}>
-    <Scenes />
+    <Scenes {...rest} />
   </ThemeProvider>
 );
