@@ -18,6 +18,7 @@ class ModelInfo(BaseModel):
     repo: str
     license: str
     size_mb: int
+    revision: str | None = None
 
 
 WHISPER_MODELS: dict[str, ModelInfo] = {
@@ -25,7 +26,13 @@ WHISPER_MODELS: dict[str, ModelInfo] = {
     for m in [
         ModelInfo(name="tiny", repo="Systran/faster-whisper-tiny", license="MIT", size_mb=75),
         ModelInfo(name="base", repo="Systran/faster-whisper-base", license="MIT", size_mb=145),
-        ModelInfo(name="small", repo="Systran/faster-whisper-small", license="MIT", size_mb=485),
+        ModelInfo(
+            name="small",
+            repo="Systran/faster-whisper-small",
+            license="MIT",
+            size_mb=485,
+            revision="536b0662742c02347bc0e980a01041f333bce120",
+        ),
         ModelInfo(name="medium", repo="Systran/faster-whisper-medium", license="MIT", size_mb=1530),
         ModelInfo(name="large-v3", repo="Systran/faster-whisper-large-v3", license="MIT", size_mb=3090),
     ]
@@ -54,7 +61,7 @@ def download_whisper(name: str) -> Path:
 
     info = WHISPER_MODELS[name]
     target = whisper_path(name)
-    snapshot_download(repo_id=info.repo, local_dir=target)
+    snapshot_download(repo_id=info.repo, revision=info.revision, local_dir=target)
     return target
 
 

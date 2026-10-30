@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1
 # One image, two bases: CPU (default) and NVIDIA GPU (compose.gpu.yaml).
 # Base images are pinned by digest; Dependabot proposes updates. The GPU base
 # (compose.gpu.yaml) is pinned by tag until it can be resolved and tested on a GPU machine.
@@ -41,13 +42,15 @@ COPY --from=uv /uv /uvx /usr/local/bin/
 WORKDIR /app
 
 # Python: the version comes from .python-version, packages from uv.lock.
+# Download caches (uv, npm, sounds) live in BuildKit cache mounts, not in the image:
+# smaller image, and rebuilds reuse the downloads.
 COPY pyproject.toml uv.lock .python-version README.md ./
-RUN uv sync --frozen --no-dev --no-install-project
+RUN --mount=type=cache,target=/root/.cache/uv uv sync --frozen --no-dev --no-install-project
 
 # Default models, baked in so the first run works offline. Must match
 # stagorix/models.py (checked by tests/test_models.py).
 RUN python -c "from huggingface_hub import snapshot_download; \
-snapshot_download('Systran/faster-whisper-small', local_dir='/opt/models/whisper/small'); \
+snapshot_download('Systran/faster-whisper-small', revision='536b0662742c02347bc0e980a01041f333bce120', local_dir='/opt/models/whisper/small'); \
 from huggingface_hub import hf_hub_download; \
 hf_hub_download('opencv/face_detection_yunet', 'face_detection_yunet_2023mar.onnx', local_dir='/opt/models/yunet'); \
 hf_hub_download('onnx-community/mediapipe_selfie_segmentation', 'onnx/model.onnx', revision='be49485c8e027524be38591817fc5cd31bd9d00e', local_dir='/opt/models/selfie')"
@@ -59,14 +62,14 @@ assert hashlib.sha256(open(p, 'rb').read()).hexdigest() == \
 
 # Render: exact packages from package-lock.json plus Remotion's pinned browser.
 COPY render/package.json render/package-lock.json render/
-RUN cd render && npm ci --no-audit --no-fund && npx remotion browser ensure
+RUN --mount=type=cache,target=/root/.npm cd render && npm ci --no-audit --no-fund && npx remotion browser ensure
 
 COPY stagorix stagorix
 COPY render render
 COPY examples examples
-RUN uv sync --frozen --no-dev
+RUN --mount=type=cache,target=/root/.cache/uv uv sync --frozen --no-dev
 
 # Sound library: synthesized sounds plus CC0 packs, each file checked against its sha256.
-RUN stagorix sounds build
+RUN --mount=type=cache,target=/root/.cache/stagorix/sounds stagorix sounds build
 
 CMD ["stagorix", "doctor"]

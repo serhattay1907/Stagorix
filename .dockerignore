@@ -9,3 +9,7 @@ workspace
 *.mp4
 *.mov
 *.wav
+
+# Built locally or copied from the user's footage; never part of the image
+render/public/showcase-input
+render/public/sounds
