@@ -96,6 +96,8 @@ After the option review gate, requests stay open for good: each wish becomes a n
   - [x] 3.4a Full face, split screen, card over face, inside a phone, picture in picture (`stagorix layouts`, layout reel)
   - [x] 3.4b B-roll with the face in a corner, background swap, reaction (clip with credit), screen recording with the face, text only
 - [ ] 3.5 New effects: list cards, progress bar, phone mock-up, orbit, pull-back, zoom-through, vertigo, UI/diagram scenes, logo stack (logos supplied by the user, none bundled), word-synced kinetic typography (C)
+  - [x] 3.5a Camera moves: orbit, pull-back, zoom-through, vertigo (depth layers: background and speaker move separately)
+  - [ ] 3.5b Progress bar, UI/diagram scene, logo stack, word-synced kinetic typography
 - [ ] 3.6 Draft render for previews (540p, lower frame rate, ~4× faster on CPU) and final render only after approval, −14 LUFS; a thin renderer interface so Remotion can be swapped (C)
 
 ## Phase 4 — Brand system

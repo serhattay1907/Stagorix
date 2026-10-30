@@ -3,6 +3,7 @@ import { z } from "zod";
 import { Badge } from "../effects/Badge";
 import { BarChart } from "../effects/BarChart";
 import { Camera, WhipFlash } from "../effects/Camera";
+import { MoveLayer, useCameraMove, ZoomThroughFlash } from "../effects/CameraMove";
 import { Captions } from "../effects/Captions";
 import { Checklist } from "../effects/Checklist";
 import { EmojiPop } from "../effects/EmojiPop";
@@ -41,15 +42,21 @@ export const showcaseSchema = z.object({
 });
 type ShowcaseProps = z.infer<typeof showcaseSchema>;
 
-export const SHOWCASE_SECONDS = 74;
+export const SHOWCASE_SECONDS = 84;
 const FACE = { x: 540, y: 700 };
-const WHIPS = [3, 67.2];
+const WHIPS = [3, 77.8];
 const TRANSITIONS = [
   { kind: "glitch" as const, at: 22.0 },
   { kind: "iris" as const, at: 24.7 },
   { kind: "zoomblur" as const, at: 27.4 },
 ];
 const SHAKES = [13.9];
+const MOVES = [
+  { kind: "orbit" as const, at: 66.8, seconds: 2.2 },
+  { kind: "pullback" as const, at: 69.4, seconds: 2.0 },
+  { kind: "zoomthrough" as const, at: 72.6, seconds: 0.6 },
+  { kind: "vertigo" as const, at: 75.1, seconds: 1.8 },
+];
 const SPEAKER = [
   { kind: "blur" as const, at: 40.8, seconds: 2.4 },
   { kind: "swap" as const, at: 43.4, seconds: 2.4 },
@@ -153,8 +160,19 @@ const CHAPTERS: [number, number, string][] = [
   [58.8, 61.4, "Card · timeline"],
   [61.4, 64, "Card · badge"],
   [64, 66.6, "Card · spotlight"],
-  [66.6, 74, "Whip · outro card"],
+  [66.6, 69.2, "Camera · orbit"],
+  [69.2, 71.8, "Camera · pull-back"],
+  [71.8, 74.4, "Camera · zoom-through"],
+  [74.4, 77, "Camera · vertigo"],
+  [77, 84, "Whip · outro card"],
 ];
+
+// With footage, the speaker gets its own layer (from the person matte) during camera moves,
+// so the background can move differently (parallax, dolly zoom).
+const DuringMove: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const move = useCameraMove(MOVES);
+  return move ? <>{children}</> : null;
+};
 
 // Your own 9:16 footage (muted, looped) or the stand-in stage.
 const Background: React.FC<{ footage: string }> = ({ footage }) => {
@@ -191,9 +209,11 @@ const Scenes: React.FC<Omit<ShowcaseProps, "theme" | "look" | "sounds">> = ({
     <AbsoluteFill>
       <Transitions items={TRANSITIONS} origin={FACE}>
         <Camera {...camera}>
-          <SpeakerBackdrop items={SPEAKER}>
-            <Background footage={footage} />
-          </SpeakerBackdrop>
+          <MoveLayer items={MOVES} origin={FACE} layer="background">
+            <SpeakerBackdrop items={SPEAKER}>
+              <Background footage={footage} />
+            </SpeakerBackdrop>
+          </MoveLayer>
         </Camera>
         <Sequence durationInFrames={s(3)}>
           <TitleBehind
@@ -205,20 +225,27 @@ const Scenes: React.FC<Omit<ShowcaseProps, "theme" | "look" | "sounds">> = ({
           />
         </Sequence>
         <Camera {...camera}>
-          {footage ? (
-            <>
-              <CutoutLayer dir={cutoutDir} frames={cutoutFrames} />
-              {matteDir && (
-                <SpeakerPerson items={SPEAKER}>
-                  <MattedVideo src={footage} matteDir={matteDir} matteFps={matteFps} matteFrames={matteFrames} />
-                </SpeakerPerson>
-              )}
-            </>
-          ) : (
-            <SpeakerPerson items={SPEAKER} always>
-              <Speaker />
-            </SpeakerPerson>
-          )}
+          <MoveLayer items={MOVES} origin={FACE} layer="person">
+            {footage ? (
+              <>
+                <CutoutLayer dir={cutoutDir} frames={cutoutFrames} />
+                {matteDir && (
+                  <SpeakerPerson items={SPEAKER}>
+                    <MattedVideo src={footage} matteDir={matteDir} matteFps={matteFps} matteFrames={matteFrames} />
+                  </SpeakerPerson>
+                )}
+                {matteDir && (
+                  <DuringMove>
+                    <MattedVideo src={footage} matteDir={matteDir} matteFps={matteFps} matteFrames={matteFrames} />
+                  </DuringMove>
+                )}
+              </>
+            ) : (
+              <SpeakerPerson items={SPEAKER} always>
+                <Speaker />
+              </SpeakerPerson>
+            )}
+          </MoveLayer>
         </Camera>
         <Label text="What does it take?" from={3.3} to={5.1} position="upper" />
         <Captions words={sampleWords("Every word is timed, and keywords stand out.", 5.3)} keywords={["keywords"]} style="highlight" />
@@ -292,8 +319,12 @@ const Scenes: React.FC<Omit<ShowcaseProps, "theme" | "look" | "sounds">> = ({
         />
         <Badge at={61.6} seconds={2.2} text="New" sub="Speaker effects are here" />
         <Spotlight at={64.2} seconds={2.2} x={FACE.x} y={FACE.y} radius={250} label="Look here" />
+        <Captions words={sampleWords("The camera arcs around you,", 66.9)} keywords={["arcs"]} position="lower" />
+        <Captions words={sampleWords("pulls back to reveal the room,", 69.5)} keywords={["reveal"]} position="lower" />
+        <Captions words={sampleWords("dives through to the next part,", 72.0)} keywords={["dives"]} position="lower" />
+        <Captions words={sampleWords("or bends the room behind you.", 75.2)} keywords={["bends"]} position="lower" />
         <Outro
-          from={67.6}
+          from={78.2}
           heading="Be honest:"
           title="How many can you say YES to?"
           highlight="YES"
@@ -309,6 +340,7 @@ const Scenes: React.FC<Omit<ShowcaseProps, "theme" | "look" | "sounds">> = ({
       ))}
       <Grade leaks={WHIPS} label="STAGORIX · EFFECT SHOWCASE" />
       <WhipFlash whips={WHIPS} />
+      <ZoomThroughFlash items={MOVES} />
     </AbsoluteFill>
   );
 };

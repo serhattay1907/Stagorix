@@ -163,6 +163,22 @@
       "sound": "whoosh-reverse",
       "hit": 0.5
     },
+    "camera.orbit": {
+      "sound": "whoosh-long",
+      "hit": "middle"
+    },
+    "camera.pullback": {
+      "sound": "whoosh-soft",
+      "hit": 0.35
+    },
+    "camera.zoomthrough": {
+      "sound": "riser-bright",
+      "hit": "middle"
+    },
+    "camera.vertigo": {
+      "sound": "drop-sub",
+      "hit": 0
+    },
     "outro.card": {
       "sound": "chime-success",
       "hit": 0

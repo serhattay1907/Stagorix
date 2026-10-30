@@ -63,6 +63,10 @@ Every effect has a default sound (or none), set in `render/src/sound/sounds.json
 | timeline | swipe-down | the line starting (+0.2 s) |
 | badge | impact-punch | the stamp |
 | spotlight | whoosh-reverse | the circle closing (+0.5 s) |
+| camera.orbit | whoosh-long | the middle of the arc |
+| camera.pullback | whoosh-soft | the pull starting (+0.35 s) |
+| camera.zoomthrough | riser-bright | the cut (middle) |
+| camera.vertigo | drop-sub | the move starting |
 | outro.card | chime-success | the card |
 | grade.leak | none | it rides on a whip |
 
