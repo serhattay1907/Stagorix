@@ -139,6 +139,30 @@
       "sound": "impact-soft",
       "hit": 0.3
     },
+    "quote.bubbles": {
+      "sound": "pop-mouth",
+      "hit": 0.1
+    },
+    "list.checklist": {
+      "sound": "pop-high",
+      "hit": 0.25
+    },
+    "headline.wall": {
+      "sound": "impact-boom",
+      "hit": 1.2
+    },
+    "timeline": {
+      "sound": "swipe-down",
+      "hit": 0.2
+    },
+    "badge": {
+      "sound": "impact-punch",
+      "hit": 0.05
+    },
+    "spotlight": {
+      "sound": "whoosh-reverse",
+      "hit": 0.5
+    },
     "outro.card": {
       "sound": "chime-success",
       "hit": 0

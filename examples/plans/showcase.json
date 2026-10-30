@@ -1,5 +1,5 @@
 {
-  "duration": 58,
+  "duration": 74,
   "effects": [
     {
       "effect": "title.behind",
@@ -116,15 +116,51 @@
       "reason": "Stresses a personal moment"
     },
     {
+      "effect": "quote.bubbles",
+      "at": 51.2,
+      "seconds": 2.4,
+      "reason": "Quotes the viewer's problem"
+    },
+    {
+      "effect": "list.checklist",
+      "at": 53.8,
+      "seconds": 2.4,
+      "reason": "Three steps to remember"
+    },
+    {
+      "effect": "headline.wall",
+      "at": 56.3,
+      "seconds": 2.5,
+      "reason": "News-style hook for a new section"
+    },
+    {
+      "effect": "timeline",
+      "at": 59.0,
+      "seconds": 2.4,
+      "reason": "Shows the order of events"
+    },
+    {
+      "effect": "badge",
+      "at": 61.6,
+      "seconds": 2.2,
+      "reason": "Flags what is new"
+    },
+    {
+      "effect": "spotlight",
+      "at": 64.2,
+      "seconds": 2.2,
+      "reason": "Points at the speaker"
+    },
+    {
       "effect": "camera.whip",
-      "at": 51.45,
+      "at": 67.05,
       "seconds": 0.35,
       "reason": "Moves to the closing"
     },
     {
       "effect": "outro.card",
-      "at": 52.0,
-      "seconds": 6.0,
+      "at": 67.6,
+      "seconds": 6.4,
       "reason": "Call to comment"
     }
   ]

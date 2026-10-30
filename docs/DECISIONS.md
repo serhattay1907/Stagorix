@@ -4,6 +4,7 @@ Append-only. Newest first. Each entry names the principle(s) it serves (P1–P7,
 
 | Date | Decision | Rationale | Principle |
 | --- | --- | --- | --- |
+| 2026-10-30 | Pilot cards rebuilt on the theme: quote bubbles (typed, optional strike and stamp), checklist (ticks drawn one by one), headline wall (role hook, strong), vertical timeline, badge (tone accent/positive/negative), spotlight; upper case always uses the brand's locale | Same content as the pilot, but brand-agnostic and language-neutral (Turkish dotted/dotless i); a vertical timeline reads top to bottom on a phone | P1 |
 | 2026-10-30 | Keep Remotion as the renderer; add a thin renderer interface in 3.6 and review HyperFrames (Apache-2.0) at 12.0; the Remotion company license for organisations above 3 employees stays stated in the README | Remotion is mature and our 20 effects are React; HyperFrames is free for everyone but pre-1.0. A full port would cost ~25–40 h; the interface keeps the switch cheap if company users or the license make it necessary | P5, P7 |
 | 2026-10-30 | Outside projects are used for ideas only and recorded in `docs/REFERENCES.md` with their license: mg-styles-15 (MIT), lemo-opuscar (MIT code, CC BY 4.0 content, credited), pdoom-video (MIT); repositories without a license are only watched | Their code is HTML/Canvas, ours is React, so nothing is copied; recording the source keeps credit and licensing clear | P6 |
 | 2026-10-30 | New effect: logo stack (3.5); logos always come from the user, none are bundled | Logos are third-party trademarks | P1, P6 |
