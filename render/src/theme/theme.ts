@@ -4,7 +4,7 @@ import { z } from "zod";
 import { FONTS } from "./fonts";
 import { positionSchema } from "./layout";
 
-export const captionStyleSchema = z.enum(["highlight", "karaoke", "boxed", "pop", "plain"]);
+export const captionStyleSchema = z.enum(["highlight", "karaoke", "boxed", "pop", "bold", "reveal", "marker", "plain"]);
 export type CaptionStyle = z.infer<typeof captionStyleSchema>;
 
 // A theme is a set of choices on fixed scales, so a brand (or the setup wizard)

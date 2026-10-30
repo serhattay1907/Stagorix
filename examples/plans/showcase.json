@@ -1,12 +1,65 @@
 {
-  "duration": 18,
+  "duration": 27,
   "effects": [
-    { "effect": "title.behind", "at": 0.2, "seconds": 2.8, "reason": "Opening question as a hook" },
-    { "effect": "camera.whip", "at": 2.85, "seconds": 0.35, "reason": "New section starts" },
-    { "effect": "grade.leak", "at": 2.9, "seconds": 0.9, "reason": "Softens the whip" },
-    { "effect": "label", "at": 3.3, "seconds": 1.8, "reason": "Names the question" },
-    { "effect": "camera.zoom", "at": 8.3, "seconds": 1.0, "reason": "Stress on 'readable'" },
-    { "effect": "camera.whip", "at": 12.85, "seconds": 0.35, "reason": "Moves to the closing" },
-    { "effect": "outro.card", "at": 13.2, "seconds": 4.8, "reason": "Call to comment" }
+    {
+      "effect": "title.behind",
+      "at": 0.2,
+      "seconds": 2.8,
+      "reason": "Opening question as a hook"
+    },
+    {
+      "effect": "camera.whip",
+      "at": 2.85,
+      "seconds": 0.35,
+      "reason": "New section starts"
+    },
+    {
+      "effect": "grade.leak",
+      "at": 2.9,
+      "seconds": 0.9,
+      "reason": "Softens the whip"
+    },
+    {
+      "effect": "label",
+      "at": 3.3,
+      "seconds": 1.8,
+      "reason": "Names the question"
+    },
+    {
+      "effect": "camera.zoom",
+      "at": 8.3,
+      "seconds": 1.0,
+      "reason": "Stress on 'readable'"
+    },
+    {
+      "effect": "camera.shake",
+      "at": 13.9,
+      "seconds": 0.45,
+      "reason": "Lands the word 'loud'"
+    },
+    {
+      "effect": "emoji.pop",
+      "at": 13.9,
+      "seconds": 1.2,
+      "reason": "Same beat: a sticker for 'loud'"
+    },
+    {
+      "effect": "number.pop",
+      "at": 18.6,
+      "seconds": 2.2,
+      "reason": "The key number, said aloud"
+    },
+    {
+      "effect": "camera.whip",
+      "at": 21.25,
+      "seconds": 0.35,
+      "reason": "Moves to the closing"
+    },
+    {
+      "effect": "outro.card",
+      "at": 21.7,
+      "seconds": 5.3,
+      "reason": "Call to comment"
+    }
   ]
 }

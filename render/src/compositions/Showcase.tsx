@@ -2,8 +2,10 @@ import { AbsoluteFill, interpolate, Sequence, useCurrentFrame, useVideoConfig } 
 import { z } from "zod";
 import { Camera, WhipFlash } from "../effects/Camera";
 import { Captions } from "../effects/Captions";
+import { EmojiPop } from "../effects/EmojiPop";
 import { Grade } from "../effects/Grade";
 import { Label } from "../effects/Label";
+import { NumberPop } from "../effects/NumberPop";
 import { Outro } from "../effects/Outro";
 import { TitleBehind } from "../effects/TitleBehind";
 import { clamp } from "../theme/motion";
@@ -14,9 +16,10 @@ import { alpha, ThemeProvider, themeSchema, useTheme } from "../theme/theme";
 // later as the template picker. Sample text is English because the repo is.
 export const showcaseSchema = z.object({ theme: themeSchema });
 
-export const SHOWCASE_SECONDS = 18;
+export const SHOWCASE_SECONDS = 27;
 const FACE = { x: 540, y: 700 };
-const WHIPS = [3, 13];
+const WHIPS = [3, 21.4];
+const SHAKES = [13.9];
 
 const sampleWords = (text: string, start: number, step = 0.32) =>
   text.split(" ").map((w, i) => ({ text: w, start: start + i * step, end: start + i * step + step * 0.85 }));
@@ -94,7 +97,10 @@ const CHAPTERS: [number, number, string][] = [
   [5.2, 8, "Captions · highlight"],
   [8, 10.6, "Captions · boxed · punch-ins"],
   [10.6, 13, "Captions · pop"],
-  [13, 18, "Whip · outro card"],
+  [13, 15.8, "Captions · bold · emoji · shake"],
+  [15.8, 18.6, "Captions · reveal"],
+  [18.6, 21.2, "Number pop"],
+  [21.2, 27, "Whip · outro card"],
 ];
 
 const Scenes: React.FC = () => {
@@ -111,7 +117,7 @@ const Scenes: React.FC = () => {
   ];
   return (
     <AbsoluteFill>
-      <Camera origin={FACE} whips={WHIPS} zooms={zooms}>
+      <Camera origin={FACE} whips={WHIPS} shakes={SHAKES} zooms={zooms}>
         <Stage />
       </Camera>
       <Sequence durationInFrames={s(3)}>
@@ -123,15 +129,19 @@ const Scenes: React.FC = () => {
           ]}
         />
       </Sequence>
-      <Camera origin={FACE} whips={WHIPS} zooms={zooms}>
+      <Camera origin={FACE} whips={WHIPS} shakes={SHAKES} zooms={zooms}>
         <Speaker />
       </Camera>
       <Label text="What does it take?" from={3.3} to={5.1} position="upper" />
       <Captions words={sampleWords("Every word is timed, and keywords stand out.", 5.3)} keywords={["keywords"]} style="highlight" />
       <Captions words={sampleWords("A boxed style keeps captions readable anywhere.", 8.1)} keywords={["readable"]} style="boxed" position="lower" />
       <Captions words={sampleWords("One word. Big. Fast.", 10.7, 0.55)} keywords={["big"]} style="pop" />
+      <Captions words={sampleWords("This is the loud style that grabs attention.", 13.1)} keywords={["loud"]} style="bold" />
+      <EmojiPop emoji="🔥" at={13.9} />
+      <Captions words={sampleWords("Words appear the moment they are spoken.", 15.9)} keywords={["spoken"]} style="reveal" />
+      <NumberPop value={73} suffix="%" caption="of viewers watch on mute" at={18.6} />
       <Outro
-        from={13.2}
+        from={21.7}
         heading="Be honest:"
         title="How many can you say YES to?"
         highlight="YES"

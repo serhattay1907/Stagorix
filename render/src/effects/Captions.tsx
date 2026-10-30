@@ -2,7 +2,7 @@ import { interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import { z } from "zod";
 import { positionSchema, safeX, yFor } from "../theme/layout";
 import { pop, sec } from "../theme/motion";
-import { alpha, captionStyleSchema, radiusPx, useTheme } from "../theme/theme";
+import { alpha, type CaptionStyle, captionStyleSchema, radiusPx, type Theme, useTheme } from "../theme/theme";
 
 // Word-timed captions in short groups that break at punctuation in any script.
 // Style and position come from the theme; a video may override them.
@@ -19,6 +19,7 @@ type CaptionWord = CaptionsProps["words"][number];
 
 const BREAK = /[.,!?;:…。！？，、؟]$/u;
 const PUNCT = /[\p{P}]/gu;
+const UPPER: CaptionStyle[] = ["pop", "bold"];
 
 export const groupWords = (words: CaptionWord[], maxWords: number): CaptionWord[][] => {
   const out: CaptionWord[][] = [];
@@ -35,6 +36,48 @@ export const groupWords = (words: CaptionWord[], maxWords: number): CaptionWord[
   }
   flush();
   return out;
+};
+
+type WordState = { said: boolean; active: boolean; isKey: boolean; bump: number };
+
+// Per-style look of one word. Kept in one place so a new style is one entry.
+const wordStyle = (style: CaptionStyle, theme: Theme, s: WordState, fontSize: number): React.CSSProperties => {
+  const { palette } = theme;
+  const shadow = `0 4px 0 ${alpha(palette.background, 0.6)}, 0 10px 28px ${alpha(palette.background, 0.65)}`;
+  const dim = alpha(palette.text, 0.5);
+  const base: React.CSSProperties = { color: palette.text, textShadow: shadow };
+  switch (style) {
+    case "highlight":
+    case "boxed":
+      return { color: !s.said ? dim : s.isKey ? palette.accent : palette.text, textShadow: style === "boxed" ? "none" : shadow };
+    case "karaoke":
+      return s.active
+        ? { color: palette.background, background: palette.accent, padding: "0 14px", borderRadius: radiusPx(theme, fontSize * 1.1) }
+        : base;
+    case "pop":
+    case "plain":
+      return { ...base, color: s.isKey ? palette.accent : palette.text };
+    case "bold":
+      return {
+        color: s.active || s.isKey ? palette.accent : palette.text,
+        WebkitTextStroke: `${fontSize * 0.09}px ${palette.background}`,
+        paintOrder: "stroke fill",
+        textShadow: `0 ${fontSize * 0.08}px 0 ${palette.background}`,
+      };
+    case "reveal":
+      return { ...base, color: s.isKey ? palette.accent : palette.text, opacity: s.said ? 1 : 0 };
+    case "marker":
+      return s.said && (s.isKey || s.active)
+        ? {
+            color: palette.background,
+            textShadow: "none",
+            backgroundImage: `linear-gradient(transparent 12%, ${palette.accent} 12%, ${palette.accent} 88%, transparent 88%)`,
+            backgroundSize: `${(s.isKey ? 1 : Math.min(s.bump, 1)) * 100}% 100%`,
+            backgroundRepeat: "no-repeat",
+            padding: "0 10px",
+          }
+        : base;
+  }
 };
 
 export const Captions: React.FC<CaptionsProps> = (props) => {
@@ -57,9 +100,8 @@ export const Captions: React.FC<CaptionsProps> = (props) => {
   const keys = new Set(keywords.map(norm));
   const appear = pop(theme, frame, sec(group[0].start - 0.05, fps), fps);
   const { palette, captions } = theme;
-  const fontSize = style === "pop" ? 128 : 74;
+  const fontSize = style === "pop" ? 128 : style === "bold" ? 86 : 74;
   const { left, right } = safeX(width);
-  const outline = `0 4px 0 ${alpha(palette.background, 0.6)}, 0 10px 28px ${alpha(palette.background, 0.65)}`;
   const boxed = style === "boxed";
 
   return (
@@ -89,18 +131,19 @@ export const Captions: React.FC<CaptionsProps> = (props) => {
       >
         {group.map((w, k) => {
           const said = t >= w.start;
-          const active = said && t < w.end + 0.08;
-          const isKey = keys.has(norm(w.text));
-          const text = captions.case === "upper" || style === "pop" ? w.text.toLocaleUpperCase(locale) : w.text;
-          const bump = pop(theme, frame, sec(w.start, fps), fps, -2);
-          let color = palette.text;
-          let background = "transparent";
-          if (style === "highlight" || boxed) color = !said ? alpha(palette.text, 0.5) : isKey ? palette.accent : palette.text;
-          if (style === "karaoke" && active) {
-            background = palette.accent;
-            color = palette.background;
-          }
-          if (style === "pop" || style === "plain") color = isKey ? palette.accent : palette.text;
+          const state: WordState = {
+            said,
+            active: said && t < w.end + 0.08,
+            isKey: keys.has(norm(w.text)),
+            bump: pop(theme, frame, sec(w.start, fps), fps, -2),
+          };
+          const upper = captions.case === "upper" || UPPER.includes(style);
+          const scale =
+            style === "reveal"
+              ? interpolate(state.bump, [0, 1], [0.6, 1])
+              : state.active && style !== "plain"
+                ? 1 + (style === "bold" ? 0.12 : 0.07) * state.bump
+                : 1;
           return (
             <span
               key={k}
@@ -111,16 +154,13 @@ export const Captions: React.FC<CaptionsProps> = (props) => {
                 fontSize,
                 letterSpacing: style === "pop" ? -2 : -0.5,
                 lineHeight: 1.12,
-                color,
-                background,
-                padding: style === "karaoke" ? "0 14px" : 0,
                 borderRadius: radiusPx(theme, fontSize * 1.1),
-                transform: `scale(${active && style !== "plain" ? 1 + 0.07 * bump : 1})`,
+                transform: `scale(${scale})`,
                 transformOrigin: "50% 80%",
-                textShadow: boxed || background !== "transparent" ? "none" : outline,
+                ...wordStyle(style, theme, state, fontSize),
               }}
             >
-              {text}
+              {upper ? w.text.toLocaleUpperCase(locale) : w.text}
             </span>
           );
         })}
