@@ -4,6 +4,9 @@ Append-only. Newest first. Each entry names the principle(s) it serves (P1–P7,
 
 | Date | Decision | Rationale | Principle |
 | --- | --- | --- | --- |
+| 2026-10-30 | Transitions glitch (strong: channel split + slice displacement, seeded per frame), iris (medium, closes and reopens in the accent colour) and zoom blur (medium) | The three most used section changes in short-form edits beyond the whip; the iris carries the brand colour | P1, P2 |
+| 2026-10-30 | `stagorix showcase --footage <analysis folder>` plays the showcase over the user's own 9:16 cut and person cutout; the clip is copied to gitignored render/public/showcase-input/ | Effects are judged on real footage, not a stand-in; user video never leaves the machine | P3, P4 |
+| 2026-10-30 | Working mode: Claude writes, tests and renders the showcase; the owner watches, decides and runs the pre-merge steps; each PR ends with a short "what we learned" note | Faster loop with the owner still in control and learning the code | P3 |
 | 2026-10-30 | Milestones: MVP (own video → branded Short) → v1 (end of phase 8, option targets met, review gate) → Pro (end of phase 12) | The promised MVP stays near; richness grows in two measurable steps | P3 |
 | 2026-10-30 | Rich option catalog with v1 and Pro targets for every dimension (formats, hooks, looks, font pairs, caption styles, effects, layouts, sounds, music, voice, visual sources, duration, tempo, calls to action); see ROADMAP | Users and brands need a wide, professional range of choices, not only effects. Basis: published short-form format and hook research (see 5.8) | P1 |
 | 2026-10-30 | Choice is offered in three layers (one-click pack, guided wizard, expert mode) with a compatibility filter; nothing is locked: "show all" is always there and every choice can be undone | Balances richness against choice overload (Hick's law) without restricting the user | P3 |

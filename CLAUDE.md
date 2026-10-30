@@ -56,7 +56,7 @@ Stagorix is an open-source, brand-agnostic, multi-agent pipeline that turns news
 | Analyze a video | `uv run stagorix analyze <file> [--language xx] [--cutout-seconds 3] [--skip-transcript\|--skip-framing\|--skip-voice]` |
 | Find flubs in a transcript | `uv run stagorix flubs <transcript.json> [--review]` |
 | Preview with approved flub edits | `uv run stagorix cut <video> [--flubs flubs.json]` |
-| Effect showcase video | `uv run stagorix showcase [--theme theme.json]` (in Docker: `docker compose run --rm worker stagorix showcase`) |
+| Effect showcase video | `uv run stagorix showcase [--theme theme.json] [--footage workspace/analysis/<name>]` (in Docker: `docker compose run --rm worker stagorix showcase`) |
 | Effect library / check an edit plan | `uv run stagorix effects` · `uv run stagorix check-plan <plan.json> [--rules rules.json]` |
 | Models | `uv run stagorix models list` · `uv run stagorix models download <name>` |
 | Tests | `uv run pytest` |
