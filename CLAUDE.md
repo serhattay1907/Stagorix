@@ -27,6 +27,7 @@ Stagorix is an open-source, brand-agnostic, multi-agent pipeline that turns news
 | `pilot/` | Phase 1 throwaway prototypes. Read-only reference; do not extend or import from it. |
 | `docs/ARCHITECTURE.md` | System design |
 | `docs/DECISIONS.md` | Decision log (append-only) |
+| `docs/MOTION.md` | Motion language: effect roles, intensity, brand rules |
 | `docs/ROADMAP.md` | Phases and tasks — the source of truth for progress |
 | `brands/<slug>/` | Brand profiles (schema in phase 4) |
 | `stagorix/` | Python core: `cli.py`, `doctor.py` and one subpackage per area (analysis, agents, llm, brands, assets, render, platforms, panel, runs) |
@@ -56,6 +57,7 @@ Stagorix is an open-source, brand-agnostic, multi-agent pipeline that turns news
 | Find flubs in a transcript | `uv run stagorix flubs <transcript.json> [--review]` |
 | Preview with approved flub edits | `uv run stagorix cut <video> [--flubs flubs.json]` |
 | Effect showcase video | `uv run stagorix showcase [--theme theme.json]` (in Docker: `docker compose run --rm worker stagorix showcase`) |
+| Effect library / check an edit plan | `uv run stagorix effects` · `uv run stagorix check-plan <plan.json> [--rules rules.json]` |
 | Models | `uv run stagorix models list` · `uv run stagorix models download <name>` |
 | Tests | `uv run pytest` |
 | Lint / format | `uv run ruff check .` · `uv run ruff format .` |
@@ -72,7 +74,7 @@ Stagorix is an open-source, brand-agnostic, multi-agent pipeline that turns news
 
 - Python 3.12, typed, Pydantic models for every agent input/output.
 - TypeScript for Remotion; every effect/component has a Zod schema for its props.
-- Effects take colors, fonts, radius and motion from the theme (`useTheme()`, `render/src/theme/`), never as literals; text and timings (in seconds) come from props. New effects appear in the `Showcase` composition.
+- Effects take colors, fonts, radius and motion from the theme (`useTheme()`, `render/src/theme/`), never as literals; text and timings (in seconds) come from props. New effects appear in the `Showcase` composition and get a role and intensity in `stagorix/render/motion.py` (see `docs/MOTION.md`).
 - Pin every dependency version (`uv.lock`, `package-lock.json`, Docker image digests).
 - A command that is not built yet says so and exits with code 2; never a silent no-op.
 - `zod` is pinned to the exact version Remotion depends on; upgrade both together.

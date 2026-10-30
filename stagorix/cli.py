@@ -130,6 +130,59 @@ def showcase(
 
 
 @app.command()
+def effects() -> None:
+    """List the effect library with each effect's role and intensity."""
+    from stagorix.render.motion import CATALOG
+
+    table = Table(title="Effect library")
+    for col in ("Effect", "Role", "Intensity", "Duration", "Component"):
+        table.add_column(col)
+    for spec in CATALOG.values():
+        table.add_row(
+            spec.id,
+            str(spec.role),
+            str(spec.intensity),
+            f"{spec.min_seconds:g}–{spec.max_seconds:g}s",
+            spec.component,
+        )
+    console.print(table)
+
+
+@app.command("check-plan")
+def check_plan_cmd(
+    plan_file: Annotated[Path, typer.Argument(help="Edit plan JSON.", exists=True, dir_okay=False)],
+    rules_file: Annotated[
+        Path | None, typer.Option("--rules", help="Motion rules JSON (default rules if omitted).")
+    ] = None,
+) -> None:
+    """Check an edit plan against the motion rules: hook, spacing, repeats, strong-effect budget, outro."""
+    from stagorix.render.motion import EditPlan, MotionRules, Severity, check_plan
+
+    plan = EditPlan.model_validate_json(plan_file.read_text(encoding="utf-8"))
+    rules = (
+        MotionRules.model_validate_json(rules_file.read_text(encoding="utf-8"))
+        if rules_file
+        else MotionRules()
+    )
+    found = check_plan(plan, rules)
+    table = Table(title=f"Plan check · {plan_file.name} · {len(plan.effects)} effects · {plan.duration:g}s")
+    for col in ("Time", "Severity", "Rule", "Message"):
+        table.add_column(col)
+    style = {Severity.ERROR: "red", Severity.WARNING: "yellow"}
+    for v in found:
+        table.add_row(f"{v.at:.1f}s", f"[{style[v.severity]}]{v.severity}[/]", v.rule, v.message)
+    if found:
+        console.print(table)
+    errors = sum(v.severity is Severity.ERROR for v in found)
+    warnings = len(found) - errors
+    console.print(
+        f"{errors} errors · {warnings} warnings" if found else "[green]Plan follows the motion rules.[/]"
+    )
+    if errors:
+        raise typer.Exit(code=1)
+
+
+@app.command()
 def run(
     mode: Annotated[Mode, typer.Argument(help="Input mode.")],
     brand: Annotated[str, typer.Option("--brand", "-b", help="Brand profile slug.")],
