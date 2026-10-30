@@ -7,7 +7,7 @@ Effects are not decoration: each one has a reason to be on screen. The motion la
 | Role | Purpose | Examples |
 | --- | --- | --- |
 | hook | Grab attention in the opening seconds | title behind the speaker |
-| emphasis | Underline a word, number or idea | punch-in zoom |
+| emphasis | Underline a word, number or idea | punch-in zoom, shake, emoji pop, number pop |
 | transition | Mark a change of section | whip, light leak |
 | info | Show structured information | label, cards |
 | outro | Close and ask for action | outro card |

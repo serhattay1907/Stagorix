@@ -69,6 +69,30 @@ CATALOG: dict[str, EffectSpec] = {
             max_seconds=0.6,
         ),
         EffectSpec(
+            id="camera.shake",
+            component="Camera",
+            role=Role.EMPHASIS,
+            intensity=Intensity.MEDIUM,  # short (0.45 s) and small; strong would eat the budget
+            min_seconds=0.3,
+            max_seconds=0.6,
+        ),
+        EffectSpec(
+            id="emoji.pop",
+            component="EmojiPop",
+            role=Role.EMPHASIS,
+            intensity=Intensity.SUBTLE,
+            min_seconds=0.6,
+            max_seconds=2,
+        ),
+        EffectSpec(
+            id="number.pop",
+            component="NumberPop",
+            role=Role.EMPHASIS,
+            intensity=Intensity.MEDIUM,
+            min_seconds=1.5,
+            max_seconds=3.5,
+        ),
+        EffectSpec(
             id="label",
             component="Label",
             role=Role.INFO,

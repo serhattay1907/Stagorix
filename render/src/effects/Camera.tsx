@@ -4,17 +4,34 @@ import { amount, clamp, ease } from "../theme/motion";
 import { useTheme } from "../theme/theme";
 
 // Virtual camera moves on top of the footage: eased zoom keyframes (punch-ins)
-// and whip transitions (fast zoom + blur + flash). Wrap layers that must move together.
+// whip transitions (fast zoom + blur + flash) and short emphasis shakes. Wrap layers that
+// must move together.
 export const cameraSchema = z.object({
   zooms: z
     .array(z.object({ at: z.number(), scale: z.number().min(1).max(2), ease: z.number().min(0).default(0.2) }))
     .default([]),
   whips: z.array(z.number()).default([]).describe("Seconds where a whip transition peaks"),
+  shakes: z.array(z.number()).default([]).describe("Seconds where an emphasis shake starts"),
   origin: z.object({ x: z.number(), y: z.number() }).describe("Zoom centre in px, usually the face"),
 });
 export type CameraProps = z.input<typeof cameraSchema>;
 
 const WHIP = 0.35;
+const SHAKE = 0.45;
+
+/** Decaying, deterministic jitter: same frame, same offset on every machine. */
+export const shakeOffset = (t: number, shakes: number[], strength: number) => {
+  let x = 0;
+  let y = 0;
+  for (const at of shakes) {
+    const k = (t - at) / SHAKE;
+    if (k < 0 || k > 1) continue;
+    const decay = (1 - k) ** 2;
+    x += Math.sin(k * 61) * strength * decay;
+    y += Math.cos(k * 47) * strength * 0.7 * decay;
+  }
+  return { x, y };
+};
 
 export const useWhip = (whips: number[]) => {
   const frame = useCurrentFrame();
@@ -24,7 +41,7 @@ export const useWhip = (whips: number[]) => {
 };
 
 export const Camera: React.FC<CameraProps & { children?: React.ReactNode }> = ({ children, ...props }) => {
-  const { zooms, whips, origin } = cameraSchema.parse(props);
+  const { zooms, whips, shakes, origin } = cameraSchema.parse(props);
   const theme = useTheme();
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -44,11 +61,12 @@ export const Camera: React.FC<CameraProps & { children?: React.ReactNode }> = ({
   }
   scale = 1 + (scale - 1) * amount(theme, 1);
   const w = useWhip(whips);
+  const shake = shakeOffset(t, shakes, amount(theme, 18));
   scale += w * amount(theme, 0.3);
   return (
     <AbsoluteFill
       style={{
-        transform: `scale(${scale})`,
+        transform: `translate(${shake.x}px, ${shake.y}px) scale(${scale})`,
         transformOrigin: `${origin.x}px ${origin.y}px`,
         filter: w > 0.01 ? `blur(${w * 14}px)` : undefined,
       }}

@@ -83,7 +83,11 @@ After the option review gate, requests stay open for good: each wish becomes a n
 - [ ] 3.3 Effect library v1: pilot effects as Zod-typed components (C)
   - [x] 3.3a Talking-head effects on a theme scale: captions (5 styles), title behind speaker + cutout layer, camera zooms and whips, label, outro, grade; bundled fonts; named positions in a safe area; `Showcase` composition and `stagorix showcase`
   - [x] 3.3b Motion language: effect roles, intensity and spacing rules, set per brand (`docs/MOTION.md`, `stagorix effects`, `stagorix check-plan`)
-  - [ ] 3.3c Pack A: more caption styles, emoji and number emphasis, shake, transitions (glitch, mask wipe, zoom blur); four preset looks; free sound library with license log (moved forward from 7.3)
+  - [ ] 3.3c Pack A
+    - [x] 3.3c-1 Caption styles bold, reveal, marker; emoji pop; number pop; camera shake
+    - [ ] 3.3c-2 Transitions: glitch, mask wipe, zoom blur
+    - [ ] 3.3c-3 Four preset looks (News, Educational, Minimal, Energetic); showcase rendered in each
+    - [ ] 3.3c-4 Free sound library with license log, sounds mapped to effects (moved forward from 7.3)
   - [ ] 3.3d Pack B: speaker effects (background swap/blur, outline glow, colour pop) and data cards (counter, charts, A vs B)
   - [ ] 3.3e Cards from the pilot: quote bubbles, checklist, headline wall, timeline, badge, spotlight
 - [ ] 3.4 Layouts: full face, split screen, card over face, inside a phone (C)
