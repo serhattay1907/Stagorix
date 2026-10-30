@@ -1,5 +1,5 @@
 {
-  "duration": 74,
+  "duration": 84,
   "effects": [
     {
       "effect": "title.behind",
@@ -152,15 +152,39 @@
       "reason": "Points at the speaker"
     },
     {
+      "effect": "camera.orbit",
+      "at": 66.8,
+      "seconds": 2.2,
+      "reason": "Gives a talking shot depth"
+    },
+    {
+      "effect": "camera.pullback",
+      "at": 69.4,
+      "seconds": 2.0,
+      "reason": "Reveals the setting"
+    },
+    {
+      "effect": "camera.zoomthrough",
+      "at": 72.6,
+      "seconds": 0.6,
+      "reason": "Dives into the next section"
+    },
+    {
+      "effect": "camera.vertigo",
+      "at": 75.1,
+      "seconds": 1.8,
+      "reason": "Dramatic realisation"
+    },
+    {
       "effect": "camera.whip",
-      "at": 67.05,
+      "at": 77.65,
       "seconds": 0.35,
       "reason": "Moves to the closing"
     },
     {
       "effect": "outro.card",
-      "at": 67.6,
-      "seconds": 6.4,
+      "at": 78.2,
+      "seconds": 5.8,
       "reason": "Call to comment"
     }
   ]
