@@ -87,7 +87,7 @@ def render_showcase(
     if theme is not None:
         props.update(json.loads(theme.read_text(encoding="utf-8")))
     if footage is not None:
-        props.update(stage_footage(footage, matte=composition == "Showcase"))
+        props.update(stage_footage(footage, matte=composition in ("Showcase", "LayoutReel")))
     if look:
         props["look"] = look
     args = ["render", "src/index.ts", composition, str(out), "--codec=h264"]

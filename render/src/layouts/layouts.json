@@ -33,5 +33,40 @@
     "description": "Content fills the frame, the speaker sits in a corner",
     "content": "image or video",
     "captions": "middle"
+  },
+  "broll": {
+    "name": "B-roll with face",
+    "component": "PictureInPicture",
+    "description": "B-roll fills the frame with a slow push-in, the speaker in a round bubble in a corner",
+    "content": "image or video (B-roll)",
+    "captions": "middle"
+  },
+  "bgswap": {
+    "name": "Background swap",
+    "component": "BackgroundSwap",
+    "description": "The speaker cut out in front of the brand backdrop or your own image or video",
+    "content": "optional background",
+    "captions": "lower"
+  },
+  "reaction": {
+    "name": "Reaction",
+    "component": "Reaction",
+    "description": "A clip plays in a player at the top with its credit; the speaker reacts below",
+    "content": "video (with credit)",
+    "captions": "middle"
+  },
+  "screen": {
+    "name": "Screen with face",
+    "component": "ScreenFace",
+    "description": "A screen recording in a large window, the speaker in a bubble on its upper corner",
+    "content": "screen recording",
+    "captions": "lower"
+  },
+  "text": {
+    "name": "Text only",
+    "component": "TextOnly",
+    "description": "Only the words, landing line by line on the brand backdrop",
+    "content": "none",
+    "captions": "none"
   }
 }

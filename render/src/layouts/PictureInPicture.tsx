@@ -3,7 +3,7 @@ import { z } from "zod";
 import { SAFE } from "../theme/layout";
 import { pop } from "../theme/motion";
 import { alpha, radiusPx, useTheme } from "../theme/theme";
-import { ContentView, contentSchema, focusSchema, SpeakerView } from "./common/views";
+import { ContentView, contentSchema, focusSchema, KenBurns, SpeakerView } from "./common/views";
 
 // Content fills the frame; the speaker sits in a framed box in a corner, kept clear of
 // the platform buttons (right edge) and the description (bottom).
@@ -13,6 +13,7 @@ export const pictureInPictureSchema = z.object({
   corner: z.enum(["top-left", "top-right", "bottom-left"]).default("top-left"),
   shape: z.enum(["box", "circle"]).default("box"),
   size: z.number().min(0.25).max(0.5).default(0.36).describe("Width as a share of the frame"),
+  kenBurns: z.boolean().default(false).describe("Slow push-in on the content (B-roll)"),
 });
 export type PictureInPictureProps = z.input<typeof pictureInPictureSchema> & { speaker: React.ReactNode };
 
@@ -29,7 +30,13 @@ export const PictureInPicture: React.FC<PictureInPictureProps> = ({ speaker, ...
   const radius = p.shape === "circle" ? w / 2 : radiusPx(theme, 200);
   return (
     <AbsoluteFill>
-      <ContentView content={p.content} />
+      {p.kenBurns ? (
+        <KenBurns>
+          <ContentView content={p.content} />
+        </KenBurns>
+      ) : (
+        <ContentView content={p.content} />
+      )}
       <div
         style={{
           position: "absolute",
